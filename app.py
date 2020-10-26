@@ -1,5 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify
+import connectToDB
 app = Flask(__name__)
 
 @app.route('/getmsg/', methods=['GET'])
@@ -44,7 +45,7 @@ def post_something():
 # A welcome message to test our server
 @app.route('/')
 def index():
-    return "<h1>Welcome to our server !!</h1>"
+    return "<h1>Welcome to our CS411 Project Website !!</h1> <p>by Ozgur Gencer and Ryohei Namiki</p>"
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
