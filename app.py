@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser
+from connectToDB import getUser, logUserIn
 app = Flask(__name__)
 
 
@@ -15,7 +15,7 @@ def index():
 def hello(username=None):
     try:
         results = getUser(username)
-        return render_template('welcome.html', name=results[0], lastname=results[1])
+        return render_template('welcome.html', name=results[0])
     except:
         return render_template('welcome.html', name=None, lastname=None)
 
@@ -26,6 +26,25 @@ def login():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
+
+@app.route('/managelogin', methods = ['POST', 'GET'])
+def managelogin():
+    if request.method == 'POST':
+        result = request.form
+        queryRes = logUserIn(result["username"], result["passcode"])
+        if queryRes:
+            return render_template('welcome.html', name=queryRes[0], lastname=queryRes[1])
+        else:
+            return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
+
+    
+
+
+@app.route('/signinfo', methods = ['POST', 'GET'])
+def signinfo():
+   if request.method == 'POST':
+      result = request.form
+      return render_template("signupinfo.html", result = result)
 
 
 if __name__ == '__main__':
