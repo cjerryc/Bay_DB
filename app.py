@@ -4,7 +4,6 @@ from connectToDB import getUser
 app = Flask(__name__)
 
 
-# A welcome message to test our server
 @app.route('/index')
 @app.route('/')
 def index():
@@ -20,6 +19,13 @@ def hello(username=None):
     except:
         return render_template('welcome.html', name=None, lastname=None)
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
 
 
 if __name__ == '__main__':

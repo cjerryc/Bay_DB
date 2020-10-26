@@ -5,7 +5,11 @@ import psycopg2
 
 #conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-conn = psycopg2.connect(
+try:
+    DATABASE_URL = os.environ['DATABASE_URL']
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+except:
+    conn = psycopg2.connect(
         host="ec2-52-200-134-180.compute-1.amazonaws.com",
         database="d6ehld1vcv1vv1",
         user="vuxncunnoferwp",
