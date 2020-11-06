@@ -39,7 +39,7 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     conn.commit()
     #return cursor.fetchone()
 
-def createTask(taskname):
+def createTask(taskname, cursor=cur):
     taskname = "'" + taskname + "'"
     username = "'none'"
     status = "'pending'"
