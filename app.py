@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn
+from connectToDB import getUser, logUserIn, createUser
 app = Flask(__name__)
 
 
@@ -44,6 +44,9 @@ def managelogin():
 def signinfo():
    if request.method == 'POST':
       result = request.form
+      #print(result)
+      createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
+      #print(result["username"])
       return render_template("signupinfo.html", result = result)
 
 

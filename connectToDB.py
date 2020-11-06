@@ -1,10 +1,6 @@
 import os
 import psycopg2
 
-#DATABASE_URL = os.environ['DATABASE_URL']
-
-#conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -31,4 +27,12 @@ def logUserIn(username, passcode, cursor=cur):
     cur.execute(query)
     return cur.fetchone()
 
-print(logUserIn("ogencer", "CS411ogencer"))
+def createUser(username, firstname, lastname, email, passcode):
+    username = "'" + username + "'"
+    firstname = "'" + firstname + "'"
+    lastname = "'" + lastname + "'"
+    email = "'" + email + "'"
+    passcode = "'" + passcode + "'"
+    query = 'INSERT INTO users(username, firstname, lastname, email, passcode) VALUES (%s, %s, %s, %s, %s);' % (username, firstname, lastname, email, passcode)
+    print(query)
+    cur.execute(query)
