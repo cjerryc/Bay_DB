@@ -48,6 +48,10 @@ def home():
 @app.route('/addtask')
 def addtask():
     return render_template('addtask.html')
+
+@app.route('/search')
+def search():
+    return render_template('search.html')
     
 @app.route('/taskcreated', methods = ['POST', 'GET'])
 def taskcreated():

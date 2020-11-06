@@ -5,10 +5,15 @@
   <body>
   <h1>Home Page!</h1>
     <button onclick="toAddTask()">Add Task</button>
+    <button onclick="toSearch()">Search</button>
     <script>
       function toAddTask(){
         root_site = window.location.href = '../';
         window.open(root_site + "addtask", "_self");
+      }
+      function toSearch(){
+        root_site = window.location.href = '../';
+        window.open(root_site + "search", "_self");
 
       }
       
