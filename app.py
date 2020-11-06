@@ -3,11 +3,9 @@ from flask import Flask, request, jsonify, render_template
 from connectToDB import getUser, logUserIn, createUser
 app = Flask(__name__)
 
-
-@app.route('/index')
 @app.route('/')
 def index():
-    return "<h1>Welcome to our CS411 Project Website !!</h1> <p>by Ozgur Gencer, Veda Menon, Lucy Zhang, Jerry Chang</p>"
+    return render_template('index.html')
 
 
 @app.route('/hello/')
