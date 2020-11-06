@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, createUser
+from connectToDB import getUser, logUserIn, createUser, createTask
 app = Flask(__name__)
 
 @app.route('/')
@@ -35,7 +35,17 @@ def managelogin():
         else:
             return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
 
+@app.route('/managelogin/addtask')
+def addtask():
+    return render_template('addtask.html')
     
+@app.route('/taskcreated', methods = ['POST', 'GET'])
+def taskcreated():
+    if request.method == 'POST':
+        result = request.form
+        print(result)
+        createTask(result["taskname"])
+        return render_template('taskcreated.html', taskname=result["taskname"])    
 
 
 @app.route('/signinfo', methods = ['POST', 'GET'])

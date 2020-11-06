@@ -39,3 +39,17 @@ def createUser(username, firstname, lastname, email, passcode):
     conn.commit()
     return cur.fetchone()
 
+def createTask(taskname):
+    taskname = "'" + taskname + "'"
+    username = "'none'"
+    status = "'pending'"
+    date = "'none'"
+    time = "'none'"
+    query = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
+    print("\nTESTING")
+    print(query)
+    print("TESTING\n")
+    cur.execute(query)
+    conn.commit()
+    return cur.fetchone()
+

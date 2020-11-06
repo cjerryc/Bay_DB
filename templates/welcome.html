@@ -1,7 +1,19 @@
-<!doctype html>
-<title>Hello from Flask</title>
-{% if name %}
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+  {% if name %}
   <h1>Hello {{ name }} {{ lastname }}!</h1>
-{% else %}
+  {% else %}
   <h1>Hello, World!</h1>
-{% endif %}
+  {% endif %}
+    <button onclick="toAddTask()">Add Task</button>
+    <script>
+      function toAddTask(){
+        window.open(window.location.href + "/addtask", "_self");
+      }
+      
+    </script>
+  </body>
+</html>
