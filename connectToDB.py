@@ -36,3 +36,5 @@ def createUser(username, firstname, lastname, email, passcode):
     query = 'INSERT INTO users(username, firstname, lastname, email, passcode) VALUES (%s, %s, %s, %s, %s);' % (username, firstname, lastname, email, passcode)
     print(query)
     cur.execute(query)
+    conn.commit()
+
