@@ -53,12 +53,8 @@ def addtask():
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     if request.method == 'POST':
-        print("oh fuck")
         result = request.form
-        print(result)
         queryRes = searchTasks(result["search"])
-        print("this is the query res:", end='')
-        print(queryRes)
         if result["search"] != '':
             return render_template('search.html', searchedTasks=queryRes)
         else:
@@ -72,7 +68,6 @@ def search():
 def taskcreated():
     if request.method == 'POST':
         result = request.form
-        print(result)
         createTask(result["taskname"])
         return render_template('taskcreated.html', taskname=result["taskname"])    
 
