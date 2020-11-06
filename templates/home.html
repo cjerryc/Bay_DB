@@ -1,22 +1,78 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  </head>
-  <body>
-  <h1>Home Page!</h1>
-    <button onclick="toAddTask()">Add Task</button>
-    <button onclick="toSearch()">Search</button>
-    <script>
-      function toAddTask(){
-        root_site = window.location.href = '../';
-        window.open(root_site + "addtask", "_self");
-      }
-      function toSearch(){
-        root_site = window.location.href = '../';
-        window.open(root_site + "search", "_self");
 
-      }
-      
-    </script>
-  </body>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    body {
+      margin: 0;
+      background-color: powderblue;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+    
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+    
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    
+    .topnav a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    </style>
+    </head>
+    <body>
+    
+    <div class="topnav">
+      <a class= "active" href = window.location.href >Home</a>
+      <a href = "login">Log In</a>
+      <a href = "signup">signup</a>
+      <a href = "addtask">Add Task</a>
+      <a href = "search"> Search</a>
+    </div>
+    
+    <div style="padding-left:16px">
+      <h2>Top Navigation Example</h2>
+      <p>Some content..</p>
+    </div>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Taskname</th>
+            <th scope="col">Username</th>
+            <th scope="col">Status</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+          </tr>
+        </thead>
+          {% for task in tasks %}
+          <tr>
+          <th scope="row">{{task.Taskname}}</th>
+          <td>{{task.Username}}
+          </td>
+          <td>{{task.Status}}
+          </td>
+          <td>{{task.Date}}
+          </td>
+          <td>{{task.Time}}
+            </td>
+            {% endfor %}
+        </table>
+    </body>
 </html>
