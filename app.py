@@ -53,9 +53,13 @@ def signinfo():
    if request.method == 'POST':
       result = request.form
       #print(result)
-      createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
-      #print(result["username"])
-      return render_template("signupinfo.html", result = result)
+
+      try:
+        createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
+        #print(result["username"])
+        return render_template("signupinfo.html", result = result)
+      except:
+          return "<h1>Password doesn't match try again!</h1>"
 
 
 if __name__ == '__main__':

@@ -32,6 +32,11 @@ div {
   padding: 20px;
 }
 </style>
+
+<script src="../static/signup.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
 <body>
     <h3>Sign Up</h3>
     <div>
@@ -40,7 +45,8 @@ div {
             <p>Name <input type = "text" name = "firstname" /></p>
             <p>Last Name <input type = "text" name = "lastname" /></p>
             <p>Email <input type = "text" name = "email" /></p>
-            <p>Password <input type ="text" name = "passcode" /></p>
+            <p>Password <input type ="text" name = "passcode" id = "passcode"/></p>
+            <p>Confirm Password <input type ="text" name = "confirm_passcode" id = "confirm_passcode"/></p> <span id='message'></span>
             <p><input type = "submit" value = "submit" /></p>
         </form>
     </div>
