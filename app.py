@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, createUser, createTask
+from connectToDB import getUser, logUserIn, createUser, createTask, getTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -43,7 +43,9 @@ def managelogin():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    tasks = getTasks()
+    print(tasks)
+    return render_template('home.html', tasks = getTasks())
     
 @app.route('/addtask')
 def addtask():

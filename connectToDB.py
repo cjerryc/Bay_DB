@@ -19,6 +19,10 @@ def getUser(username, cursor=cur):
     cursor.execute(query)
     return cur.fetchone()
 
+def getTasks(cursor = cur):
+    cur.execute("SELECT * FROM tasks")
+    return cur.fetchall()
+    
 def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"
     passcode = "'" + passcode + "'"

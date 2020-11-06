@@ -49,7 +49,6 @@
       <h2>Top Navigation Example</h2>
       <p>Some content..</p>
     </div>
-
     <table class="table">
         <thead>
           <tr>
@@ -63,16 +62,13 @@
         </thead>
           {% for task in tasks %}
           <tr>
-          <th scope="row">{{task.Taskname}}</th>
-          <td>{{task.Username}}
-          </td>
-          <td>{{task.Status}}
-          </td>
-          <td>{{task.Date}}
-          </td>
-          <td>{{task.Time}}
-            </td>
-            {% endfor %}
+          <th scope="row">{{task[0]}}</th>
+          <td>{{task[1]}}</td>
+          <td>{{task[2]}}</td>
+          <td>{{task[3]}}</td>
+          <td>{{task[4]}}</td>
+          </tr>
+          {% endfor %}
         </table>
     </body>
 </html>
