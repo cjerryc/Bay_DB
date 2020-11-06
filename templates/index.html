@@ -6,10 +6,14 @@
   <body>
     <h1>Main Page!</h1>
     <p> Wow Colorful</p>
-    <button onclick="toLogin()">Click me to go to login</button>
+    <button onclick="toLogin()">Go to Login</button>
+    <button onclick="toSignup()">To Signup </button>
     <script>
       function toLogin(){
-        window.open(window.location.href + "/signup");
+        window.open(window.location.href + "login", "_self");
+      }
+      function toSignup(){
+        window.open(window.location.href + "signup", "_self");
       }
     </script>
   </body>
