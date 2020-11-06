@@ -40,6 +40,7 @@ form.search::after {
 }
 </style>
 <body>
+    <h1> {{searchedTasks}} </h1>
     <h3>Search the System</h3>
     <button onclick="toHome()">Back to Home</button>
     <script>
@@ -52,7 +53,7 @@ form.search::after {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <form class="search" action="/search">
         <input type="text" placeholder="Search.." name="search">
-        <button type="submit"><i class="fa fa-search"></i></button>
+        <button type="submit" formmethod="post"><i class="fa fa-search"></i></button>
       </form>
     
 </body>

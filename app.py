@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, createUser, createTask, getTasks
+from connectToDB import getUser, logUserIn, createUser, createTask, getTasks, searchTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -44,15 +44,28 @@ def managelogin():
 @app.route('/home')
 def home():
     tasks = getTasks()
-    print(tasks)
     return render_template('home.html', tasks = getTasks())
     
 @app.route('/addtask')
 def addtask():
     return render_template('addtask.html')
 
-@app.route('/search')
+@app.route('/search', methods = ['POST', 'GET'])
 def search():
+    if request.method == 'POST':
+        print("oh fuck")
+        result = request.form
+        print(result)
+        queryRes = searchTasks(result["search"])
+        print("this is the query res:", end='')
+        print(queryRes)
+        if result["search"] != '':
+            return render_template('search.html', searchedTasks=queryRes)
+        else:
+            missing = "No Tasks Found!"
+            return render_template('search.html', searchedTasks=missing)
+    elif request.method == 'GET':
+        return render_template('search.html')
     return render_template('search.html')
     
 @app.route('/taskcreated', methods = ['POST', 'GET'])

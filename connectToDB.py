@@ -22,6 +22,12 @@ def getUser(username, cursor=cur):
 def getTasks(cursor = cur):
     cur.execute("SELECT * FROM tasks")
     return cur.fetchall()
+
+def searchTasks(taskname, cursor = cur):
+    taskname = "'%" + taskname + "%'"
+    query = 'SELECT * FROM tasks WHERE tasks.taskname LIKE %s;' % (taskname)
+    cur.execute(query)
+    return cur.fetchall()
     
 def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"
