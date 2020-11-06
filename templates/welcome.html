@@ -11,7 +11,8 @@
     <button onclick="toAddTask()">Add Task</button>
     <script>
       function toAddTask(){
-        window.open(window.location.href + "/addtask", "_self");
+        root_site = window.location.href = '../';
+        window.open(root_site + "addtask", "_self");
       }
       
     </script>

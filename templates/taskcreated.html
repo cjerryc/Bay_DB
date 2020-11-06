@@ -4,9 +4,16 @@
   </head>
   <body>
   {% if taskname %}
-  <h1>A {{ taskname }} has been created!</h1>
+  <h1>A task ' {{ taskname }} ' has been created!</h1>
   {% else %}
-  <h1>Hello, World!</h1>
+  <h1>Error! Reload Page.</h1>
   {% endif %}
+    <button onclick="toHome()">Back to Home</button>
+    <script>
+      function toHome(){
+        root_site = window.location.href = '../';
+        window.open(root_site + "home","_self");
+      }
+    </script>
   </body>
 </html>

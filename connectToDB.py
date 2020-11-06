@@ -46,9 +46,7 @@ def createTask(taskname, cursor=cur):
     date = "'none'"
     time = "'none'"
     query = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
-    print("\nTESTING")
     print(query)
-    print("TESTING\n")
     cursor.execute(query)
     conn.commit()
     #return cursor.fetchone()

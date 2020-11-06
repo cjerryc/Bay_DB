@@ -2,6 +2,9 @@
 from flask import Flask, request, jsonify, render_template
 from connectToDB import getUser, logUserIn, createUser, createTask
 app = Flask(__name__)
+current_firstname = "''"
+current_lastname = "''"
+
 
 @app.route('/')
 def index():
@@ -25,17 +28,24 @@ def login():
 def signup():
     return render_template('signup.html')
 
+
 @app.route('/managelogin', methods = ['POST', 'GET'])
 def managelogin():
     if request.method == 'POST':
         result = request.form
         queryRes = logUserIn(result["username"], result["passcode"])
+        current_firstname = queryRes[0]
+        current_lastname = queryRes[1]
         if queryRes:
             return render_template('welcome.html', name=queryRes[0], lastname=queryRes[1])
         else:
             return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
 
-@app.route('/managelogin/addtask')
+@app.route('/home')
+def home():
+    return render_template('home.html')
+    
+@app.route('/addtask')
 def addtask():
     return render_template('addtask.html')
     
