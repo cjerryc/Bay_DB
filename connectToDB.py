@@ -16,7 +16,7 @@ def getUser(username, cursor=cur):
     username = "'" + username + "'"
     query = 'SELECT firstname, lastname FROM users WHERE users.username = %s;' % username
     print(query)
-    cur.execute(query)
+    cursor.execute(query)
     return cur.fetchone()
 
 def logUserIn(username, passcode, cursor=cur):
@@ -24,10 +24,10 @@ def logUserIn(username, passcode, cursor=cur):
     passcode = "'" + passcode + "'"
     query = 'SELECT firstname, lastname, email FROM users WHERE users.username = %s AND users.passcode = %s;' % (username, passcode)
     print(query)
-    cur.execute(query)
+    cursor.execute(query)
     return cur.fetchone()
 
-def createUser(username, firstname, lastname, email, passcode):
+def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     username = "'" + username + "'"
     firstname = "'" + firstname + "'"
     lastname = "'" + lastname + "'"
@@ -35,9 +35,9 @@ def createUser(username, firstname, lastname, email, passcode):
     passcode = "'" + passcode + "'"
     query = 'INSERT INTO users(username, firstname, lastname, email, passcode) VALUES (%s, %s, %s, %s, %s);' % (username, firstname, lastname, email, passcode)
     print(query)
-    cur.execute(query)
+    cursor.execute(query)
     conn.commit()
-    return cur.fetchone()
+    #return cursor.fetchone()
 
 def createTask(taskname):
     taskname = "'" + taskname + "'"
@@ -49,7 +49,7 @@ def createTask(taskname):
     print("\nTESTING")
     print(query)
     print("TESTING\n")
-    cur.execute(query)
+    cursor.execute(query)
     conn.commit()
-    return cur.fetchone()
+    #return cursor.fetchone()
 
