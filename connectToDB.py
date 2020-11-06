@@ -37,4 +37,5 @@ def createUser(username, firstname, lastname, email, passcode):
     print(query)
     cur.execute(query)
     conn.commit()
+    return cur.fetchone()
 

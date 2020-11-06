@@ -4,11 +4,11 @@ from connectToDB import getUser, logUserIn, createUser
 app = Flask(__name__)
 
 
-# @app.route('/index')
+@app.route('/index')
 @app.route('/')
 def index():
-    #return "<h1>Welcome to our CS411 Project Website !!</h1> <p>by Ozgur Gencer, Veda Menon, Lucy Zhang, Jerry Chang</p>"
-    return render_template("index.html")
+    return "<h1>Welcome to our CS411 Project Website !!</h1> <p>by Ozgur Gencer, Veda Menon, Lucy Zhang, Jerry Chang</p>"
+
 
 @app.route('/hello/')
 @app.route('/hello/<username>')
