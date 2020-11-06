@@ -1,6 +1,36 @@
 <!DOCTYPE html>
 <html>
+  <head> <meta name="viewport" content="width=device-width, initial-scale=1"> </head>
 <style>
+      body {
+      margin: 0;
+      background-color: powderblue;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+    
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+    
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    
+    .topnav a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
 input[type=text], select {
   width: 100%;
   padding: 12px 20px;
@@ -26,7 +56,7 @@ input[type=submit]:hover {
   background-color: #45a049;
 }
 
-div {
+.divform {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
@@ -38,8 +68,15 @@ div {
 
 
 <body>
+  <div class="topnav">
+    <a href = "home" >Home</a>
+    <a href = "login">Log In</a>
+    <a class= "active" href = "signup">signup</a>
+    <a href = "addtask">Add Task</a>
+    <a href = "search"> Search</a>
+  </div>
     <h3>Sign Up</h3>
-    <div>
+    <div class = "divform">
         <form action = "/signinfo" method = "POST">
             <p>Username <input type = "text" name = "username" /></p>
             <p>Name <input type = "text" name = "firstname" /></p>
