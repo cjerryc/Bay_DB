@@ -20,7 +20,7 @@ def getUser(username, cursor=cur):
     return cur.fetchone()
 
 def getTasks(cursor = cur):
-    cur.execute("SELECT * FROM active_tasks")
+    cur.execute("SELECT * FROM active_tasks;")
     return cur.fetchall()
 
 def tasksExists(taskname, cursor = cur):
