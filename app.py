@@ -65,6 +65,8 @@ def deletetask():
         except:
             exists = False
             return render_template("taskdeleted.html", taskname=result["taskname"])
+        # if do:
+        #     return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
     return render_template('deletetask.html')
 
 @app.route('/taskupdated', methods = ['POST', 'GET'])
@@ -83,9 +85,7 @@ def taskupdated():
 def search():
     if request.method == 'POST':
         result = request.form
-        queryRes = sear
-        chTasks(result["search"])
-        print(type(queryRes))
+        queryRes = searchTasks(result["search"])
         if result["search"] != '':
             return render_template('search.html', searchedTasks=queryRes)
         else:
