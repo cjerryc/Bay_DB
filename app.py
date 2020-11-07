@@ -64,7 +64,8 @@ def taskupdated():
         try:
             exists = updateTask(result["taskname"], result["date"], result["time"])
             return render_template("taskupdated.html", taskname=result["taskname"], exists=exists)
-        except:
+        except Exception as inst:
+            print(inst)
             return "<h1>Error try again!</h1>"
 
 @app.route('/search', methods = ['POST', 'GET'])

@@ -91,7 +91,7 @@ def updateTask(taskname, date, time, cursor=cur):
         status = "'complete'"
         date = "'" + date + "'"
         time = "'" + time + "'"
-        query = 'UPDATE active_tasks SET username = %s, status = %s, date = %s, time = %s, WHERE taskname = %s;' % (username, status, date, time, taskname)
+        query = 'UPDATE active_tasks SET username = %s, status = %s, date = %s, time = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
         print(query)
         cursor.execute(query)
         conn.commit()
