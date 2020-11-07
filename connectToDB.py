@@ -31,7 +31,7 @@ def tasksExists(taskname, cursor = cur):
 
 def searchTasks(taskname, cursor = cur):
     taskname = "'%" + taskname + "%'"
-    query = 'SELECT * FROM active_tasks WHERE active_tasks.taskname LIKE %s;' % (taskname)
+    query = 'SELECT * FROM active_tasks WHERE (active_tasks.taskname LIKE %s) OR (active_tasks.username LIKE %s) OR (active_tasks.status LIKE %s) OR (active_tasks.date LIKE %s) OR (active_tasks.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname)
     cur.execute(query)
     return cur.fetchall()
     
