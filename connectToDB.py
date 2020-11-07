@@ -80,3 +80,26 @@ def createTask(taskname, cursor=cur):
     #return cursor.fetchone()
 
 
+def updateTask(taskname, date, time, cursor=cur):
+    exists = tasksExists("'" + taskname + "'")
+    print("TESTING TESTING \n")
+    print(exists)
+
+    if exists:
+        exists == 'true' 
+        taskname = "'" + taskname + "'"
+        username = "'jerryc2'"
+        status = "'complete'"
+        date = "'" + date + "'"
+        time = "'" + time + "'"
+        query = 'UPDATE active_tasks SET username = %s, status = %s, date = %s, time = %s, WHERE taskname = %s;' % (username, status, date, time, taskname)
+        print(query)
+        cursor.execute(query)
+        conn.commit()
+    else:
+        exists = 'false'
+    
+    return exists
+    
+    
+    #return cursor.fetchone()

@@ -50,6 +50,22 @@ def home():
 def addtask():
     return render_template('addtask.html')
 
+@app.route('/completetask')
+def completetask():
+    return render_template('completetask.html')
+
+@app.route('/taskupdated', methods = ['POST', 'GET'])
+def taskupdated():
+    if request.method == 'POST':
+        result = request.form
+        print(result)
+        
+        try:
+            exists = updateTask(result["taskname"], result["date"], result["time"])
+            return render_template("taskupdated.html", taskname=result["taskname"], exists=exists)
+        except:
+            return "<h1>Error try again!</h1>"
+
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     if request.method == 'POST':
