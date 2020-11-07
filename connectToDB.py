@@ -37,8 +37,14 @@ def deleteTask(task, cursor = cur):
     taske = "'" + task + "'"
     query = 'DELETE FROM active_tasks WHERE taskname = %s;' %taske
     cursor.execute(query)
-    conn.commit()
-    return True
+    if cursor.statusmessage == "DELETE 0":
+        conn.commit()
+        print(cursor.statusmessage)
+        return False
+    else:
+        conn.commit()
+        print(cursor.statusmessage)
+        return True
     
 def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"

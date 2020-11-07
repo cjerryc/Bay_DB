@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, createUser, createTask, getTasks, searchTasks, updateTask
+from connectToDB import getUser, logUserIn, createUser, createTask, getTasks, searchTasks, updateTask, deleteTask
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -61,9 +61,10 @@ def deletetask():
         print(result)
         try:
             do = deleteTask(result['taskname'])
-            return "<h1> It worked! </h1>"
         except:
             return "<h1> Didn't work </h1>"
+        if do:
+            return "<h1> It worked! </h1>"
     return render_template('deletetask.html')
 
 @app.route('/taskupdated', methods = ['POST', 'GET'])
