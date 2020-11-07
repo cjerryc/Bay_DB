@@ -1,17 +1,57 @@
 <!DOCTYPE html>
 <html>
   <link rel="stylesheet" href="../static/style.css">
-<body>
-    <h1> {{searchedTasks}} </h1>
-    <h3>Search the System</h3>
-    <button onclick="toHome()">Back to Home</button>
-    <script>
-     function toHome(){
-        root_site = window.location.href = '../';
-        window.open(root_site + "home","_self");
+  <style>
+      * {
+        box-sizing: border-box;
       }
       
-    </script>
+      /* Style the search field */
+      form.search input[type=text] {
+        padding: 10px;
+        font-size: 17px;
+        border: 1px solid grey;
+        float: left;
+        width: 80%;
+        background: #f1f1f1;
+      }
+      
+      /* Style the submit button */
+      form.search button {
+        float: left;
+        width: 20%;
+        padding: 10px;
+        background: #2196F3;
+        color: white;
+        font-size: 17px;
+        border: 1px solid grey;
+        border-left: none; /* Prevent double borders */
+        cursor: pointer;
+      }
+      
+      form.search button:hover {
+        background: #0b7dda;
+      }
+      
+      /* Clear floats */
+      form.search::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+      </style>
+<body>
+  <ul class="topnav">
+        <li><a class= "active" href = window.location.href >Home</a></li>
+        <li><a href = "login">Log In</a></li>
+        <li><a href = "signup">Sign Up</a></li>
+        <li><a href = "addtask">Add Task</a></li>
+        <li><a href = "search"> Search</a></li>
+        <li><a href = "completetask"> Complete Task</a></li>
+        <li><a href = "deletetask"> Delete Task</a></li>
+    </ul>
+    <h1> {{searchedTasks}} </h1>
+    <h3>Search the System</h3>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <form class="search" action="/search">
         <input type="text" placeholder="Search.." name="search">

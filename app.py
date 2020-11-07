@@ -86,6 +86,7 @@ def search():
     if request.method == 'POST':
         result = request.form
         queryRes = searchTasks(result["search"])
+        print(type(queryRes))
         if result["search"] != '':
             return render_template('search.html', searchedTasks=queryRes)
         else:
