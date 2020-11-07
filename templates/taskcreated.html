@@ -3,10 +3,10 @@
   <head>
   </head>
   <body>
-  {% if taskname %}
+  {% if exists == 'false' %}
   <h1>A task ' {{ taskname }} ' has been created!</h1>
   {% else %}
-  <h1>Error! Reload Page.</h1>
+  <h1>Task already exists! Enter a new task.</h1>
   {% endif %}
     <button onclick="toHome()">Back to Home</button>
     <script>

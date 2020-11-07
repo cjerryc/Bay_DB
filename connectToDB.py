@@ -20,12 +20,18 @@ def getUser(username, cursor=cur):
     return cur.fetchone()
 
 def getTasks(cursor = cur):
-    cur.execute("SELECT * FROM tasks")
+    cur.execute("SELECT * FROM active_tasks")
     return cur.fetchall()
+
+def tasksExists(taskname, cursor = cur):
+    query = 'SELECT taskname FROM active_tasks WHERE active_tasks.taskname = %s;'%taskname
+    print(query)
+    cur.execute(query)
+    return cur.fetchall()  
 
 def searchTasks(taskname, cursor = cur):
     taskname = "'%" + taskname + "%'"
-    query = 'SELECT * FROM tasks WHERE tasks.taskname LIKE %s;' % (taskname)
+    query = 'SELECT * FROM active_tasks WHERE active_tasks.taskname LIKE %s;' % (taskname)
     cur.execute(query)
     return cur.fetchall()
     
@@ -50,14 +56,27 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     #return cursor.fetchone()
 
 def createTask(taskname, cursor=cur):
-    taskname = "'" + taskname + "'"
-    username = "'none'"
-    status = "'pending'"
-    date = "'none'"
-    time = "'none'"
-    query = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
-    print(query)
-    cursor.execute(query)
-    conn.commit()
+    exists = tasksExists("'" + taskname + "'")
+    print("TESTING TESTING \n")
+    print(exists)
+
+    if not exists or exists == 'false' :
+        exists = 'false'
+        taskname = "'" + taskname + "'"
+        username = "'none'"
+        status = "'pending'"
+        date = "'none'"
+        time = "'none'"
+        query = 'INSERT INTO active_tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
+        print(query)
+        cursor.execute(query)
+        conn.commit()
+    else:
+        "<h1>Task already exists! Enter a new task.</h1>"
+    
+    return exists
+    
+    
     #return cursor.fetchone()
+
 

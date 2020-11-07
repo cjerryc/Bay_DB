@@ -68,8 +68,10 @@ def search():
 def taskcreated():
     if request.method == 'POST':
         result = request.form
-        createTask(result["taskname"])
-        return render_template('taskcreated.html', taskname=result["taskname"])    
+        print(result)
+        exists = createTask(result["taskname"])
+        print(exists)
+        return render_template('taskcreated.html', taskname=result["taskname"], exists=exists)     
 
 
 @app.route('/signinfo', methods = ['POST', 'GET'])
