@@ -1,5 +1,6 @@
 import os
 import psycopg2
+from datetime import datetime
 
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
@@ -64,16 +65,17 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     conn.commit()
     #return cursor.fetchone()
 
-def createTask(taskname, cursor=cur):
+def createTask(taskname, username, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
 
     if not exists or exists == 'false' :
         exists = 'false'
         taskname = "'" + taskname + "'"
-        username = "'none'"
+        username = "'" + username + "'"
         status = "'pending'"
-        date = "'none'"
-        time = "'none'"
+        now = "'" + datetime.now() + "'"
+        date = now.strftime("%m/%d/%Y")
+        time = "'" + now.strftime("%H:%M") + "'"
         query = 'INSERT INTO active_tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
         cursor.execute(query)
         conn.commit()

@@ -100,7 +100,7 @@ def taskcreated():
     if request.method == 'POST':
         result = request.form
         print(result)
-        exists = createTask(result["taskname"])
+        exists = createTask(result["taskname"], result["username"])
         print(exists)
         return render_template('taskcreated.html', taskname=result["taskname"], exists=exists)     
 
