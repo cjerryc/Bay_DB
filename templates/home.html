@@ -34,6 +34,8 @@
       color: white;
     }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/home.js"></script>
     </head>
     <body>
     
@@ -49,11 +51,14 @@
       <h2>Top Navigation Example</h2>
       <p>Some content..</p>
     </div>
-    <table class="table">
+    <p style="text-align:right;width:500px;">
+        <span style="font-weight:bold;">Search:</span> <input type="text" id="txtSearch" name="txtSearch" maxlength="50" />&nbsp;
+        <button id="imgSearch">Cancel Search!</button>
+    <table id="tblSearch" class="table" cellpadding="2" cellspacing="0">
         <thead>
           <tr>
-            <th scope="col">Taskname</th>
             <th scope="col">Username</th>
+            <th scope="col">Taskname</th>
             <th scope="col">Status</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
@@ -61,8 +66,8 @@
         </thead>
           {% for task in tasks %}
           <tr>
-          <th scope="row">{{task[0]}}</th>
-          <td>{{task[1]}}</td>
+          <th scope="row">{{task[1]}}</th>
+          <td>{{task[0]}}</td>
           <td>{{task[2]}}</td>
           <td>{{task[3]}}</td>
           <td>{{task[4]}}</td>
