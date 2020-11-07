@@ -36,6 +36,18 @@ def searchTasks(taskname, cursor = cur):
 
 def deleteTask(task, cursor = cur):
     taske = "'" + task + "'"
+    select = 'SELECT * FROM active_tasks WHERE taskname = %s;' %taske
+    cursor.execute(select)
+    slct = cursor.fetchone()
+    print(slct)
+    tskname = "'" + slct[0] + "'"
+    usrname = "'" + slct[1] + "'"
+    stts = "'" + slct[2] + "'"
+    dt = "'" + slct[3] + "'"
+    tm = "'" + slct[4] + "'"
+    insrt = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (tskname, usrname, stts, dt, tm)
+    cursor.execute(insrt)
+    conn.commit()
     query = 'DELETE FROM active_tasks WHERE taskname = %s;' %taske
     cursor.execute(query)
     if cursor.statusmessage == "DELETE 0":
