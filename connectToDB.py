@@ -73,9 +73,13 @@ def createTask(taskname, username, cursor=cur):
         taskname = "'" + taskname + "'"
         username = "'" + username + "'"
         status = "'pending'"
-        now = "'" + datetime.now() + "'"
-        date = now.strftime("%m/%d/%Y")
-        time = "'" + now.strftime("%H:%M") + "'"
+        now = datetime.now()
+        date = str(now.strftime("%m/%d/%Y"))
+        time = str(now.strftime("%H:%M"))
+        #date = 'none'
+        #time = 'none'
+        date = "'" + date + "'"
+        time = "'" + time + "'"
         query = 'INSERT INTO active_tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
         cursor.execute(query)
         conn.commit()
