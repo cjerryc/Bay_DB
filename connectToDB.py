@@ -15,7 +15,6 @@ cur = conn.cursor()
 def getUser(username, cursor=cur):
     username = "'" + username + "'"
     query = 'SELECT firstname, lastname FROM users WHERE users.username = %s;' % username
-    print(query)
     cursor.execute(query)
     return cur.fetchone()
 
@@ -25,7 +24,6 @@ def getTasks(cursor = cur):
 
 def tasksExists(taskname, cursor = cur):
     query = 'SELECT taskname FROM active_tasks WHERE active_tasks.taskname = %s;'%taskname
-    print(query)
     cur.execute(query)
     return cur.fetchall()  
 
@@ -39,7 +37,6 @@ def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"
     passcode = "'" + passcode + "'"
     query = 'SELECT firstname, lastname, email FROM users WHERE users.username = %s AND users.passcode = %s;' % (username, passcode)
-    print(query)
     cursor.execute(query)
     return cur.fetchone()
 
@@ -50,14 +47,12 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     email = "'" + email + "'"
     passcode = "'" + passcode + "'"
     query = 'INSERT INTO users(username, firstname, lastname, email, passcode) VALUES (%s, %s, %s, %s, %s);' % (username, firstname, lastname, email, passcode)
-    print(query)
     cursor.execute(query)
     conn.commit()
     #return cursor.fetchone()
 
 def createTask(taskname, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
-    print(exists)
 
     if not exists or exists == 'false' :
         exists = 'false'
@@ -67,7 +62,6 @@ def createTask(taskname, cursor=cur):
         date = "'none'"
         time = "'none'"
         query = 'INSERT INTO active_tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
-        print(query)
         cursor.execute(query)
         conn.commit()
     else:
@@ -81,8 +75,6 @@ def createTask(taskname, cursor=cur):
 
 def updateTask(taskname, date, time, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
-    print("TESTING TESTING \n")
-    print(exists)
 
     if exists:
         exists == 'true' 
@@ -92,7 +84,6 @@ def updateTask(taskname, date, time, cursor=cur):
         date = "'" + date + "'"
         time = "'" + time + "'"
         query = 'UPDATE active_tasks SET username = %s, status = %s, date = %s, time = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
-        print(query)
         cursor.execute(query)
         conn.commit()
     else:
