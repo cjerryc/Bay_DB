@@ -32,6 +32,13 @@ def searchTasks(taskname, cursor = cur):
     query = 'SELECT * FROM active_tasks WHERE (active_tasks.taskname LIKE %s) OR (active_tasks.username LIKE %s) OR (active_tasks.status LIKE %s) OR (active_tasks.date LIKE %s) OR (active_tasks.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname)
     cur.execute(query)
     return cur.fetchall()
+
+def deleteTask(task, cursor = cur):
+    taske = "'" + task + "'"
+    query = 'DELETE FROM active_tasks WHERE taskname = %s;' %taske
+    cursor.execute(query)
+    conn.commit()
+    return True
     
 def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"

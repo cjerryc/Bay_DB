@@ -54,6 +54,18 @@ def addtask():
 def completetask():
     return render_template('completetask.html')
 
+@app.route('/deletetask', methods = ['POST', 'GET'])
+def deletetask():
+    if request.method == 'POST':
+        result = request.form
+        print(result)
+        try:
+            do = deleteTask(result['taskname'])
+            return "<h1> It worked! </h1>"
+        except:
+            return "<h1> Didn't work </h1>"
+    return render_template('deletetask.html')
+
 @app.route('/taskupdated', methods = ['POST', 'GET'])
 def taskupdated():
     if request.method == 'POST':
