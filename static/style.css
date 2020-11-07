@@ -1,13 +1,13 @@
 body {
     margin: 0;
-    background-color: powderblue;
+    background-color: whitesmoke;
     font-family: Arial, Helvetica, sans-serif;
   }
   h1 {
-    color: blue;
+    color: black;
   }
   p {
-    color: red;
+    color: black;
   }
   .topnav {
     overflow: hidden;
