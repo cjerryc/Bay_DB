@@ -75,7 +75,7 @@ def taskupdated():
         result = request.form
         
         try:
-            exists = updateTask(result["taskname"], result["date"], result["time"])
+            exists = updateTask(result["taskname"], result["username"], result["date"], result["time"])
             return render_template("taskupdated.html", taskname=result["taskname"], exists=exists)
         except Exception as inst:
             print(inst)

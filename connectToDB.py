@@ -92,13 +92,13 @@ def createTask(taskname, username, cursor=cur):
     #return cursor.fetchone()
 
 
-def updateTask(taskname, date, time, cursor=cur):
+def updateTask(taskname, username, date, time, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
 
     if exists:
         exists = 'true' 
         taskname = "'" + taskname + "'"
-        username = "'jerryc2'"
+        username = "'" + username + "'"
         status = "'complete'"
         date = "'" + date + "'"
         time = "'" + time + "'"
