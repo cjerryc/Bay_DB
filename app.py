@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, createUser, createTask, getTasks, searchTasks
+from connectToDB import getUser, logUserIn, createUser, createTask, getTasks, searchTasks, updateTask
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -58,6 +58,7 @@ def completetask():
 def taskupdated():
     if request.method == 'POST':
         result = request.form
+        print("HELLOOOOO")
         print(result)
         
         try:

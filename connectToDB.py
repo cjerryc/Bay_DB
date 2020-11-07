@@ -57,7 +57,6 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
 
 def createTask(taskname, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
-    print("TESTING TESTING \n")
     print(exists)
 
     if not exists or exists == 'false' :
