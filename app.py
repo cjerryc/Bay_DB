@@ -61,18 +61,18 @@ def deletetask():
         print(result)
         try:
             do = deleteTask(result['taskname'])
+            return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
         except:
-            return "<h1> Didn't work </h1>"
-        if do:
-            return "<h1> It worked! </h1>"
+            exists = False
+            return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
+        # if do:
+        #     return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
     return render_template('deletetask.html')
 
 @app.route('/taskupdated', methods = ['POST', 'GET'])
 def taskupdated():
     if request.method == 'POST':
         result = request.form
-        print("HELLOOOOO")
-        print(result)
         
         try:
             exists = updateTask(result["taskname"], result["date"], result["time"])

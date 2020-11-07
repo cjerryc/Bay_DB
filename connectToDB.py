@@ -40,11 +40,11 @@ def deleteTask(task, cursor = cur):
     if cursor.statusmessage == "DELETE 0":
         conn.commit()
         print(cursor.statusmessage)
-        return False
+        return 'false'
     else:
         conn.commit()
         print(cursor.statusmessage)
-        return True
+        return 'true'
     
 def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"
@@ -90,7 +90,7 @@ def updateTask(taskname, date, time, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
 
     if exists:
-        exists == 'true' 
+        exists = 'true' 
         taskname = "'" + taskname + "'"
         username = "'jerryc2'"
         status = "'complete'"
