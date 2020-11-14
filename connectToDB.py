@@ -1,7 +1,7 @@
 import os
 import psycopg2
 from datetime import datetime
-
+current_username = "unknown"
 
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
@@ -13,6 +13,10 @@ except:
         user="vuxncunnoferwp",
         password="bab2d1e1b712cbc8c6a16c50213d0d5888c7b53c74ea961aba4a708f55e36115")
 cur = conn.cursor()
+
+def logUserOut():
+    global current_username
+    current_username = "unknown"
 
 def getUser(username, cursor=cur):
     username = "'" + username + "'"
@@ -61,6 +65,8 @@ def deleteTask(task, cursor = cur):
         return 'true'
     
 def logUserIn(username, passcode, cursor=cur):
+    global current_username
+    current_username = username
     username = "'" + username + "'"
     passcode = "'" + passcode + "'"
     query = 'SELECT firstname, lastname, email FROM users WHERE users.username = %s AND users.passcode = %s;' % (username, passcode)
@@ -78,13 +84,13 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     conn.commit()
     #return cursor.fetchone()
 
-def createTask(taskname, username, cursor=cur):
+def createTask(taskname, cursor=cur):
+    global current_username
     exists = tasksExists("'" + taskname + "'")
-
     if not exists:
         exists = 'false'
         taskname = "'" + taskname + "'"
-        username = "'" + username + "'"
+        username = "'" + current_username + "'"
         status = "'incomplete'"
         now = datetime.now()
         date = str(now.strftime("%m/%d/%Y"))
@@ -102,13 +108,14 @@ def createTask(taskname, username, cursor=cur):
     return exists
 
 
-def updateTask(taskname, username, date, time, cursor=cur):
+def updateTask(taskname, date, time, cursor=cur):
+    global current_username
     exists = tasksExists("'" + taskname + "'")
 
     if exists:
         exists = 'true' 
         taskname = "'" + taskname + "'"
-        username = "'" + username + "'"
+        username = "'" + current_username + "'"
         status = "'complete'"
         date = "'" + date + "'"
         time = "'" + time + "'"

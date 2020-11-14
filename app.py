@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, createUser, createTask, getTasks, searchTasks, updateTask, deleteTask
+from connectToDB import getUser, logUserIn, logUserOut, createUser, createTask, getTasks, searchTasks, updateTask, deleteTask
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -22,6 +22,8 @@ def hello(username=None):
 
 @app.route('/login')
 def login():
+    print('LOGOUT')
+    logUserOut()
     return render_template('login.html')
 
 @app.route('/signup')
@@ -76,7 +78,7 @@ def taskupdated():
         result = request.form
         
         try:
-            exists = updateTask(result["taskname"], result["username"], result["date"], result["time"])
+            exists = updateTask(result["taskname"], result["date"], result["time"])
             return render_template("taskupdated.html", taskname=result["taskname"], exists=exists)
         except Exception as inst:
             print(inst)
@@ -101,7 +103,7 @@ def taskcreated():
     if request.method == 'POST':
         result = request.form
         print(result)
-        exists = createTask(result["taskname"], result["username"])
+        exists = createTask(result["taskname"])
         print(exists)
         return render_template('taskcreated.html', taskname=result["taskname"], exists=exists)     
 
