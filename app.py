@@ -71,6 +71,7 @@ def deletetask():
 
 @app.route('/taskupdated', methods = ['POST', 'GET'])
 def taskupdated():
+    
     if request.method == 'POST':
         result = request.form
         

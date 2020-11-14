@@ -2,6 +2,7 @@ import os
 import psycopg2
 from datetime import datetime
 
+
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -80,11 +81,11 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
 def createTask(taskname, username, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
 
-    if not exists or exists == 'false' :
+    if not exists:
         exists = 'false'
         taskname = "'" + taskname + "'"
         username = "'" + username + "'"
-        status = "'pending'"
+        status = "'incomplete'"
         now = datetime.now()
         date = str(now.strftime("%m/%d/%Y"))
         time = str(now.strftime("%H:%M"))
@@ -99,9 +100,6 @@ def createTask(taskname, username, cursor=cur):
         "<h1>Task already exists! Enter a new task.</h1>"
     
     return exists
-    
-    
-    #return cursor.fetchone()
 
 
 def updateTask(taskname, username, date, time, cursor=cur):
@@ -122,5 +120,3 @@ def updateTask(taskname, username, date, time, cursor=cur):
     
     return exists
     
-    
-    #return cursor.fetchone()

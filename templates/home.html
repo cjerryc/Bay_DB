@@ -21,8 +21,8 @@
     </ul>
     
     <div style="padding-left:16px">
-      <h1>Top Navigation Example</h1>
-      <p>Some content..</p>
+      <h1>Your Group's Tasks</h1>
+      <p></p>
     </div>
     <p style="text-align:right;width:500px;">
         <span style="font-weight:bold;">Search:</span> <input type="text" id="txtSearch" name="txtSearch" maxlength="50" />&nbsp;
@@ -38,7 +38,11 @@
           </tr>
         </thead>
           {% for task in tasks %}
-          <tr>
+          {% if task[2] == 'incomplete' %}
+          <tr style="color: rgb(165, 40, 40)">
+          {% else %}
+            <tr style="color: rgb(31, 110, 31)">
+          {% endif %}
           <th scope="row">{{task[1]}}</th>
           <td>{{task[0]}}</td>
           <td>{{task[2]}}</td>
