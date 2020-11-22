@@ -8,7 +8,6 @@ mydb = client["BayDB"]
 mycol = mydb["BayDB"]
 
 
-
 mongo_template = { "history_id": 5,
           "task_id": 4,
           "group_id": 3,
