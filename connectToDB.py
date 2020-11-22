@@ -1,8 +1,11 @@
 import os
 import psycopg2
 from datetime import datetime
+import pymongo
 current_username = "unknown"
 
+
+client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
