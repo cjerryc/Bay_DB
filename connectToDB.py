@@ -47,7 +47,7 @@ def searchTasks(taskname, cursor = cur):
 
 def checkGroupID(usrnm, cursor=cur):
     usrnm = "'" + usrnm + "'"
-    query = 'Select Groupid FROM groups WHERE %s = ANY (Username);' %usrnm
+    query = 'Select Groupid FROM groups_table WHERE %s = ANY (Username);' %usrnm
     cursor.execute(query)
     return (int(cursor.fetchone()[0]))
 
