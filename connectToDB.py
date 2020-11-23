@@ -2,6 +2,7 @@ import os
 import psycopg2
 from datetime import datetime
 import pymongo
+import random
 current_username = "unknown"
 
 
@@ -96,14 +97,19 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     conn.commit()
     #return cursor.fetchone()
 
-def createTask(taskname, cursor=cur):
+def createTask(taskname, assignedto, cursor=cur):
     global current_username
     exists = tasksExists("'" + taskname + "'")
     if not exists:
         exists = 'false'
+        taskid = random.randrange(1,2147483647)
         taskname = "'" + taskname + "'"
+        assignedto = "'" + assignedto + "'"
         username = "'" + current_username + "'"
+        #need to get groupid select from group table
+        #groupid = "'" + groupid + "'"
         status = "'incomplete'"
+        nope = "'NULL'"
         now = datetime.now()
         date = str(now.strftime("%m/%d/%Y"))
         time = str(now.strftime("%H:%M"))
@@ -111,7 +117,7 @@ def createTask(taskname, cursor=cur):
         #time = 'none'
         date = "'" + date + "'"
         time = "'" + time + "'"
-        query = 'INSERT INTO active_tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (taskname, username, status, date, time)
+        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL);' % (taskid, taskname, date, time, status, assignedto, 5)
         cursor.execute(query)
         conn.commit()
     else:
