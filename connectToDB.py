@@ -31,17 +31,17 @@ def getUser(username, cursor=cur):
     return cur.fetchone()
 
 def getTasks(cursor = cur):
-    cur.execute("SELECT * FROM active_tasks;")
+    cur.execute("SELECT * FROM tasks_table;")
     return cur.fetchall()
 
 def tasksExists(taskname, cursor = cur):
-    query = 'SELECT taskname FROM active_tasks WHERE active_tasks.taskname = %s;'%taskname
+    query = 'SELECT taskname FROM tasks_table WHERE tasks_table.taskname = %s;'%taskname
     cur.execute(query)
     return cur.fetchall()  
 
 def searchTasks(taskname, cursor = cur):
     taskname = "'%" + taskname + "%'"
-    query = 'SELECT * FROM active_tasks WHERE (active_tasks.taskname LIKE %s) OR (active_tasks.username LIKE %s) OR (active_tasks.status LIKE %s) OR (active_tasks.date LIKE %s) OR (active_tasks.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname)
+    query = 'SELECT * FROM tasks_table WHERE (tasks_table.taskname LIKE %s) OR (tasks_table.assignedto LIKE %s) OR (tasks_table.status LIKE %s) OR (tasks_table.date LIKE %s) OR (tasks_table.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname)
     cur.execute(query)
     return cur.fetchall()
 
@@ -53,7 +53,7 @@ def checkGroupID(usrnm, cursor=cur):
 
 def deleteTask(task, cursor = cur):
     taske = "'" + task + "'"
-    select = 'SELECT * FROM active_tasks WHERE taskname = %s;' %taske
+    select = 'SELECT * FROM tasks_table WHERE taskname = %s;' %taske
     cursor.execute(select)
     slct = cursor.fetchone()
     print(slct)
@@ -65,7 +65,7 @@ def deleteTask(task, cursor = cur):
     insrt = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (tskname, usrname, stts, dt, tm)
     cursor.execute(insrt)
     conn.commit()
-    query = 'DELETE FROM active_tasks WHERE taskname = %s;' %taske
+    query = 'DELETE FROM tasks_table WHERE taskname = %s;' %taske
     cursor.execute(query)
     
     if cursor.statusmessage == "DELETE 0":
@@ -102,14 +102,13 @@ def createTask(taskname, assignedto, cursor=cur):
     exists = tasksExists("'" + taskname + "'")
     if not exists:
         exists = 'false'
-        taskid = random.randrange(1,2147483647)
+        taskid = random.randrange(1,2147483647) #id range
         taskname = "'" + taskname + "'"
         assignedto = "'" + assignedto + "'"
         username = "'" + current_username + "'"
         #need to get groupid select from group table
         #groupid = "'" + groupid + "'"
         status = "'incomplete'"
-        nope = "'NULL'"
         now = datetime.now()
         date = str(now.strftime("%m/%d/%Y"))
         time = str(now.strftime("%H:%M"))
@@ -147,7 +146,7 @@ def updateTask(taskname, date, time, cursor=cur):
         status = "'complete'"
         date = "'" + date + "'"
         time = "'" + time + "'"
-        query = 'UPDATE active_tasks SET username = %s, status = %s, date = %s, time = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
+        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
         cursor.execute(query)
         conn.commit()
         mycol.insert_one(mongo_template)
