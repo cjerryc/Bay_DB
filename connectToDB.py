@@ -6,6 +6,8 @@ current_username = "unknown"
 
 
 client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
+mydb = client["BayDB"]
+mycol = mydb["BayDB"]
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -42,6 +44,12 @@ def searchTasks(taskname, cursor = cur):
     cur.execute(query)
     return cur.fetchall()
 
+def checkGroupID(usrnm, cursor=cur):
+    usrnm = "'" + usrnm + "'"
+    query = 'Select Groupid FROM groups WHERE %s = ANY (Username);' %usrnm
+    cursor.execute(query)
+    return (int(cursor.fetchone()[0]))
+
 def deleteTask(task, cursor = cur):
     taske = "'" + task + "'"
     select = 'SELECT * FROM active_tasks WHERE taskname = %s;' %taske
@@ -58,6 +66,7 @@ def deleteTask(task, cursor = cur):
     conn.commit()
     query = 'DELETE FROM active_tasks WHERE taskname = %s;' %taske
     cursor.execute(query)
+    
     if cursor.statusmessage == "DELETE 0":
         conn.commit()
         print(cursor.statusmessage)
@@ -115,6 +124,16 @@ def updateTask(taskname, date, time, cursor=cur):
     global current_username
     exists = tasksExists("'" + taskname + "'")
 
+    mongo_template = { "history_id": int(datetime.now().timestamp()),
+          "task_id": 4,
+          "group_id": checkGroupID(current_username),
+          "taskname": taskname,
+          "username": current_username,
+          "date": date,
+          "time": time,
+          "was_assigned": True,
+          "subtasks": ["hi", "lol", "love"]}
+
     if exists:
         exists = 'true' 
         taskname = "'" + taskname + "'"
@@ -125,6 +144,7 @@ def updateTask(taskname, date, time, cursor=cur):
         query = 'UPDATE active_tasks SET username = %s, status = %s, date = %s, time = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
         cursor.execute(query)
         conn.commit()
+        mycol.insert_one(mongo_template)
     else:
         exists = 'false'
     
