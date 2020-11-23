@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <link rel="stylesheet" href="../static/style.css">
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/home.js"></script>
+    </head>
   <body>
-      <ul class="topnav">
-          <li><a href = "home" >Home</a></li>
-          <li><a href = "login">Log In</a></li>
-          <li><a href = "signup">Sign Up</a></li>
-          <li><a href = "addtask">Add Task</a></li>
-          <li><a href = "search"> Search</a></li>
-          <li><a href = "completetask"> Complete Task</a></li>
-          <li><a href = "deletetask"> Delete Task</a></li>
-      </ul>
-    <h1>Welcome to Expose Le Roommate!</h1>
-    <p> Website by by Ozgur Gencer, Veda Menon, Lucy Zhang, Jerry Chang</p>
-    <button onclick="toLogin()">Go to Login</button>
-    <button onclick="toSignup()">To Signup </button>
-    <button onclick="toHome()"> Actual Home Page</button>
+      <div class="sidebar">
+          <a href = "home" >Home</a>
+          <a href = "login">Log In</a>
+          <a href = "signup">Sign Up</a>
+          <a href = "addtask">Add Task</a>
+          <a href = "search"> Search</a>
+          <a href = "completetask"> Complete Task</a>
+          <a href = "deletetask"> Delete Task</a>
+      </div>
+      <div class = "content">
+        <h1>Welcome to Expose Le Roommate!</h1>
+        <p> Website by by Ozgur Gencer, Veda Menon, Lucy Zhang, Jerry Chang</p>
+        <button onclick="toLogin()">Go to Login</button>
+        <button onclick="toSignup()">To Signup </button>
+        <button onclick="toHome()"> Actual Home Page</button>
+      </div>
     <script>
       function toLogin(){
         window.open(window.location.href + "login", "_self");

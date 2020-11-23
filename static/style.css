@@ -1,13 +1,64 @@
 body {
     margin: 0;
-    background-color: whitesmoke;
+    background-color: #f1faee;
     font-family: Arial, Helvetica, sans-serif;
-  }
+}
   h1 {
     color: black;
   }
   p {
     color: black;
+  }
+  .sidebar {
+    margin: 0;
+    padding: 0;
+    width: 175px;
+    background-color: #1d3557;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+  
+  .sidebar a {
+    display: block;
+    color: rgb(255, 255, 255);
+    padding: 16px;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    font-size: large;
+  }
+   
+  .sidebar a.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .sidebar a:hover:not(.active) {
+    background-color: #457b9d;
+    color: white;
+  }
+  
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+  }
+  
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+  }
+  
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
   }
   .topnav {
     overflow: hidden;
