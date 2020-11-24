@@ -2,32 +2,40 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/login.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="static/login.js"></script>
     <script src="../static/signup.js"></script>
+
   </head>
 
 <body>
-  <div class="sidebar">
-    <a href = "home" >Home</a>
-    <a class= "active" href = "login">Log In</a>
-    <a href = "signup">Sign Up</a>
-    <a href = "addtask">Add Task</a>
-    <a href = "search"> Search</a>
-    <a href = "completetask"> Complete Task</a>
-    <a href = "deletetask"> Delete Task</a>
-  </div>
-  <div class = "content">
-    <h2>Log In</h2>
-    <div class = "divform">
-      <form action = "/managelogin" method = "POST">
-      <p>Username <input type = "text" name = "username" required></p>
-      <p>Password <input type ="text" name = "passcode" required></p>
-      <p><input type = "submit" value = "submit" /></p>
+  <div class="login-page">
+    <div class="form">
+      <form class="register-form" action = "/signinfo" method = "POST">
+        <input type="text" placeholder="username" name = "username"/>
+        <input type="text" placeholder="first name" name = "firstname"/>
+        <input type="text" placeholder="last name" name = "lastname"/>
+        <input type="text" placeholder="email" name = "email"/>
+        <input type="text" placeholder="password" name = "passcode"/>
+        <button value = "submit">create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form>
+      <form class="login-form" action = "/managelogin" method = "POST">
+        <input type = "text" placeholder = "username" name = "username" required>
+        <input type ="password" placeholder = "username"name = "passcode" required>
+        <button value = "submit">login</button>
+        <p class="message">Not registered? <a href="#">Create an account</a></p>
       </form>
     </div>
   </div>
+  <script>
+    $('.message a').click(function(){
+      $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+   </script>
 </body>
-    </html>
+
+</html>

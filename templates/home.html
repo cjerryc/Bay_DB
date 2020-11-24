@@ -14,15 +14,19 @@
     
       <div class="sidebar">
         <a class= "active">Home</a>
-        <a href = "login">Log In</a>
-        <a href = "signup">Sign Up</a>
+        <a class = "signupinfo"> Profile</a>
         <a href = "addtask">Add Task</a>
         <a href = "search"> Search</a>
         <a href = "completetask"> Complete Task</a>
         <a href = "deletetask"> Delete Task</a>
         <a href = "login"> Log Out</a>
       </div>
-      <div class = "content">
+      <script>function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+      }</script>
+      
+      <div id = "main" class = "content">
     <div style="padding-left:16px">
       <h1>Your Group's Tasks</h1>
       <p></p>

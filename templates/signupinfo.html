@@ -1,5 +1,27 @@
 <!doctype html>
-<link rel="stylesheet" href="../static/style.css">
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/home.js"></script>
+    </head>
+<body>
+<div class="sidebar">
+   <a class= "home">Home</a>
+   <a class = "active"> Profile</a>
+   <a href = "addtask">Add Task</a>
+   <a href = "search"> Search</a>
+   <a href = "completetask"> Complete Task</a>
+   <a href = "deletetask"> Delete Task</a>
+   <a href = "login"> Log Out</a>
+ </div>
+ <div class = "content">
+    <h3> Profile Page!</h3>
   <table border = 1>
     {% for key, value in result.items() %}
 
@@ -10,3 +32,6 @@
 
     {% endfor %}
  </table>
+</div>
+</body>
+</html>

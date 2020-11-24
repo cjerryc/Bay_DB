@@ -8,7 +8,8 @@ current_lastname = "''"
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    #return render_template('index.html') #change to 'login.html' later
+    return render_template('login.html')
 
 
 @app.route('/hello/')
@@ -39,7 +40,7 @@ def managelogin():
         current_firstname = queryRes[0]
         current_lastname = queryRes[1]
         if queryRes:
-            return render_template('welcome.html', name=queryRes[0], lastname=queryRes[1])
+            return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
         else:
             return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
 
