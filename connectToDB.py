@@ -41,7 +41,7 @@ def tasksExists(taskname, cursor = cur):
 
 def searchTasks(taskname, cursor = cur):
     taskname = "'%" + taskname + "%'"
-    query = 'SELECT * FROM tasks_table WHERE (tasks_table.taskname LIKE %s) OR (tasks_table.assignedto LIKE %s) OR (tasks_table.status LIKE %s) OR (tasks_table.date LIKE %s) OR (tasks_table.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname)
+    query = 'SELECT * FROM tasks_table WHERE (tasks_table.taskname LIKE %s) OR (tasks_table.doneby LIKE %s) OR (tasks_table.assignedto LIKE %s) OR (tasks_table.status LIKE %s) OR (tasks_table.date LIKE %s) OR (tasks_table.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname, taskname)
     cur.execute(query)
     return cur.fetchall()
 
@@ -53,18 +53,18 @@ def checkGroupID(usrnm, cursor=cur):
 
 def deleteTask(task, cursor = cur):
     taske = "'" + task + "'"
-    select = 'SELECT * FROM tasks_table WHERE taskname = %s;' %taske
-    cursor.execute(select)
-    slct = cursor.fetchone()
-    print(slct)
-    tskname = "'" + slct[0] + "'"
-    usrname = "'" + slct[1] + "'"
-    stts = "'" + slct[2] + "'"
-    dt = "'" + slct[3] + "'"
-    tm = "'" + slct[4] + "'"
-    insrt = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (tskname, usrname, stts, dt, tm)
-    cursor.execute(insrt)
-    conn.commit()
+    #select = 'SELECT * FROM tasks_table WHERE taskname = %s;' %taske
+    #cursor.execute(select)
+    #slct = cursor.fetchone()
+    #print(slct)
+    #tskname = "'" + slct[0] + "'"
+    #usrname = "'" + slct[1] + "'"
+    #stts = "'" + slct[2] + "'"
+    #dt = "'" + slct[3] + "'"
+    #tm = "'" + slct[4] + "'"
+    #insrt = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (tskname, usrname, stts, dt, tm)
+    #cursor.execute(insrt)
+    #conn.commit()
     query = 'DELETE FROM tasks_table WHERE taskname = %s;' %taske
     cursor.execute(query)
     
@@ -116,7 +116,7 @@ def createTask(taskname, assignedto, cursor=cur):
         #time = 'none'
         date = "'" + date + "'"
         time = "'" + time + "'"
-        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL);' % (taskid, taskname, date, time, status, assignedto, 5)
+        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL);' % (taskid, taskname, date, time, status, assignedto, 71)
         cursor.execute(query)
         conn.commit()
     else:
@@ -125,9 +125,12 @@ def createTask(taskname, assignedto, cursor=cur):
     return exists
 
 
-def updateTask(taskname, date, time, cursor=cur):
+def updateTask(taskname, cursor=cur):
     global current_username
     exists = tasksExists("'" + taskname + "'")
+    now = datetime.now()
+    date = now.strftime("%m/%d/%Y")
+    time = now.strftime("%H:%M")
 
     mongo_template = { "history_id": int(datetime.now().timestamp()),
           "task_id": 4,

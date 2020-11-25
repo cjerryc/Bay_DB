@@ -39,8 +39,12 @@ def managelogin():
         queryRes = logUserIn(result["username"], result["passcode"])
         current_firstname = queryRes[0]
         current_lastname = queryRes[1]
+        tasks = getTasks()
+        #if queryRes:
+            #return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
         if queryRes:
-            return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
+            return render_template('home.html', tasks = getTasks())
+
         else:
             return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
 
@@ -79,7 +83,7 @@ def taskupdated():
         result = request.form
         
         try:
-            exists = updateTask(result["taskname"], result["date"], result["time"])
+            exists = updateTask(result["taskname"])
             return render_template("taskupdated.html", taskname=result["taskname"], exists=exists)
         except Exception as inst:
             print(inst)
@@ -90,11 +94,12 @@ def search():
     if request.method == 'POST':
         result = request.form
         queryRes = searchTasks(result["search"])
-        if result["search"] != '':
-            return render_template('search.html', searchedTasks=queryRes)
+        if queryRes and result["search"] :
+            return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes)
+        elif not result["search"]:
+            return render_template('search.html', searchInput = "No results could be found!", searchedTasks= '')
         else:
-            missing = "No Tasks Found!"
-            return render_template('search.html', searchedTasks=missing)
+            return render_template('search.html', searchInput = "No results for '" + result["search"] + "' could be found!", searchedTasks= '')
     elif request.method == 'GET':
         return render_template('search.html')
     return render_template('search.html')
