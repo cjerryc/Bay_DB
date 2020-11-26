@@ -11,27 +11,40 @@
     <script src="../static/home.js"></script>
     </head>
 <body>
-<div class="sidebar">
-   <a class= "home">Home</a>
-   <a class = "active"> Profile</a>
-   <a href = "addtask">Add Task</a>
-   <a href = "search"> Search</a>
-   <a href = "completetask"> Complete Task</a>
-   <a href = "deletetask"> Delete Task</a>
-   <a href = "login"> Log Out</a>
- </div>
+   <div id="navbar">
+      <!-- <a class="navbar-brand" href="/"> -->
+         <!-- <div class="logo-image">
+               <img style='height: 100%; width: 100%; object-fit: contain' src="mush.png" class="img-fluid">
+         </div> -->
+      <!-- </a> -->
+      <a> CS411 BayDB </a>
+      <a href="#home"></a>
+    </div>
+    <div class="sidebar">
+      <a href="home">Home</a>
+      <a class= "active" href = "profile"> Profile</a>
+      <a href = "addtask">Add Task</a>
+      <a href = "search"> Search Tasks</a>
+      <a href = "updatetask"> Change a Task</a>
+      <a href = "completetask"> Complete Task</a>
+      <a href = "deletetask"> Delete Task</a>
+      <a href = "login"> Log Out</a>
+    </div>
  <div class = "content">
-    <h3> Profile Page!</h3>
-  <table border = 1>
-    {% for key, value in result.items() %}
-
-    <tr>
-       <th> {{ key }} </th>
-       <td> {{ value }} </td>
-    </tr>
-
-    {% endfor %}
+    <div class = "activities">
+      <h1> Your Profile Page</h1>
+   <table class = "table" border = 1 cellpadding="2" cellspacing="0">
+      <thead>
+        <tr><th>Username</th><td> {{ result[0] }} </td></tr>
+        <tr><th>First Name</th><td> {{ result[1] }} </td></tr>
+         <tr><th>Last Name</th><td> {{ result[2] }} </td></tr>
+            <tr><th>Email</th><td> {{ result[3] }} </td></tr>
+               <tr><th>Password</th><td> {{ result[4] }} </td></tr>
+                  <tr><th>Group Name</th></tr>
+                     <tr><th>GroupId</th></tr>
+      </thead>
  </table>
+ </div>
 </div>
 </body>
 </html>

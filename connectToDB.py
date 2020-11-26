@@ -30,8 +30,8 @@ def getUser(username, cursor=cur):
     cursor.execute(query)
     return cur.fetchone()
     
-def getUserInfo(username, cursor = cur):
-    username = "'" + username + "'"
+def getUserInfo(cursor = cur):
+    username = "'" + current_username + "'"
     query = 'SELECT * FROM users WHERE users.username = %s;' % username
     cursor.execute(query)
     return cur.fetchone()

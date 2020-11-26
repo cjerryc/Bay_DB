@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, createTask, getTasks, searchTasks, updateTask, deleteTask, completeTask
+from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, searchTasks, updateTask, deleteTask, completeTask
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -8,7 +8,6 @@ current_lastname = "''"
 
 @app.route('/')
 def index():
-    #return render_template('index.html') #change to 'login.html' later
     return render_template('login.html')
 
 
@@ -128,10 +127,10 @@ def signinfo():
           return "<h1>Password doesn't match try again!</h1>"
 
 #how do we know who is currently "logged in"? pls fix profile
-# @app.route('/profile')
-# def profilepage():
-#     result = getUserInfo()
-#     return render_template('signupinfo.html', result = getUserInfo())
+@app.route('/profile')
+def profilepage():
+    result = getUserInfo()
+    return render_template('profile.html', result = result)
 
 
 if __name__ == '__main__':
