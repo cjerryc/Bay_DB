@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, createTask, getTasks, searchTasks, updateTask, deleteTask
+from connectToDB import getUser, logUserIn, logUserOut, createUser, createTask, getTasks, searchTasks, updateTask, deleteTask, completeTask
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -83,7 +83,7 @@ def taskcompleted():
         result = request.form
         
         try:
-            exists = updateTask(result["taskname"])
+            exists = completeTask(result["taskname"])
             return render_template("taskcompleted.html", taskname=result["taskname"], exists=exists, tasks = getTasks())
         except Exception as inst:
             print(inst)

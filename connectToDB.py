@@ -129,7 +129,38 @@ def createTask(taskname, assignedto, cursor=cur):
         "<h1>Task already exists! Enter a new task.</h1>"
     
     return exists
+def completeTask(taskname, cursor=cur):
+    global current_username
+    exists = tasksExists("'" + taskname + "'")
+    now = datetime.now()
+    date = now.strftime("%m/%d/%Y")
+    time = now.strftime("%H:%M")
 
+    mongo_template = { "history_id": int(datetime.now().timestamp()),
+          "task_id": 4,
+          "group_id": checkGroupID(current_username),
+          "taskname": taskname,
+          "username": current_username,
+          "date": date,
+          "time": time,
+          "was_assigned": True,
+          "subtasks": ["hi", "lol", "love"]}
+
+    if exists:
+        exists = 'true' 
+        taskname = "'" + taskname + "'"
+        username = "'" + current_username + "'"
+        status = "'complete'"
+        date = "'" + date + "'"
+        time = "'" + time + "'"
+        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
+        cursor.execute(query)
+        conn.commit()
+        mycol.insert_one(mongo_template)
+    else:
+        exists = 'false'
+    
+    return exists
 
 def updateTask(taskname, cursor=cur):
     global current_username
