@@ -103,11 +103,12 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
     conn.commit()
     #return cursor.fetchone()
 
-def createTask(taskname, assignedto, cursor=cur):
+def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
     global current_username
     exists = tasksExists("'" + taskname + "'")
     if not exists:
         exists = 'false'
+        groupid = 71 ##need to chnage
         taskid = random.randrange(1,2147483647) #id range
         taskname = "'" + taskname + "'"
         assignedto = "'" + assignedto + "'"
@@ -120,11 +121,18 @@ def createTask(taskname, assignedto, cursor=cur):
         time = str(now.strftime("%H:%M"))
         #date = 'none'
         #time = 'none'
+        usernotes = "'" + usernotes + "'"
         date = "'" + date + "'"
         time = "'" + time + "'"
-        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL);' % (taskid, taskname, date, time, status, assignedto, 71)
+        repeat = "'" + repeat + "'"
+        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL);' % (taskid, taskname, date, time, status, assignedto, groupid) #, %s)#, usernotes)
         cursor.execute(query)
         conn.commit()
+        print(repeat)
+        if "No" not in repeat:
+            query = 'INSERT INTO recurring_table(taskid,taskname,repeattime,assignedto,groupid,subtasks,materials,notes) VALUES ( %s, %s, %s, %s, %s,NULL, NULL, %s) ;'% (taskid, taskname, repeat, assignedto, groupid, usernotes)
+            cursor.execute(query)
+            conn.commit()
     else:
         "<h1>Task already exists! Enter a new task.</h1>"
     

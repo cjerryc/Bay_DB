@@ -179,6 +179,7 @@ table.table tfoot .links a{
   text-decoration: none;
   font-family: 'Open Sans', sans-serif;
   font-size: large;
+  font-weight: bold;
   width: 8%;
 }
  .logo-image{

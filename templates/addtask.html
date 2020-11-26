@@ -33,7 +33,19 @@
                <form action = "/taskcreated" method = "POST">
                   <p>Task Name <input type = "text" name = "taskname" /></p>
                   <p>Assigned to <input type = "text" name = "assignedto" /></p>
-                  <p><input type = "submit" value = "submit" /></p>
+                  <p> Recurring?
+                  <select class="form-control form-control-lg" name = "repeat">
+                     <option name = "norepeat"> No</option>
+                     <option name = "daily">Daily</option>
+                     <option name = "weekly">Weekly (Sunday)</option>
+                     <option name = "biweekly">Biweekly</option>
+                  </select> </p>
+                  <p> Extra Notes: </p> <textarea name="usernotes" rows="10" cols="40"> </textarea> 
+                  <div class="form-check">
+                     <input type="checkbox" class="form-check-input" id="CDCoption">
+                     <label class="form-check-label" for="CDCoption">See potential CDC subtasks and materials?</label>
+                   </div>
+                  <p><input type = "submit" value = "submit"/></p>
                </form>
             </div>
          </div>
