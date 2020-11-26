@@ -107,9 +107,13 @@ def search():
 def taskcreated():
     if request.method == 'POST':
         result = request.form
-        print(result)
+        # print(result)
         exists = createTask(result["taskname"], result["assignedto"], result["repeat"], result["usernotes"])
-        print(exists)
+        ##this is for cdc stuff:
+        if 'CDCoption' in result.keys():
+            ##do mongo stuff 
+            print("insertmongostuff")
+        # print(exists)
         return render_template('taskcreated.html', taskname=result["taskname"], exists=exists, tasks = getTasks())     
 
 
