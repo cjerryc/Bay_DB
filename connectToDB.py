@@ -29,6 +29,12 @@ def getUser(username, cursor=cur):
     query = 'SELECT firstname, lastname FROM users WHERE users.username = %s;' % username
     cursor.execute(query)
     return cur.fetchone()
+    
+def getUserInfo(username, cursor = cur):
+    username = "'" + username + "'"
+    query = 'SELECT * FROM users WHERE users.username = %s;' % username
+    cursor.execute(query)
+    return cur.fetchone()
 
 def getTasks(cursor = cur):
     cur.execute("SELECT * FROM tasks_table;")

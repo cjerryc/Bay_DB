@@ -13,17 +13,18 @@
 
 <body>
   <div class="sidebar">
-    <a href = "home" >Home</a>
-    <a href = "login">Log In</a>
-    <a href = "signup">Sign Up</a>
+    <a href="home">Home</a>
+    <a href = "profile"> Profile</a>
     <a href = "addtask">Add Task</a>
-    <a href = "search"> Search</a>
+    <a href = "search"> Search Tasks</a>
+    <a href = "updatetask"> Change a Task</a>
     <a href = "completetask"> Complete Task</a>
     <a class= "active" href = "deletetask"> Delete Task</a>
     <a href = "login"> Log Out</a>
   </div>
   <div class = "content">
-    <h3>Delete a task</h3>
+    <div class = "activities">
+    <h1>Delete a task</h1>
     <div class ="divform">
         <form action = "/deletetask" method = "POST">
             <p>Task Name <input type = "text" name = "taskname" /></p>
@@ -31,5 +32,39 @@
         </form>
     </div>
   </div>
+  <div class = "taskscontainer">
+    <h1> Tasks List </h1>
+    <table id="tblSearch" class="table" cellpadding="2" cellspacing="0">
+      <thead>
+        <tr>
+          <th scope="col">Taskname</th>
+          <th scope="col">Status</th>
+          <th scope="col">Created Date</th>
+          <th scope="col">Created Time</th>
+          <th scope="col">Assigned to:</th>
+          <th scope="col">Completed Date</th>
+          <th scope="col">Completed Time</th>
+          <th scope="col">Done by:</th>
+        </tr>
+      </thead>
+        {% for task in tasks %}
+        {% if task[4] == 'incomplete' %}
+        <tr style="color: rgb(165, 40, 40)">
+        {% else %}
+          <tr style="color: rgb(31, 110, 31)">
+        {% endif %}
+        <th scope="row">{{task[1]}}</th>
+        <td>{{task[4]}}</td> 
+        <td>{{task[3]}}</td>
+        <td>{{task[2]}}</td>
+        <td>{{task[5]}}</td>
+        <td>{{task[6]}}</td>
+        <td>{{task[7]}}</td>
+        <td>{{task[8]}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+ </div>
+</div>
 </body>
 </html>

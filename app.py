@@ -55,11 +55,12 @@ def home():
     
 @app.route('/addtask')
 def addtask():
-    return render_template('addtask.html')
+    tasks = getTasks()
+    return render_template('addtask.html', tasks = getTasks())
 
 @app.route('/completetask')
 def completetask():
-    return render_template('completetask.html')
+    return render_template('completetask.html', tasks = getTasks())
 
 @app.route('/deletetask', methods = ['POST', 'GET'])
 def deletetask():
@@ -68,23 +69,22 @@ def deletetask():
         print(result)
         try:
             do = deleteTask(result['taskname'])
-            return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
+            return render_template("taskdeleted.html", taskname=result["taskname"], exists=do, tasks = getTasks())
         except:
             exists = False
-            return render_template("taskdeleted.html", taskname=result["taskname"])
+            return render_template("taskdeleted.html", taskname=result["taskname"], tasks = getTasks())
         # if do:
         #     return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
-    return render_template('deletetask.html')
+    return render_template('deletetask.html', tasks = getTasks())
 
-@app.route('/taskupdated', methods = ['POST', 'GET'])
-def taskupdated():
-    
+@app.route('/taskcompleted', methods = ['POST', 'GET'])
+def taskcompleted():
     if request.method == 'POST':
         result = request.form
         
         try:
             exists = updateTask(result["taskname"])
-            return render_template("taskupdated.html", taskname=result["taskname"], exists=exists)
+            return render_template("taskcompleted.html", taskname=result["taskname"], exists=exists, tasks = getTasks())
         except Exception as inst:
             print(inst)
             return "<h1>Error try again!</h1>"
@@ -111,7 +111,7 @@ def taskcreated():
         print(result)
         exists = createTask(result["taskname"], result["assignedto"])
         print(exists)
-        return render_template('taskcreated.html', taskname=result["taskname"], exists=exists)     
+        return render_template('taskcreated.html', taskname=result["taskname"], exists=exists, tasks = getTasks())     
 
 
 @app.route('/signinfo', methods = ['POST', 'GET'])
@@ -123,9 +123,15 @@ def signinfo():
       try:
         createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
         #print(result["username"])
-        return render_template("signupinfo.html", result = result)
+        return render_template("profile.html", result = result)
       except:
           return "<h1>Password doesn't match try again!</h1>"
+
+#how do we know who is currently "logged in"? pls fix profile
+# @app.route('/profile')
+# def profilepage():
+#     result = getUserInfo()
+#     return render_template('signupinfo.html', result = getUserInfo())
 
 
 if __name__ == '__main__':

@@ -83,6 +83,31 @@ body {
     background-color: #4CAF50;
     color: white;
   }
+  .taskscontainer {
+    float: right;
+    background-color: coral;
+    width: 63%;
+    margin: 0 1.5%;
+    color: black;
+  }
+  .selected {
+    background-color: brown;
+    color: #FFF;
+}
+  .activities {
+    float: left;
+    width: 30%;
+    margin: 0 1.5%;
+    background-color: coral;
+  }
+  .activities details{
+    margin: 0 1.5%;
+    background-color: cyan;
+  }
+  .divform{
+    float:left;
+  }
+  
   ul {
     list-style-type: none;
     margin: 0;
