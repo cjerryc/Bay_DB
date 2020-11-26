@@ -51,15 +51,10 @@ def managelogin():
 def home():
     tasks = getTasks()
     return render_template('home.html', tasks = getTasks())
-    
-@app.route('/addtask')
-def addtask():
-    tasks = getTasks()
-    return render_template('addtask.html', tasks = getTasks())
 
-@app.route('/completetask')
-def completetask():
-    return render_template('completetask.html', tasks = getTasks())
+@app.route('/updatetask', methods = ['POST', 'GET'])
+def updateTask():
+    return render_template('updatetask.html', tasks = getTasks())
 
 @app.route('/deletetask', methods = ['POST', 'GET'])
 def deletetask():
@@ -76,8 +71,8 @@ def deletetask():
         #     return render_template("taskdeleted.html", taskname=result["taskname"], exists=do)
     return render_template('deletetask.html', tasks = getTasks())
 
-@app.route('/taskcompleted', methods = ['POST', 'GET'])
-def taskcompleted():
+@app.route('/completetask', methods = ['POST', 'GET'])
+def completetask():
     if request.method == 'POST':
         result = request.form
         
@@ -87,6 +82,7 @@ def taskcompleted():
         except Exception as inst:
             print(inst)
             return "<h1>Error try again!</h1>"
+    return render_template('completetask.html', tasks = getTasks())
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
@@ -103,8 +99,8 @@ def search():
         return render_template('search.html')
     return render_template('search.html')
     
-@app.route('/taskcreated', methods = ['POST', 'GET'])
-def taskcreated():
+@app.route('/addtask', methods = ['POST', 'GET'])
+def addtask():
     if request.method == 'POST':
         result = request.form
         # print(result)
@@ -114,7 +110,8 @@ def taskcreated():
             ##do mongo stuff 
             print("insertmongostuff")
         # print(exists)
-        return render_template('taskcreated.html', taskname=result["taskname"], exists=exists, tasks = getTasks())     
+        return render_template('taskcreated.html', taskname=result["taskname"], exists=exists, tasks = getTasks())
+    return render_template('addtask.html', tasks = getTasks())     
 
 
 @app.route('/signinfo', methods = ['POST', 'GET'])
