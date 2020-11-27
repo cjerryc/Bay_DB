@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, searchTasks, updateTask, deleteTask, completeTask
+from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -44,7 +44,15 @@ def managelogin():
 @app.route('/group',  methods = ['POST', 'GET'])
 def groupinfo():
     userinfo = getUserInfo()
-    return render_template('group.html')
+    try:
+        groupid = userinfo[5]
+        print(groupid)
+        groupname = getGroupName(groupid)
+        print(groupname[0][0])
+        groupmembers = getGroupMembers(groupid)
+        return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
+    except:
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group
 @app.route('/home')
 def home():
     tasks = getTasks()

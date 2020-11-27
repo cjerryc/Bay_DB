@@ -51,6 +51,18 @@ def searchTasks(taskname, cursor = cur):
     cur.execute(query)
     return cur.fetchall()
 
+def getGroupName(groupid, cursor = cur):
+    groupid = "'" + groupid + "'"
+    query = 'SELECT groupname FROM groups_table WHERE groupid = %s;' % (groupid)
+    cur.execute(query)
+    return cur.fetchall()
+
+def getGroupMembers(groupid, cursor = cur):
+    groupid = "'" + groupid + "'"
+    query = 'SELECT firstname, lastname FROM users WHERE groupid = %s;' % (groupid)
+    cur.execute(query)
+    return cur.fetchall()
+
 def checkGroupID(usrnm, cursor=cur):
     usrnm = "'" + usrnm + "'"
     query = 'Select Groupid FROM groups_table WHERE %s = ANY (Username);' %usrnm
