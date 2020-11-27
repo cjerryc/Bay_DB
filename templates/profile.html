@@ -12,17 +12,13 @@
     </head>
 <body>
    <div id="navbar">
-      <!-- <a class="navbar-brand" href="/"> -->
-         <!-- <div class="logo-image">
-               <img style='height: 100%; width: 100%; object-fit: contain' src="mush.png" class="img-fluid">
-         </div> -->
-      <!-- </a> -->
       <a> CS411 BayDB </a>
       <a href="#home"></a>
     </div>
     <div class="sidebar">
       <a href="home">Home</a>
       <a class= "active" href = "profile"> Profile</a>
+      <a href = "group"> My Group</a>
       <a href = "addtask">Add Task</a>
       <a href = "search"> Search Tasks</a>
       <a href = "updatetask"> Change a Task</a>
@@ -32,7 +28,7 @@
     </div>
  <div class = "content">
     <div class = "activities">
-      <h1> Your Profile Page</h1>
+      <h1> {{ result[1] }}'s Profile Page</h1>
    <table class = "table" border = 1 cellpadding="2" cellspacing="0">
       <thead>
         <tr><th>Username</th><td> {{ result[0] }} </td></tr>

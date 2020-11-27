@@ -26,11 +26,6 @@ def login():
     logUserOut()
     return render_template('login.html')
 
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-
 @app.route('/managelogin', methods = ['POST', 'GET'])
 def managelogin():
     if request.method == 'POST':
@@ -46,7 +41,10 @@ def managelogin():
 
         else:
             return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
-
+@app.route('/group',  methods = ['POST', 'GET'])
+def groupinfo():
+    userinfo = getUserInfo()
+    return render_template('group.html')
 @app.route('/home')
 def home():
     tasks = getTasks()
@@ -90,14 +88,14 @@ def search():
         result = request.form
         queryRes = searchTasks(result["search"])
         if queryRes and result["search"] :
-            return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes)
+            return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes, tasks = getTasks())
         elif not result["search"]:
-            return render_template('search.html', searchInput = "No results could be found!", searchedTasks= '')
+            return render_template('search.html', searchInput = "No results could be found!", searchedTasks= '', tasks = getTasks())
         else:
-            return render_template('search.html', searchInput = "No results for '" + result["search"] + "' could be found!", searchedTasks= '')
+            return render_template('search.html', searchInput = "No results for '" + result["search"] + "' could be found!", searchedTasks= '', tasks = getTasks())
     elif request.method == 'GET':
-        return render_template('search.html')
-    return render_template('search.html')
+        return render_template('search.html', tasks = getTasks())
+    return render_template('search.html', tasks = getTasks())
     
 @app.route('/addtask', methods = ['POST', 'GET'])
 def addtask():
@@ -127,7 +125,6 @@ def signinfo():
       except:
           return "<h1>Password doesn't match try again!</h1>"
 
-#how do we know who is currently "logged in"? pls fix profile
 @app.route('/profile')
 def profilepage():
     result = getUserInfo()

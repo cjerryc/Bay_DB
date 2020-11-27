@@ -125,7 +125,7 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         date = "'" + date + "'"
         time = "'" + time + "'"
         repeat = "'" + repeat + "'"
-        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL);' % (taskid, taskname, date, time, status, assignedto, groupid) #, %s)#, usernotes)
+        query = 'INSERT INTO tasks_table(taskid, taskname, date, time, status, assignedto, completeddate, completedtime, doneby, groupid, subtasks, materials, notes) VALUES (%s, %s, %s, %s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL, %s);' % (taskid, taskname, date, time, status, assignedto, groupid, usernotes)
         cursor.execute(query)
         conn.commit()
         print(repeat)
