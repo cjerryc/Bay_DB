@@ -8,7 +8,7 @@ current_lastname = "''"
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('login.html', wrongPass = False)
 
 
 @app.route('/hello/')
@@ -24,23 +24,27 @@ def hello(username=None):
 def login():
     print('LOGOUT')
     logUserOut()
-    return render_template('login.html')
+    return render_template('login.html', wrongPass = False)
 
 @app.route('/managelogin', methods = ['POST', 'GET'])
 def managelogin():
     if request.method == 'POST':
         result = request.form
-        queryRes = logUserIn(result["username"], result["passcode"])
-        current_firstname = queryRes[0]
-        current_lastname = queryRes[1]
-        tasks = getTasks()
-        #if queryRes:
-            #return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
-        if queryRes:
-            return render_template('home.html', tasks = getTasks())
+        try:
+            queryRes = logUserIn(result["username"], result["passcode"])
+            current_firstname = queryRes[0]
+            current_lastname = queryRes[1]
+            tasks = getTasks()
+            #if queryRes:
+                #return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
+            if queryRes:
+                return render_template('home.html', tasks = getTasks())
 
-        else:
-            return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
+            else:
+                return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
+        except:
+            return render_template('login.html', wrongPass = True)
+
 @app.route('/group',  methods = ['POST', 'GET'])
 def groupinfo():
     userinfo = getUserInfo()
