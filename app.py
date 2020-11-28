@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName
+from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -61,6 +61,30 @@ def groupinfo():
 def home():
     tasks = getTasks()
     return render_template('home.html', tasks = getTasks())
+
+@app.route('/dashboard')
+def dashboard():
+    ret = countTasks()
+
+    keys, vals = zip(*ret.items())
+    #keys = ret.keys()
+    #vals = ret.values()
+    k = jsonify({'key_list': keys})
+    v = jsonify({'val_list': vals})
+
+    return render_template('dashboard.html', key = keys, val = vals )
+
+@app.route('/data')
+def data():
+    ret = countTasks()
+    #counts = jsonify({'results': ret['values']})
+    keys, vals = zip(*ret.items())
+   
+    k = jsonify({'key_list': keys})
+    v = jsonify({'val_list': vals})
+    print(keys)
+    print(vals)
+    return v
 
 @app.route('/updatetask', methods = ['POST', 'GET'])
 def updateTask():

@@ -1,14 +1,18 @@
 import os
+import sys
 import psycopg2
 from datetime import datetime
-import pymongo
+import pymongo 
 import random
+from bson.son import SON
 current_username = "unknown"
 
 
 client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
 mydb = client["BayDB"]
 mycol = mydb["BayDB"]
+#test = mycol.find_one()
+#print(test)
 try:
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -65,7 +69,8 @@ def getGroupMembers(groupid, cursor = cur):
 
 def checkGroupID(usrnm, cursor=cur):
     usrnm = "'" + usrnm + "'"
-    query = 'Select groupid FROM groups_table WHERE %s = ANY (Username);' %usrnm
+    #query = 'SELECT groupid FROM groups_table WHERE %s = ANY (username);' %usrnm
+    query = 'SELECT groupid FROM users WHERE username = %s ;' %usrnm
     cursor.execute(query)
     return (int(cursor.fetchone()[0]))
 
@@ -156,48 +161,15 @@ def completeTask(taskname, cursor=cur):
     date = now.strftime("%m/%d/%Y")
     time = now.strftime("%H:%M")
 
-    # mongo_template = { "history_id": int(datetime.now().timestamp()),
-    #       "task_id": 4,
-    #       "group_id": checkGroupID(current_username),
-    #       "taskname": taskname,
-    #       "username": current_username,
-    #       "date": date,
-    #       "time": time,
-    #       "was_assigned": True,
-    #       "subtasks": ["hi", "lol", "love"]}
-
-    if exists:
-        exists = 'true' 
-        taskname = "'" + taskname + "'"
-        username = "'" + current_username + "'"
-        status = "'complete'"
-        date = "'" + date + "'"
-        time = "'" + time + "'"
-        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
-        cursor.execute(query)
-        conn.commit()
-        # mycol.insert_one(mongo_template)
-    else:
-        exists = 'false'
-    
-    return exists
-
-def updateTask(taskname, cursor=cur):
-    global current_username
-    exists = tasksExists("'" + taskname + "'")
-    now = datetime.now()
-    date = now.strftime("%m/%d/%Y")
-    time = now.strftime("%H:%M")
-
     mongo_template = { "history_id": int(datetime.now().timestamp()),
-          "task_id": 4,
-          "group_id": checkGroupID(current_username),
-          "taskname": taskname,
-          "username": current_username,
-          "date": date,
-          "time": time,
-          "was_assigned": True,
-          "subtasks": ["hi", "lol", "love"]}
+           "task_id": 4,
+           "group_id": checkGroupID(current_username),
+           "taskname": taskname,
+           "username": current_username,
+           "date": date,
+           "time": time,
+           "was_assigned": True,
+           "subtasks": ["hi", "lol", "love"]}
 
     if exists:
         exists = 'true' 
@@ -210,6 +182,94 @@ def updateTask(taskname, cursor=cur):
         cursor.execute(query)
         conn.commit()
         mycol.insert_one(mongo_template)
+   
+    else:
+        exists = 'false'
+    
+    return exists
+
+def countTasks():
+    final_dict = {}
+    users = []
+    vals = []
+    agg_result= mycol.aggregate( 
+    [{ 
+    "$group" :  
+        {"_id" : "$username",  
+         "num" : {"$sum" : 1} 
+         }},
+    {"$project" : 
+        { "_id": 0, "username": "$_id", "num": 1 } },
+    { "$sort" : 
+        SON([("num", -1)]) } 
+    ]) 
+
+    result = list(agg_result)
+    #print(result)
+
+    for d in result:
+        user = d['username']
+        val = d['num']
+        final_dict[user] = val
+      
+        users.append(user)
+        vals.append(vals)
+
+    print(final_dict)
+    
+    '''
+    test = mycol.distinct("username")
+    count_dict = {}
+    vals2 = []
+    for key in test:
+        myquery = {"username":key}
+        val = mycol.find(myquery).count()
+        count_dict[key] = val
+        vals2.append(int(val))
+    print(vals2)
+    '''
+    
+    return final_dict
+
+def updateTask(taskname, cursor=cur):
+    global current_username
+    exists = tasksExists("'" + taskname + "'")
+    now = datetime.now()
+    date = now.strftime("%m/%d/%Y")
+    time = now.strftime("%H:%M")
+
+    #mongo_template = { "history_id": int(datetime.now().timestamp()),
+    #      "task_id": 4,
+    #      "group_id": checkGroupID(current_username),
+    #      "taskname": taskname,
+    #      "username": current_username,
+    #      "date": date,
+    #      "time": time,
+    #      "was_assigned": True,
+    #      "subtasks": ["hi", "lol", "love"]}
+
+    mongo_template = { "history_id": int(datetime.now().timestamp()),
+          "task_id": 4,
+          "group_id": 71,
+          "taskname": taskname,
+          "username": current_username,
+          "date": date,
+          "time": time,
+          "was_assigned": True,
+          "subtasks": ["hi", "lol", "love"]}
+
+
+    if exists:
+        exists = 'true' 
+        taskname = "'" + taskname + "'"
+        username = "'" + current_username + "'"
+        status = "'complete'"
+        date = "'" + date + "'"
+        time = "'" + time + "'"
+        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
+        cursor.execute(query)
+        conn.commit()
+        
     else:
         exists = 'false'
     
