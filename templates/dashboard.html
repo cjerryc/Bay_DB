@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../static/signup.js"></script>
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src='jquery-3.2.1.min.js'></script>
+  </head>
+
+
+<body>
+  <div id="navbar">
+    <a> CS411 BayDB </a>
+    <a href="#home"></a>
+  </div>
+  <div class="sidebar">
+    <a href="home">Home</a>
+    <a href = "profile"> Profile</a>
+    <a href = "group"> My Group</a>
+    <a class= "active" href = "dashboard"> My Dashboard</a>
+    <a href = "addtask">Add Task</a>
+    <a href = "search"> Search Tasks</a>
+    <a href = "updatetask"> Change a Task</a>
+    <a href = "completetask"> Complete Task</a>
+    <a href = "deletetask"> Delete Task</a>
+    <a href = "login"> Log Out</a>
+  </div>
+ 
+</div>
+<div class = "content">
+    <div class = "activities">
+    <h1>My Dashboard</h1>
+    <div class="ct-chart">
+
+    </div>
+  </div>
+
+  <script>
+        //var getData = $.get('/data');
+        //getData.done(function(results){
+            var keys = JSON.parse('{{key | tojson | safe}}');
+            var vals = JSON.parse('{{val | tojson | safe}}');
+            var data = {
+           
+            labels: keys,
+       
+            series: [vals]
+            };
+
+         
+            var options = {
+            width: 500,
+            height: 200
+            };
+
+            var myChart = new Chartist.Line('.ct-chart', data, options);
+
+        //});
+        
+  </script>
+</body>
+</html>
