@@ -39,6 +39,18 @@ def tasksExists(taskname, cursor = cur):
     cur.execute(query)
     return cur.fetchall()  
 
+def tasksRecurring(taskname, cursor = cur):
+    taskname = "'" + taskname + "'"
+    query = 'SELECT taskname FROM recurring_table WHERE taskname = %s;'%taskname
+    cur.execute(query)
+    return cur.fetchall()  
+
+def deleteRecurring(taskname, cursor = cur):
+    taskname = "'" + taskname + "'"
+    query = 'DELETE FROM recurring_table WHERE taskname = %s;' %taskname
+    cur.execute(query)  
+    conn.commit()
+
 def searchTasks(taskname, cursor = cur):
     taskname = "'%" + taskname + "%'"
     query = 'SELECT * FROM tasks_table WHERE (tasks_table.taskname LIKE %s) OR (tasks_table.assignedto LIKE %s) OR (tasks_table.status LIKE %s) OR (tasks_table.date LIKE %s) OR (tasks_table.time LIKE %s);' % (taskname, taskname, taskname, taskname, taskname)
@@ -68,6 +80,8 @@ def deleteTask(task, cursor = cur):
     query = 'DELETE FROM tasks_table WHERE taskname = %s;' %taske
     cursor.execute(query)
     
+
+
     if cursor.statusmessage == "DELETE 0":
         conn.commit()
         print(cursor.statusmessage)
@@ -75,6 +89,10 @@ def deleteTask(task, cursor = cur):
     else:
         conn.commit()
         print(cursor.statusmessage)
+        recurring = tasksRecurring(task)
+        if(recurring):
+            print(recurring)
+            deleteRecurring(task)
         return 'true'
     
 def logUserIn(username, passcode, cursor=cur):
@@ -83,6 +101,18 @@ def logUserIn(username, passcode, cursor=cur):
     username = "'" + username + "'"
     passcode = "'" + passcode + "'"
     query = 'SELECT firstname, lastname, email FROM users WHERE users.username = %s AND users.passcode = %s;' % (username, passcode)
+    cursor.execute(query)
+    return cur.fetchone()
+
+def findAssignment(taskname, cursor=cur):
+    taskname = "'" + taskname + "'"
+    query = 'SELECT assignedto FROM tasks_table WHERE taskname = %s;' % (taskname)
+    cursor.execute(query)
+    return cur.fetchone()
+
+def findTaskID(taskname, cursor=cur):
+    taskname = "'" + taskname + "'"
+    query = 'SELECT taskid FROM tasks_table WHERE taskname = %s;' % (taskname)
     cursor.execute(query)
     return cur.fetchone()
 
@@ -121,6 +151,64 @@ def createTask(taskname, assignedto, cursor=cur):
         "<h1>Task already exists! Enter a new task.</h1>"
     
     return exists
+
+def completeTask(taskname, cursor=cur):
+    global current_username
+    exists = tasksExists("'" + taskname + "'")
+    now = datetime.now()
+    date = now.strftime("%m/%d/%Y")
+    time = now.strftime("%H:%M")
+    
+    assigned = ' '.join(findAssignment(taskname))
+
+    taskid_arr = findTaskID(taskname)
+    taskid = ','.join(str(v) for v in taskid_arr)
+   
+    mongo_template = { "history_id": int(datetime.now().timestamp()),
+           "task_id": int(taskid),
+           "group_id": checkGroupID(current_username),
+           "taskname": taskname,
+           "username": current_username,
+           "date": date,
+           "time": time,
+           "assignedto": assigned,
+           "subtasks": ["hi", "lol", "love"]}
+
+    if exists:
+        exists = 'true' 
+        taskname = "'" + taskname + "'"
+        username = "'" + current_username + "'"
+        status = "'complete'"
+        date = "'" + date + "'"
+        time = "'" + time + "'"
+        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s;' % (username, status, date, time, taskname)
+        cursor.execute(query)
+        conn.commit()
+        mycol.insert_one(mongo_template)
+   
+    else:
+        exists = 'false'
+    
+    return exists
+
+def countTasks():
+    final_dict = {}
+    users = []
+    vals = []
+    agg_result= mycol.aggregate( 
+    [{ 
+    "$group" :  
+        {"_id" : "$username",  
+         "num" : {"$sum" : 1} 
+         }},
+    {"$project" : 
+        { "_id": 0, "username": "$_id", "num": 1 } },
+    { "$sort" : 
+        SON([("num", -1)]) } 
+    ]) 
+
+    result = list(agg_result)
+    #print(result)
 
 
 def updateTask(taskname, date, time, cursor=cur):
