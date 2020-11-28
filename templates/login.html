@@ -28,9 +28,12 @@
       </form>
       <form class="login-form" action = "/managelogin" method = "POST">
         <input type = "text" placeholder = "username" name = "username" required>
-        <input type ="password" placeholder = "username"name = "passcode" required>
+        <input type ="password" placeholder = "password"name = "passcode" required>
         <button value = "submit">login</button>
         <p class="message">Not registered? <a href="#">Create an account</a></p>
+        {% if wrongPass %}
+        <p style="color:red;"> Incorrect username/password </p>
+        {% endif %}
       </form>
     </div>
   </div>

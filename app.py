@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName
+from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -8,7 +8,7 @@ current_lastname = "''"
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('login.html', wrongPass = False)
 
 
 @app.route('/hello/')
@@ -24,23 +24,27 @@ def hello(username=None):
 def login():
     print('LOGOUT')
     logUserOut()
-    return render_template('login.html')
+    return render_template('login.html', wrongPass = False)
 
 @app.route('/managelogin', methods = ['POST', 'GET'])
 def managelogin():
     if request.method == 'POST':
         result = request.form
-        queryRes = logUserIn(result["username"], result["passcode"])
-        current_firstname = queryRes[0]
-        current_lastname = queryRes[1]
-        tasks = getTasks()
-        #if queryRes:
-            #return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
-        if queryRes:
-            return render_template('home.html', tasks = getTasks())
+        try:
+            queryRes = logUserIn(result["username"], result["passcode"])
+            current_firstname = queryRes[0]
+            current_lastname = queryRes[1]
+            tasks = getTasks()
+            #if queryRes:
+                #return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
+            if queryRes:
+                return render_template('home.html', tasks = getTasks())
 
-        else:
-            return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
+            else:
+                return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
+        except:
+            return render_template('login.html', wrongPass = True)
+
 @app.route('/group',  methods = ['POST', 'GET'])
 def groupinfo():
     userinfo = getUserInfo()
@@ -57,6 +61,30 @@ def groupinfo():
 def home():
     tasks = getTasks()
     return render_template('home.html', tasks = getTasks())
+
+@app.route('/dashboard')
+def dashboard():
+    ret = countTasks()
+
+    keys, vals = zip(*ret.items())
+    #keys = ret.keys()
+    #vals = ret.values()
+    k = jsonify({'key_list': keys})
+    v = jsonify({'val_list': vals})
+
+    return render_template('dashboard.html', key = keys, val = vals )
+
+@app.route('/data')
+def data():
+    ret = countTasks()
+    #counts = jsonify({'results': ret['values']})
+    keys, vals = zip(*ret.items())
+   
+    k = jsonify({'key_list': keys})
+    v = jsonify({'val_list': vals})
+    print(keys)
+    print(vals)
+    return v
 
 @app.route('/updatetask', methods = ['POST', 'GET'])
 def updateTask():
