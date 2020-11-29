@@ -88,6 +88,20 @@ def createdGroup():
     except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
 
+@app.route('/exitGroup',  methods = ['POST', 'GET'])
+def exitGroup():
+    leaveGroup()
+    userinfo = getUserInfo()
+    try:
+        groupid = userinfo[5]
+        print(groupid)
+        groupname = getGroupName(groupid)
+        print(groupname[0][0])
+        groupmembers = getGroupMembers(groupid)
+        return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
+    except:
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group
+
 @app.route('/home')
 def home():
     tasks = getTasks()

@@ -29,15 +29,15 @@
     </div>
  <div class = "content">
     <div class = "activities">
-      <h1> CREATE / JOIN GROUP PAGE</h1>
       <div class ="divform">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+         <h1> JOIN GROUP</h1>
             <form class="join" action="/groupjoined">
               <input type="text" placeholder="Group Id" name="groupid">
               <button type="submit" formmethod="post">Join</button>
             </form>
-          </div>
+      </div>
          <div class ="divform">
+            <h1> CREATE GROUP</h1>
             <form action = "/createdGroup" method = "POST">
                <p>Group Name? <input type = "text" name = "groupname" /></p>
                <p>Group Id? <input type = "text" name = "groupid" /></p>

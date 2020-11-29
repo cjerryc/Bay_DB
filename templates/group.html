@@ -39,6 +39,10 @@
          <tr><th>Group Members</th> <td>  {% for member in groupmembers %} {{member[0]}} {{member[1]}} {% endfor %}</td></tr>
       </thead>
  </table>
+ <h1> LEAVE GROUP</h1>
+ <form action="/exitGroup" method="get">
+   <button type="submit">LEAVE!</button>
+ </form>
  </div>
 </div>
 </body>
