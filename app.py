@@ -248,7 +248,7 @@ def profilepage():
         groupname = getGroupName(groupid)
         return render_template('profile.html', result = userinfo, groupid = groupid, groupname = groupname[0][0])
     except:
-        return render_template('profile.html', result = userinfo, groupid = groupid, groupname = groupname)
+        return render_template('profile_nogroup.html', result = userinfo, groupid = groupid, groupname = groupname)
 
 
 if __name__ == '__main__':

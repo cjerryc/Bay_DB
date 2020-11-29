@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/home.js"></script>
+    </head>
+<body>
+   <div id="navbar">
+      <a> CS411 BayDB </a>
+      <a href="#home"></a>
+    </div>
+    <div class="sidebar">
+      <a class= "active" href = "profile"> Profile</a>
+      <a href = "group"> Create/Join a Group</a>
+      <a href = "login"> Log Out</a>
+    </div>
+ <div class = "content">
+    <div class = "activities">
+      <h1> {{ result[1] }}'s Profile Page</h1>
+   <table class = "table" border = 1 cellpadding="2" cellspacing="0">
+      <thead>
+        <tr><th>Username</th><td> {{ result[0] }} </td></tr>
+        <tr><th>First Name</th><td> {{ result[1] }} </td></tr>
+         <tr><th>Last Name</th><td> {{ result[2] }} </td></tr>
+            <tr><th>Email</th><td> {{ result[3] }} </td></tr>
+               <tr><th>Password</th><td> {{ result[4] }} </td></tr>
+                  <tr><th>Group Name</th><td> {{ groupname }}</td></tr>
+                     <tr><th>GroupId</th><td> {{ groupid }}</td></tr>
+      </thead>
+ </table>
+ </div>
+</div>
+</body>
+</html>
