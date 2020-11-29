@@ -10,7 +10,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="../static/signup.js"></script>
     <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script src='jquery-3.2.1.min.js'></script>
+
+
   </head>
 
 
@@ -23,7 +24,8 @@
     <a href="home">Home</a>
     <a href = "profile"> Profile</a>
     <a href = "group"> My Group</a>
-    <a class= "active" href = "dashboard"> My Dashboard</a>
+    <a class= "active" href = "dashboard">Dashboard</a>
+    <a href = "progress">My Progress</a>
     <a href = "addtask">Add Task</a>
     <a href = "search"> Search Tasks</a>
     <a href = "updatetask"> Change a Task</a>
@@ -35,34 +37,170 @@
 </div>
 <div class = "content">
     <div class = "activities">
-    <h1>My Dashboard</h1>
-    <div class="ct-chart">
-
-    </div>
+    <h1>My Dashboard</h1> 
+    <h3>Overall Tasks Contribution per Person</h3> 
+    <div id= "chart1" class="ct-chart ct-square" ></div>
+    <h3>Number of Completed Tasks per Task Type and Person</h3> 
+    <div id= "chart2" class="ct-chart ct-square"></div>  
+    <div id= "chart3" class="ct-chart ct-square" ></div>  
   </div>
+ 
 
   <script>
         //var getData = $.get('/data');
         //getData.done(function(results){
-            var keys = JSON.parse('{{key | tojson | safe}}');
-            var vals = JSON.parse('{{val | tojson | safe}}');
+            /*import Chartist from "chartist";
+            window["Chartist"] = Chartist;
+            const axisLabels = require("chartists-plugin-axistitle");
+            axisLabels();*/
+
+            var keys_c1 = JSON.parse('{{key_c1 | tojson | safe}}');
+            var vals_c1 = JSON.parse('{{val_c1 | tojson | safe}}');
+            var tasks_keys_c2 = JSON.parse('{{task_keys_c2| tojson | safe}}');
+            var vals_c2 = JSON.parse('{{val_c2 | tojson | safe}}');
+            
+
             var data = {
-           
-            labels: keys,
-       
-            series: [vals]
-            };
+        
+                series: vals_c1
+                };
 
-         
-            var options = {
-            width: 500,
-            height: 200
-            };
+            var sum = function(a, b) { return a + b };
 
-            var myChart = new Chartist.Line('.ct-chart', data, options);
+                var options = {
+        
+               
+                labelInterpolationFnc: function(value, idx) {
+                    var percentage = Math.round(value/data.series.reduce(sum) * 100) + '%';
+                    return  keys_c1[idx] + '  (' + percentage + ')';
+                }
+                
+                };
+
+                var responsiveOptions = [
+                ['screen and (min-width: 640px)', {
+                    chartPadding: 10,
+                    labelOffset: 50,
+                    labelDirection: 'explode',
+                    labelInterpolationFnc: function(value) {
+                    return value;
+                    }
+                }],
+                ['screen and (min-width: 1024px)', {
+                    labelOffset: 0,
+                    chartPadding: 10
+                }]
+                ];
+
+                var MyChart0 = new Chartist.Pie('#chart1', data, options);
+
+            /*
+            var data1 = {
+                labels: keys, 
+                series: [vals]
+            };
+            
+        
+            var options1 = {
+                width: 500,
+                height: 200,
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
+                    },
+                axisY: {
+                    onlyInteger: true
+                },
+            
+                plugins: [
+                    Chartist.plugins.ctAxisTitle({
+                    axisX: {
+                    axisTitle: "Time (mins)",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                    x: 0,
+                    y: 50
+                    },
+                    textAnchor: "middle"
+                    },
+                    axisY: {
+                    axisTitle: "Goals",
+                    axisClass: "ct-axis-title",
+                    offset: {
+                    x: 0,
+                    y: 0
+                    },
+                    textAnchor: "middle",
+                    flipTitle: false
+                    }
+                    })
+                ] 
+
+                
+            };*/
+
+
+            
+            var myChart2 = new Chartist.Bar('#chart2', {
+                labels: tasks_keys_c2,
+                series: 
+                vals_c2
+                
+            }, {
+                
+                width: 1000,
+            
+                seriesBarDistance: 10,
+                axisX: {
+                offset: 60
+                },
+                axisY: {
+                offset: 80,
+                labelInterpolationFnc: function(value) {
+                    return value 
+                },
+                scaleMinSpace: 15,
+                onlyInteger: true,
+                }
+            });
+
+            //var myChart1 = new Chartist.Line('#chart2', data1, options1);
+
+            var myChart3 = new Chartist.Bar('#chart3', {
+                labels: ['TestVal1', 'TestVal2', 'TestVal3'],
+                series: [
+                    [127, 211, 146],
+                    [200, 70, 120]
+                ]
+                }, {
+                chartPadding: {
+                    right: 50
+                },
+                height: 350,
+                width: 1000,
+                horizontalBars: true,
+                reverseData: true,
+                axisX: {
+                    labelInterpolationFnc: function(value) {
+                    return value + '%';
+                    },
+                    onlyInteger: true,
+                },
+                axisY: {
+                    offset: 135,
+                },
+               
+                });
+
+                
+
 
         //});
         
   </script>
+  
+  
 </body>
 </html>

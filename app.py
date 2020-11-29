@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countTasks
+from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -64,15 +64,37 @@ def home():
 
 @app.route('/dashboard')
 def dashboard():
-    ret = countTasks()
+    ret_c1 = countOverallTasks()
+    ret_c2, tasks_c2 = countIndivTasks()
 
-    keys, vals = zip(*ret.items())
-    #keys = ret.keys()
-    #vals = ret.values()
-    k = jsonify({'key_list': keys})
-    v = jsonify({'val_list': vals})
+    try:
+        keys_c1, vals_c1 = zip(*ret_c1.items())
+        user_keys_c2, vals_c2 = zip(*ret_c2.items())
+        dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
+        print(tasks_keys_c2)
+        return render_template('dashboard.html', key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
+        #k = jsonify({'key_list': keys_c1})
+        #v = jsonify({'val_list': vals_c1})
+    except:
+        return "<h1>No Data Available</h1>"
 
-    return render_template('dashboard.html', key = keys, val = vals )
+@app.route('/progress')
+def progress():
+    ret_c1 = myTaskCompletions()
+    ret_c3, tasks_c3 = countIndivTasks()
+    top_tasks = myTopTasks()
+    bottom_tasks = myBottomTasks()
+    ret_c2 = myTaskMisses()
+
+    try:
+        keys_c1, vals_c1 = zip(*ret_c1.items())
+        keys_c2, vals_c2 = zip(*ret_c2.items())
+        user_keys_c3, vals_c3 = zip(*ret_c3.items())
+        dummy_vals, tasks_keys_c3 = zip(*tasks_c3.items())
+        return render_template('progress.html', top_tasks = top_tasks, bottom_tasks = bottom_tasks, key_c1 = keys_c1, val_c1 = vals_c1, key_c2 = keys_c2, val_c2 = vals_c2, task_keys_c3 = tasks_keys_c3, val_c3 = vals_c3 )
+
+    except:
+         return "<h1>No Data Available</h1>"
 
 @app.route('/data')
 def data():
@@ -94,7 +116,6 @@ def updateTask():
 def deletetask():
     if request.method == 'POST':
         result = request.form
-        print(result)
         try:
             do = deleteTask(result['taskname'])
             return render_template("taskdeleted.html", taskname=result["taskname"], exists=do, tasks = getTasks())
