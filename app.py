@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -35,11 +35,12 @@ def managelogin():
             current_firstname = queryRes[0]
             current_lastname = queryRes[1]
             tasks = getTasks()
-            #if queryRes:
-                #return render_template('home.html', name=queryRes[0], lastname=queryRes[1])
-            if queryRes:
+            userinfo = getUserInfo()
+            groupid = userinfo[5]
+            if queryRes and groupid is not None:
                 return render_template('home.html', tasks = getTasks())
-
+            elif queryRes and groupid is None:
+                return render_template('createjoingroup.html')
             else:
                 return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
         except:
@@ -105,7 +106,17 @@ def exitGroup():
 @app.route('/home')
 def home():
     tasks = getTasks()
-    return render_template('home.html', tasks = getTasks())
+    userinfo = getUserInfo()
+    if userinfo[5] is None:
+        return render_template('createjoingroup.html')
+    else:
+        return render_template('home.html', tasks = getTasks())
+    # try:
+    #     groupid = checkGroupID(user)
+    #     print(groupid)
+    #     return render_template('home.html', tasks = getTasks())
+    # except:
+    #     return render_template('createjoingroup.html')
 
 @app.route('/dashboard')
 def dashboard():
