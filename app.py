@@ -229,8 +229,15 @@ def signinfo():
 
 @app.route('/profile')
 def profilepage():
-    result = getUserInfo()
-    return render_template('profile.html', result = result)
+    userinfo = getUserInfo()
+    groupid = "N/A"
+    groupname = "N/A"
+    try: 
+        groupid = userinfo[5]
+        groupname = getGroupName(groupid)
+        return render_template('profile.html', result = userinfo, groupid = groupid, groupname = groupname[0][0])
+    except:
+        return render_template('profile.html', result = userinfo, groupid = groupid, groupname = groupname)
 
 
 if __name__ == '__main__':
