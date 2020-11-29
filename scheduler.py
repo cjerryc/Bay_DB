@@ -55,8 +55,16 @@ def getRecurringTasks(curs=cur):
     reccuring = cur.fetchall()
     for i in reccuring:
         sched = i[2].split(" ")[0]
+        day = None
+        if (len(i[2].split(" ")) > 1):
+            day = i[2].split(" ")[1]
+            day = day.replace('(', '')
+            day = day.replace(')', '')
         if (sched == "Daily"):
             print(i)
-            createTask(i[1], i[3], "No", "", cursor=curs)
-
+            #createTask(i[1], i[3], "No", "", cursor=curs)
+        if (sched == "Weekly"):
+            print(sched, day)
+            if (datetime.today().strftime('%A') == day):
+                #createTask(i[1], i[3], "No", "", cursor=curs)
 getRecurringTasks()

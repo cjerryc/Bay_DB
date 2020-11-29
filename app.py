@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks
+from connectToDB import getUser, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -57,6 +57,37 @@ def groupinfo():
         return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
     except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
+
+@app.route('/groupjoined',  methods = ['POST', 'GET'])
+def groupjoined():
+    result = request.form
+    joinGroup(result['groupid'])
+    userinfo = getUserInfo()
+    try:
+        groupid = userinfo[5]
+        print(groupid)
+        groupname = getGroupName(groupid)
+        print(groupname[0][0])
+        groupmembers = getGroupMembers(groupid)
+        return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
+    except:
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group
+
+@app.route('/createdGroup',  methods = ['POST', 'GET'])
+def createdGroup():
+    result = request.form
+    createGroup(result['groupname'], result['groupid'])
+    userinfo = getUserInfo()
+    try:
+        groupid = userinfo[5]
+        print(groupid)
+        groupname = getGroupName(groupid)
+        print(groupname[0][0])
+        groupmembers = getGroupMembers(groupid)
+        return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
+    except:
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group
+
 @app.route('/home')
 def home():
     tasks = getTasks()

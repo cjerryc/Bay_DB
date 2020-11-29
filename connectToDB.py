@@ -104,6 +104,27 @@ def checkGroupID(usrnm, cursor=cur):
     cur.execute(query)
     return cur.fetchall()
 
+def joinGroup(groupid, cursor=cur, conn=conn):
+    global current_username
+    username = "'" + current_username + "'"
+    groupid = str(groupid)
+    updateUser = 'UPDATE users SET Groupid = %s WHERE Username = %s;' %(groupid, username)
+    cur.execute(updateUser)
+    conn.commit()
+
+def leaveGroup(cursor=cur, conn=conn):
+    global current_username
+    username = "'" + current_username + "'"
+    updateUser = 'UPDATE users SET Groupid = %s WHERE Username = %s;' %('null', username)
+    print(updateUser)
+    cur.execute(updateUser)
+    conn.commit()
+
+def createGroup(groupName, groupid):
+    groupName = "'" + str(groupName) + "'" 
+    createG = 'INSERT INTO groups_table (groupid, groupname) VALUES (%s, %s);' %(groupid, groupName)
+    cur.execute(createG)
+    joinGroup(groupid)
 
 def deleteTask(task, cursor = cur):
     global current_groupid
