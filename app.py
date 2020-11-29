@@ -107,10 +107,7 @@ def exitGroup():
 def home():
     tasks = getTasks()
     userinfo = getUserInfo()
-    if userinfo[5] is None:
-        return render_template('createjoingroup.html')
-    else:
-        return render_template('home.html', tasks = getTasks())
+    return render_template('home.html', tasks = getTasks())
     # try:
     #     groupid = checkGroupID(user)
     #     print(groupid)
