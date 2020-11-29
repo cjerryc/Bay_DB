@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../static/signup.js"></script>
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+
+  </head>
+
+
+<body>
+  <div id="navbar">
+    <a> CS411 BayDB </a>
+    <a href="#home"></a>
+  </div>
+  <div class="sidebar">
+    <a href="home">Home</a>
+    <a href = "profile"> Profile</a>
+    <a href = "group"> My Group</a>
+    <a href = "dashboard">Dashboard</a>
+    <a class= "active" href = "progress">My Progress</a>
+    <a href = "addtask">Add Task</a>
+    <a href = "search"> Search Tasks</a>
+    <a href = "updatetask"> Change a Task</a>
+    <a href = "completetask"> Complete Task</a>
+    <a href = "deletetask"> Delete Task</a>
+    <a href = "login"> Log Out</a>
+  </div>
+ 
+</div>
+<div class = "content">
+    <h1>My Progress</h1> 
+    <h3>My Most Completed Tasks:</h3> 
+    <i>'{{top_tasks}}' </i>
+    <h3>My Least Completed Tasks:</h3> 
+    <i>'{{bottom_tasks}}' <br><br></i>
+    <div class = "activities">
+    <h3>Number of Tasks I Completed Per Month</h3> 
+    <div id= "line_chart1" class="ct-chart ct-square" ></div>
+    <h3>Number of Tasks I Missed Per Month</h3> 
+    <div id= "line_chart2" class="ct-chart ct-square"></div>  
+    <!--<div id= "chart3" class="ct-chart ct-square"></div>  
+    <div id= "chart4" class="ct-chart ct-square" ></div>  -->
+  </div>
+ 
+  <!--<script src="../node_modules/chartist-plugin-axistitle/dist/chartist-plugin-axistitle.js"></script> -->
+  <script>
+        //var getData = $.get('/data');
+        //getData.done(function(results){
+            /*import Chartist from "chartist";
+            window["Chartist"] = Chartist;
+            const axisLabels = require("chartists-plugin-axistitle");
+            axisLabels();*/
+
+            var keys_c1 = JSON.parse('{{key_c1 | tojson | safe}}');
+            var vals_c1 = JSON.parse('{{val_c1 | tojson | safe}}');
+            var keys_c2 = JSON.parse('{{key_c2 | tojson | safe}}');
+            var vals_c2 = JSON.parse('{{val_c2 | tojson | safe}}');
+            var tasks_keys_c3 = JSON.parse('{{task_keys_c3| tojson | safe}}');
+            var vals_c3 = JSON.parse('{{val_c3 | tojson | safe}}');
+            
+            var data1 = {
+                labels: keys_c1, 
+                series: [vals_c1]
+            };
+            
+        
+            var options1 = {
+                width: 1000,
+                height: 400,
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
+                    },
+                axisY: {
+                    onlyInteger: true
+                },
+
+                
+            };
+
+            var myChart1 = new Chartist.Line('#line_chart1', data1, options1);
+
+            var data2 = {
+                labels: keys_c2, 
+                series: [vals_c2]
+            };
+            
+        
+            var options2 = {
+                width: 1000,
+                height: 400,
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
+                    },
+                axisY: {
+                    onlyInteger: true
+                },
+
+                
+            };
+
+            var myChart2 = new Chartist.Line('#line_chart2', data2, options2);
+            
+            /*
+            var myChart3 = new Chartist.Bar('#chart3', {
+                labels: tasks_keys_c3,
+                series: 
+                vals_c3
+                
+            }, {
+                
+                width: 1000,
+            
+                seriesBarDistance: 10,
+                axisX: {
+                offset: 60
+                },
+                axisY: {
+                offset: 80,
+                labelInterpolationFnc: function(value) {
+                    return value 
+                },
+                scaleMinSpace: 15,
+                onlyInteger: true,
+                }
+            });
+
+
+            var myChart4 = new Chartist.Bar('#chart4', {
+                labels: ['TestVal1', 'TestVal2', 'TestVal3'],
+                series: [
+                    [127, 211, 146]
+                ]
+                }, {
+                chartPadding: {
+                    right: 50
+                },
+                height: 350,
+                width: 1000,
+                horizontalBars: true,
+                reverseData: true,
+                axisX: {
+                    labelInterpolationFnc: function(value) {
+                    return value + '%';
+                    },
+                    onlyInteger: true,
+                },
+                axisY: {
+                    offset: 135,
+                },
+               
+                });*/
+
+                
+
+
+        //});
+        
+  </script>
+  
+  
+</body>
+</html>
