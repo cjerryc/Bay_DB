@@ -45,7 +45,7 @@ def managelogin():
                 return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
         except:
             return render_template('login.html', wrongPass = True)
-
+'''
 @app.route('/group',  methods = ['POST', 'GET'])
 def groupinfo():
     userinfo = getUserInfo()
@@ -57,8 +57,8 @@ def groupinfo():
         groupmembers = getGroupMembers(groupid)
         return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
     except:
-        return render_template('createjoingroup.html') ##this mean the person doesn have a group
-
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group 
+'''
 @app.route('/groupjoined',  methods = ['POST', 'GET'])
 def groupjoined():
     result = request.form
@@ -115,21 +115,32 @@ def home():
     # except:
     #     return render_template('createjoingroup.html')
 
-@app.route('/dashboard')
+@app.route('/group')
 def dashboard():
     ret_c1 = countOverallTasks()
     ret_c2, tasks_c2 = countIndivTasks()
-
+    userinfo = getUserInfo()
+    exists = "true"
     try:
-        keys_c1, vals_c1 = zip(*ret_c1.items())
-        user_keys_c2, vals_c2 = zip(*ret_c2.items())
-        dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
-        print(tasks_keys_c2)
-        return render_template('dashboard.html', key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
-        #k = jsonify({'key_list': keys_c1})
-        #v = jsonify({'val_list': vals_c1})
+        groupid = userinfo[5]
+        print(groupid)
+        groupname = getGroupName(groupid)
+        print(groupname[0][0])
+        groupmembers = getGroupMembers(groupid)
+
+        try:
+            keys_c1, vals_c1 = zip(*ret_c1.items())
+            user_keys_c2, vals_c2 = zip(*ret_c2.items())
+            dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
+            print(tasks_keys_c2)
+            return render_template('dashboard.html', exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
+            #k = jsonify({'key_list': keys_c1})
+            #v = jsonify({'val_list': vals_c1})
+        except:
+            exists = "false"
+            return render_template('dashboard.html', exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
     except:
-        return "<h1>No Data Available</h1>"
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group
 
 @app.route('/progress')
 def progress():

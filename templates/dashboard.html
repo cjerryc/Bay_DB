@@ -26,8 +26,7 @@
   <div class="sidebar">
     <a href="home">Home</a>
     <a href = "profile"> Profile</a>
-    <a href = "group"> My Group</a>
-    <a class= "active" href = "dashboard">Dashboard</a>
+    <a class= "active" href = "group">My Group</a>
     <a href = "progress">My Progress</a>
     <a href = "addtask">Add Task</a>
     <a href = "search"> Search Tasks</a>
@@ -40,12 +39,30 @@
 </div>
 <div class = "content">
     <div class = "activities">
-    <h1>My Dashboard</h1> 
+      <h1> My Group Information</h1>
+   <table class = "table" border = 1 cellpadding="2" cellspacing="0">
+      <thead>
+        <tr><th>GroupId</th><td>{{groupid}}</td></tr>
+        <tr><th>Group Name</th><td>{{groupname}}</td></tr>
+         <tr><th>Group Members</th> <td>  {% for member in groupmembers %} {{member[0]}} {{member[1]}} {% endfor %}</td></tr>
+      </thead>
+ </table>
     <h3>Overall Tasks Contribution per Person</h3> 
     <div id= "chart1" class="ct-chart ct-square" ></div>
     <h3>Number of Completed Tasks per Task Type and Person</h3> 
+    {% if exists == 'true' %}
     <div id= "chart2" class="ct-chart ct-square"></div>  
-    <div id= "chart3" class="ct-chart ct-square" ></div>  
+    <div id= "chart3" class="ct-chart ct-square" ></div> 
+    <h1> LEAVE GROUP</h1>
+    <form action="/exitGroup" method="get">
+      <button type="submit">LEAVE!</button>
+    </form> 
+    {% else %}
+    <h1> LEAVE GROUP</h1>
+    <form action="/exitGroup" method="get">
+      <button type="submit">LEAVE!</button>
+    </form>
+    {% endif %}
   </div>
  
 
