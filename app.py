@@ -161,7 +161,7 @@ def data():
     print(vals)
     return v
 
-@app.route('/uptTask', methods = ['POST', 'GET'])
+@app.route('/updatetask', methods = ['POST', 'GET'])
 def uptTask():
     if request.method == 'POST':
         result = request.form
