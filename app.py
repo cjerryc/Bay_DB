@@ -161,8 +161,12 @@ def data():
     print(vals)
     return v
 
-@app.route('/updatetask', methods = ['POST', 'GET'])
-def updateTask():
+@app.route('/uptTask', methods = ['POST', 'GET'])
+def uptTask():
+    if request.method == 'POST':
+        result = request.form
+        updateTask(result['taskname'], result['assignedto'])
+        render_template('updatetask.html', tasks = getTasks())
     return render_template('updatetask.html', tasks = getTasks())
 
 @app.route('/deletetask', methods = ['POST', 'GET'])
