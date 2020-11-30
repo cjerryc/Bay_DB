@@ -287,7 +287,7 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
             subtasks = convertArray(subtasks)
             materials = convertArray(materials)
             #need to reformat subtasks and materiasl from being [] to '{"209-240-9984", "209-256-6897"}' LOL kms
-            query = 'UPDATE tasks_table SET subtasks = %s, materials = %s;' % (subtasks, materials)
+            query = 'UPDATE tasks_table SET subtasks = %s, materials = %s WHERE taskid = %s;' % (subtasks, materials, taskid)
             cursor.execute(query)
             conn.commit()
         print(subtasks)
