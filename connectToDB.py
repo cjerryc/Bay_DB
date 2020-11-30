@@ -232,10 +232,20 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         conn.commit()
         print(repeat)
         subtasks = []
+        materials = []
         for word in keys:
-            eee = findSubtasks(word)
-            subtasks = eee + subtasks
+            stask = findSubtasks(word)
+            mats = findMaterials(word)
+            subtasks = stask + subtasks
+            materials = mats + materials
+        ## need to insert users adding and subtracting their preferences.
+        # if len(subtasks) != 0 or len(materials) != 0:
+            #need to reformat subtasks and materiasl from being [] to '{"209-240-9984", "209-256-6897"}' LOL kms
+            # query = 'UPDATE tasks_table SET subtasks = "'"%s"'", materials = "'"%s"'";' % (subtasks, materials)
+            # cursor.execute(query)
+            # conn.commit()
         print(subtasks)
+        print(materials)
         if "No" not in repeat:
             query = 'INSERT INTO recurring_table(taskid,taskname,repeattime,assignedto,groupid,subtasks,materials,notes) VALUES ( %s, %s, %s, %s, %s,NULL, NULL, %s) ;'% (taskid, taskname, repeat, assignedto, groupid, usernotes)
             cursor.execute(query)
@@ -680,4 +690,12 @@ def findSubtasks(word, mysub=mysub):
     subtasks = mysub.find({"keyword":  { "$regex": word, "$options" :'i' }}, {"_id": 0, "subtask": 1})
     for i in subtasks:
         array = i['subtask']
+    return array
+
+def findMaterials(word, mysub=mysub):
+    word = ".*" + word + ".*"
+    array = []
+    materials = mysub.find({"keyword":  { "$regex": word, "$options" :'i' }}, {"_id": 0, "materials": 1})
+    for i in materials:
+        array = i['materials']
     return array
