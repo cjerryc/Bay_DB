@@ -6,6 +6,7 @@ import pymongo
 import random
 from bson.son import SON
 import redis
+import json
 current_username = "unknown"
 current_groupid = 0
 client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
@@ -280,12 +281,15 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
             mats = findMaterials(word)
             subtasks = stask + subtasks
             materials = mats + materials
+
         ## need to insert users adding and subtracting their preferences.
-        # if len(subtasks) != 0 or len(materials) != 0:
+        if len(subtasks) != 0 or len(materials) != 0:
+            subtasks = convertArray(subtasks)
+            materials = convertArray(materials)
             #need to reformat subtasks and materiasl from being [] to '{"209-240-9984", "209-256-6897"}' LOL kms
-            # query = 'UPDATE tasks_table SET subtasks = "'"%s"'", materials = "'"%s"'";' % (subtasks, materials)
-            # cursor.execute(query)
-            # conn.commit()
+            query = 'UPDATE tasks_table SET subtasks = %s, materials = %s;' % (subtasks, materials)
+            cursor.execute(query)
+            conn.commit()
         print(subtasks)
         print(materials)
         if "No" not in repeat:
@@ -772,4 +776,12 @@ def findMaterials(word, mysub=mysub):
     materials = mysub.find({"keyword":  { "$regex": word, "$options" :'i' }}, {"_id": 0, "materials": 1})
     for i in materials:
         array = i['materials']
+    return array
+
+def convertArray(array):
+    array = json.dumps(array)
+    array = str(array)
+    array = array.replace('[', '{')
+    array = array.replace(']', '}')
+    array = "'" + array + "'"
     return array
