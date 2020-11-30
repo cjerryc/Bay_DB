@@ -5,6 +5,7 @@ from datetime import datetime
 import pymongo 
 import random
 from bson.son import SON
+import redis
 current_username = "unknown"
 current_groupid = 0
 client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
@@ -23,12 +24,21 @@ except:
         user="vuxncunnoferwp",
         password="bab2d1e1b712cbc8c6a16c50213d0d5888c7b53c74ea961aba4a708f55e36115")
 cur = conn.cursor()
+try:
+    db=redis.from_url(os.environ['REDISCLOUD_URL'])
+except:
+    print("Local Use!")
+
 
 def logUserOut():
     global current_username
     global current_groupid 
-    current_username = "unknown"
-    current_groupid = 0
+    try:
+        db.set('current_username', "unknown")
+        db.set('current_groupid', 0)
+    except:
+        current_username = "unknown"
+        current_groupid = 0
 
 def getUser(username, cursor=cur):
     username = "'" + username + "'"
@@ -42,7 +52,11 @@ def getUsernames(groupid, cursor=cur):
     return cur.fetchall()
 
 def getUserInfo(cursor = cur):
-    username = "'" + current_username + "'"
+    global current_username
+    try:
+        username = "'" + db.get('current_username') + "'"
+    except:
+        username = "'" + current_username + "'"
     query = 'SELECT * FROM users WHERE users.username = %s;' % username
     cursor.execute(query)
     return cur.fetchone()
@@ -107,7 +121,10 @@ def checkGroupID(usrnm, cursor=cur):
 
 def joinGroup(groupid, cursor=cur, conn=conn):
     global current_username
-    username = "'" + current_username + "'"
+    try:
+        username = "'" + db.get('current_username') + "'"
+    except:
+        username = "'" + current_username + "'"
     groupid = str(groupid)
     updateUser = 'UPDATE users SET Groupid = %s WHERE Username = %s;' %(groupid, username)
     cur.execute(updateUser)
@@ -115,7 +132,10 @@ def joinGroup(groupid, cursor=cur, conn=conn):
 
 def leaveGroup(cursor=cur, conn=conn):
     global current_username
-    username = "'" + current_username + "'"
+    try:
+        username = "'" + db.get('current_username') + "'"
+    except:
+        username = "'" + current_username + "'"
     updateUser = 'UPDATE users SET Groupid = %s WHERE Username = %s;' %('null', username)
     print(updateUser)
     cur.execute(updateUser)
@@ -161,7 +181,12 @@ def deleteTask(task, cursor = cur):
 def logUserIn(username, passcode, cursor=cur):
     global current_username
     global current_groupid
-    current_username = username
+    try:
+        db.set('current_username',username)
+        current_username = username
+    except:
+        current_username = username
+
     group_id = checkGroupID(current_username)
 
     try:
@@ -170,7 +195,11 @@ def logUserIn(username, passcode, cursor=cur):
         group_id = 0
 
     group_id = int(group_id)
-    current_groupid = group_id
+    try:
+        db.set('current_groupid',group_id)
+        current_groupid = group_id
+    except:
+        current_groupid = group_id
     username = "'" + username + "'"
     passcode = "'" + passcode + "'"
     query = 'SELECT firstname, lastname, email FROM users WHERE users.username = %s AND users.passcode = %s;' % (username, passcode)
@@ -180,6 +209,10 @@ def logUserIn(username, passcode, cursor=cur):
 
 def findAssignment(taskname, cursor=cur):
     global current_groupid
+    try:
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     taskname = "'" + taskname + "'"
     query = 'SELECT assignedto FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
     cursor.execute(query)
@@ -187,6 +220,10 @@ def findAssignment(taskname, cursor=cur):
 
 def findTaskID(taskname, cursor=cur):
     global current_groupid
+    try:
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     taskname = "'" + taskname + "'"
     query = 'SELECT taskid FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
     cursor.execute(query)
@@ -206,6 +243,11 @@ def createUser(username, firstname, lastname, email, passcode, cursor=cur):
 def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
     global current_username
     global current_groupid
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     exists = tasksExists("'" + taskname + "'")
     if not exists:
         exists = 'false'
@@ -259,6 +301,11 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
 def completeTask(taskname, cursor=cur):
     global current_username
     global current_groupid
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     exists = tasksExists("'" + taskname + "'")
     now = datetime.now()
     date = now.strftime("%m/%d/%Y")
@@ -430,6 +477,11 @@ def earliestActive():
 def myTaskCompletions():
     global current_username
     global current_groupid
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     final_dict = {}
     username = str(current_username)
 
@@ -478,6 +530,11 @@ def myTaskCompletions():
 def myTaskMisses():
     global current_username
     global current_groupid
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     final_dict = {}
     username = str(current_username)
 
@@ -542,6 +599,12 @@ def mapMonthNums(month):
 
 def myTopTasks():
     global current_groupid
+    global current_username
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     top_tasks = []
     username = str(current_username)
 
@@ -582,6 +645,12 @@ def myTopTasks():
 
 def myBottomTasks():
     global current_groupid
+    global current_username
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     final_dict = {}
     bottom_tasks = []
     all_tasks = getTaskNames()
@@ -644,8 +713,13 @@ def myBottomTasks():
     return bottom_tasks
 
 def updateTask(taskname, assignedto, cursor=cur):
-    global current_username
     global current_groupid
+    global current_username
+    try:
+        current_username = db.get('current_username')
+        current_groupid = db.get('current_groupid')
+    except:
+        print("Local")
     exists = tasksExists("'" + taskname + "'")
     now = datetime.now()
     date = now.strftime("%m/%d/%Y")
