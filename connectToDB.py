@@ -10,6 +10,7 @@ current_groupid = 0
 client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
 mydb = client["BayDB"]
 mycol = mydb["BayDB"]
+mysub = mydb["Subtasks"]
 #test = mycol.find_one()
 #print(test)
 try:
@@ -210,6 +211,7 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         exists = 'false'
         groupid = current_groupid ##need to chnage
         taskid = random.randrange(1,2147483647) #id range
+        keys = taskname.split()
         taskname = "'" + taskname + "'"
         assignedto = "'" + assignedto + "'"
         username = "'" + current_username + "'"
@@ -229,10 +231,16 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         cursor.execute(query)
         conn.commit()
         print(repeat)
+        subtasks = []
+        for word in keys:
+            eee = findSubtasks(word)
+            subtasks = eee + subtasks
+        print(subtasks)
         if "No" not in repeat:
             query = 'INSERT INTO recurring_table(taskid,taskname,repeattime,assignedto,groupid,subtasks,materials,notes) VALUES ( %s, %s, %s, %s, %s,NULL, NULL, %s) ;'% (taskid, taskname, repeat, assignedto, groupid, usernotes)
             cursor.execute(query)
             conn.commit()
+        
     else:
         "<h1>Task already exists! Enter a new task.</h1>"
     
@@ -662,3 +670,14 @@ def updateTask(taskname, assignedto, cursor=cur):
         exists = 'false'
     
     return exists
+
+def findSubtasks(word, mysub=mysub):
+    # word = "/^" + str(word) + "/"
+    word = ".*" + word + ".*"
+    #{ "$regex": /^word/}
+    # query = {"keyword": word }, {"_id": 0, "subtask": 1}
+    array = []
+    subtasks = mysub.find({"keyword":  { "$regex": word, "$options" :'i' }}, {"_id": 0, "subtask": 1})
+    for i in subtasks:
+        array = i['subtask']
+    return array
