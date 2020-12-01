@@ -110,13 +110,19 @@ def exitGroup():
 @app.route('/home')
 def home():
     
-    tasks = getTasks()
+    temp = getTasks()
     userinfo = getUserInfo()
+    tasks = []
+    for item in temp:
+        new_item = tuple((i or '') for i in item)
+        tasks.append(new_item)
     print(tasks)
-    for item in tasks:
-        # item[12] = str(item[12])
-        print (type(item[12]))
-    return render_template('home.html', tasks = getTasks())
+    # print(tasks)
+    # for item in tasks:
+    #     for i in item:
+    #         print(i, type(i))
+
+    return render_template('home.html', tasks = tasks)
     # try:
     #     groupid = checkGroupID(user)
     #     print(groupid)

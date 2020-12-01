@@ -69,7 +69,7 @@
           <td>{{task[8]}}</td>
           </tr>
           <tr class="flip hidden">
-            <td colspan="4">Subtasks : {{task[10]}} <br> Materials : {{task[11]}} <br> Notes : {{task[12]}}</td>
+            <td colspan="4">Subtasks : {% for item in task[10] %} <br> <li>{{ item }}</li> {% endfor %}<br> Materials : {% for item in task[11] %} <br> <li>{{ item }}</li> {% endfor %}<br> Notes : {{task[12]}}</td>
           </tr>
             {% endfor %}
         </table>
