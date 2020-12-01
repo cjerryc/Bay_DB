@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -101,6 +101,8 @@ def exitGroup():
         groupname = getGroupName(groupid)
         print(groupname[0][0])
         groupmembers = getGroupMembers(groupid)
+        print("groupmemebers: \n")
+        print(groupmembers)
         return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
     except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
@@ -345,3 +347,16 @@ def profilepage():
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
     app.run(threaded=True, port=5000)
+
+@app.route('/nameByTask', methods = ['POST', 'GET'])
+def nameByTask():
+    if request.method == 'POST':
+        queryRes = getCompleted()
+        for i in range(0, len(queryRes)):
+            print(queryRes[i])
+            print("\n")
+    #     if queryRes:
+    #         return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes, tasks = getTasks())
+    #  elif request.method == 'GET':
+    #     return render_template('search.html', tasks = getTasks())
+    # return render_template('search.html', tasks = getTasks())

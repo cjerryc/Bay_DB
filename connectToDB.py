@@ -846,3 +846,11 @@ def changeStuff(taskname, assignedto, subtaskarr, materialarr, usernotes, cursor
     cur.execute(query)
     conn.commit()
     return True
+
+def getCompleted(cursor = cur):
+    global current_groupid
+    current_groupid = "'" + str(current_groupid) + "'"
+    query = 'SELECT DISTINCT firstname, lastname, users.groupid, cnt FROM((SELECT doneby, count(DISTINCT taskid) as cnt FROM tasks_table WHERE tasks_table.groupid = %s AND doneby IS NOT NULL GROUP BY doneby) r JOIN tasks_table t on r.doneby = t.doneby) NATURAL JOIN users WHERE users.username = t.doneby ORDER BY  firstname;' % current_groupid
+    cur.execute(query)
+    return cur.fetchall()
+
