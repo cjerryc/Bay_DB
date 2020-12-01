@@ -44,8 +44,9 @@ def managelogin():
                 return render_template('createjoingroup.html')
             else:
                 return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
-        except:
-            return render_template('login.html', wrongPass = True)
+        except Exception as e:
+            return e
+            #return render_template('login.html', wrongPass = True)
 '''
 @app.route('/group',  methods = ['POST', 'GET'])
 def groupinfo():
