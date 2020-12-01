@@ -146,11 +146,14 @@ def dashboard():
 
 @app.route('/progress')
 def progress():
-    ret_c1 = myTaskCompletions()
-    ret_c3, tasks_c3 = countIndivTasks()
-    top_tasks = myTopTasks()
-    bottom_tasks = myBottomTasks()
-    ret_c2 = myTaskMisses()
+    try:
+        ret_c1 = myTaskCompletions()
+        ret_c3, tasks_c3 = countIndivTasks()
+        top_tasks = myTopTasks()
+        bottom_tasks = myBottomTasks()
+        ret_c2 = myTaskMisses()
+    except Exception as e:
+        return e
 
     try:
         keys_c1, vals_c1 = zip(*ret_c1.items())
