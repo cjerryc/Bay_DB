@@ -252,7 +252,7 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         current_groupid = db.get('current_groupid')
     except:
         print("Local")
-    exists = tasksExists("'" + taskname + "'")
+    exists = tasksExists(taskname)
     if not exists:
         exists = 'false'
         groupid = current_groupid ##need to chnage
@@ -297,7 +297,7 @@ def completeTask(taskname, cursor=cur):
         current_groupid = db.get('current_groupid')
     except:
         print("Local")
-    exists = tasksExists("'" + taskname + "'")
+    exists = tasksExists(taskname)
     now = datetime.now()
     date = now.strftime("%m/%d/%Y")
     time = now.strftime("%H:%M")
@@ -712,7 +712,7 @@ def updateTask(taskname, cursor=cur):
         current_groupid = db.get('current_groupid')
     except:
         print("Local")
-    exists = tasksExists("'" + taskname + "'")
+    exists = tasksExists(taskname)
     now = datetime.now()
     date = now.strftime("%m/%d/%Y")
     time = now.strftime("%H:%M")
