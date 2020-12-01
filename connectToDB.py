@@ -365,7 +365,8 @@ def countOverallTasks():
     for u in users_arr:
         for d in result:
             if d['username'] == u:
-                user = d['username']
+                name = getUser(d['username'])
+                user = " ".join(list(name)).title()
                 val = d['num']
                 final_dict[user] = val
             
