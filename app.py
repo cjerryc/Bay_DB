@@ -151,14 +151,17 @@ def dashboard():
 
 @app.route('/progress')
 def progress():
-    try:
-        ret_c1 = myTaskCompletions()
-        ret_c3, tasks_c3 = countIndivTasks()
-        top_tasks = myTopTasks()
-        bottom_tasks = myBottomTasks()
-        ret_c2 = myTaskMisses()
-    except Exception as e:
-        return e
+    ret_c1 = ''
+    ret_c2 = ''
+    ret_c3 = ''
+    top_tasks = ''
+    bottom_tasks = ''
+    
+    ret_c1 = myTaskCompletions()
+    ret_c3, tasks_c3 = countIndivTasks()
+    top_tasks = myTopTasks()
+    bottom_tasks = myBottomTasks()
+    ret_c2 = myTaskMisses()
 
     try:
         keys_c1, vals_c1 = zip(*ret_c1.items())
@@ -169,6 +172,7 @@ def progress():
 
     except:
          return "<h1>No Data Available</h1>"
+    return "<h1>No Data Available</h1>"
 
 @app.route('/data')
 def data():
