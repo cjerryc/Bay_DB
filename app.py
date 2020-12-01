@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks,searchHistory, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -182,11 +182,15 @@ def updateTaskPage():
     if request.method == 'POST':
         result = request.form
         exists = tasksExists(result['taskname'])
-        if len(exists) > 0:
+        print(exists)
+        if exists:
             updatableStuff = getATask(result['taskname']) #assignedto, subtasks, materials, notes
             print(updatableStuff)
             subarr = getArrSubtask(result["taskname"])
             matarr = getArrMaterials(result["taskname"])
+            #    for x in updatableStuff[0][1]:
+            #TypeError: 'NoneType' object is not iterable
+            # [('vedanta2', None, None, ' ')]
             for x in updatableStuff[0][1]:
                 if x in subarr:
                     subarr.remove(x)
@@ -195,8 +199,7 @@ def updateTaskPage():
                     matarr.remove(x)
             return render_template('updatetaskbody.html', tasks = getTasks(), currtask = result['taskname'], assignedto = updatableStuff[0][0], subtasks = updatableStuff[0][1], othersubtasks = subarr, othermats = matarr , materials = updatableStuff[0][2], notes = updatableStuff[0][3])
         else:
-            exists = 'false'
-            render_template('noupdatetask.html', tasks = getTasks(), exists = exists)
+            return render_template('noupdatetask.html', tasks = getTasks())
     return render_template('updatetask.html', tasks = getTasks())
 
 @app.route('/recieveupdatetask', methods = ['POST', 'GET'])
