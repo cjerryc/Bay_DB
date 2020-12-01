@@ -32,27 +32,13 @@
          <div class = "activities">
           <h1>Update a Task</h1>
             <div class ="divform">
-               <form action = "/recieveupdatetask" method = "POST">
-                  <p>Task Name <input type = "text" name = "taskname" value = "{{ currtask }}"/></p>
-                  <p>Assigned to <input type = "text" name = "assignedto" value = "{{ assignedto }}"/></p>
-                  <p>Subtasks </p>
-                  {% for sub in subtasks %}     
-                  <input type="checkbox" name="subtask" value= "{{ sub }}" checked>{{ sub }}<br>
-                  {% endfor %}
-                  {% for sub in othersubtasks %}
-                  <input type="checkbox" name="subtask" value= "{{ sub }}">{{ sub }}<br>  
-                  {% endfor %}
-
-                  <p>Materials </p>    
-                  {% for mat in materials %}
-                  <input type="checkbox" name="material" value= "{{ mat }}" checked>{{ mat }}<br>   
-                  {% endfor %}
-                  {% for mat in othermats %}
-                  <input type="checkbox" name="material" value= "{{ mat }}">{{ mat }}<br>  
-                  {% endfor %}  
-                  <p>Notes </p><textarea name="usernotes" rows="10" cols="40" value = "{{ notes }}"> </textarea> 
+               <form action = "/updatetask" method = "POST">
+                  <p>Which Task do you want to update? <input type = "text" name = "taskname" /></p>
                   <p><input type = "submit" value = "submit" /></p>
                </form>
+               {% if exists == 'false' %}
+               <p1>No such task! Retype in a task!</p1>
+               {% endif %}
             </div>
          </div>
          <div class = "taskscontainer">

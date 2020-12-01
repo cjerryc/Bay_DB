@@ -67,6 +67,7 @@ def getTasks(cursor = cur):
     global current_groupid 
     query = "SELECT * FROM tasks_table WHERE groupid::int = %i;" %current_groupid 
     cur.execute(query)
+    print(cur.statusmessage)
     return cur.fetchall()
 
 def getTaskNames(cursor = cur):
@@ -77,7 +78,8 @@ def getTaskNames(cursor = cur):
 
 def tasksExists(taskname, cursor = cur):
     global current_groupid 
-    query = 'SELECT taskname FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    taskname = "'" + taskname + "'"
+    query = 'SELECT taskid FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
     cur.execute(query)
     return cur.fetchall()  
 
@@ -701,7 +703,7 @@ def myBottomTasks():
     
     return bottom_tasks
 
-def updateTask(taskname, assignedto, cursor=cur):
+def updateTask(taskname, cursor=cur):
     global current_groupid
     global current_username
     try:
@@ -716,18 +718,7 @@ def updateTask(taskname, assignedto, cursor=cur):
 
     assigned = ' '.join(findAssignment(taskname))
 
-    taskid_arr = findTaskID(taskname)
-    taskid = ','.join(str(v) for v in taskid_arr)
-
-    mongo_template = { "history_id": int(datetime.now().timestamp()),
-          "task_id": int(taskid),
-          "group_id": current_groupid,
-          "taskname": taskname,
-          "username": current_username,
-          "date": date,
-          "time": time,
-          "assignedto": assigned,
-          "subtasks": ["hi", "lol", "love"]}
+    taskid = findTaskID(taskname)
 
     if exists:
         exists = 'true' 
@@ -802,3 +793,10 @@ def updateSubMat(subtaskarr, materialarr, cursor = cur):
     print(subtasks)
     print(materials)
     return 'false'
+
+def getATask(taskname, cursor = cur):
+    global current_groupid 
+    taskname = "'" + taskname + "'"
+    query = "SELECT assignedto, subtasks, materials, notes FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;" % (taskname, current_groupid)
+    cur.execute(query)
+    return cur.fetchall() 

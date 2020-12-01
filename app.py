@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, getATask, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -178,12 +178,33 @@ def data():
     return v
 
 @app.route('/updatetask', methods = ['POST', 'GET'])
-def uptTask():
+def updateTaskPage():
     if request.method == 'POST':
         result = request.form
-        updateTask(result['taskname'], result['assignedto'])
-        render_template('updatetask.html', tasks = getTasks())
+        exists = tasksExists(result['taskname'])
+        if len(exists) > 0:
+            updatableStuff = getATask(result['taskname']) #assignedto, subtasks, materials, notes
+            print(updatableStuff)
+            subarr = getArrSubtask(result["taskname"])
+            matarr = getArrMaterials(result["taskname"])
+            for x in updatableStuff[0][1]:
+                if x in subarr:
+                    subarr.remove(x)
+            for x in updatableStuff[0][2]:
+                if x in subarr:
+                    matarr.remove(x)
+            return render_template('updatetaskbody.html', tasks = getTasks(), currtask = result['taskname'], assignedto = updatableStuff[0][0], subtasks = updatableStuff[0][1], othersubtasks = subarr, othermats = matarr , materials = updatableStuff[0][2], notes = updatableStuff[0][3])
+        else:
+            exists = 'false'
+            render_template('noupdatetask.html', tasks = getTasks(), exists = exists)
     return render_template('updatetask.html', tasks = getTasks())
+
+@app.route('/recieveupdatetask', methods = ['POST', 'GET'])
+def updateTask():
+    if request.method == 'POST':
+        result = request.form
+        print(result)
+
 
 @app.route('/deletetask', methods = ['POST', 'GET'])
 def deletetask():
