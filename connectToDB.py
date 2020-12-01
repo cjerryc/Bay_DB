@@ -104,6 +104,13 @@ def searchTasks(taskname, cursor = cur):
     cur.execute(query)
     return cur.fetchall()
 
+def searchHistory(taskname, cursor = cur):
+    global current_groupid
+    taskname = "'%" + taskname + "%'"
+    query = 'SELECT DISTINCT * FROM history_table WHERE groupid::int = %i AND ((taskname LIKE %s) OR (doneby LIKE %s) OR (assignedto LIKE %s) OR (status LIKE %s) OR (date LIKE %s) OR (time LIKE %s) OR (%s  = ANY(subtasks)) OR (%s = ANY(materials) ) OR (notes LIKE %s));' % (current_groupid, taskname, taskname, taskname, taskname, taskname, taskname, taskname, taskname, taskname)
+    cur.execute(query)
+    return cur.fetchall()
+
 def getGroupName(groupid, cursor = cur):
     groupid = "'" + groupid + "'"
     query = 'SELECT groupname FROM groups_table WHERE groupid = %s;' % (groupid)

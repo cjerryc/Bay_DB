@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks,searchHistory, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -249,7 +249,7 @@ def completetask():
 def search():
     if request.method == 'POST':
         result = request.form
-        queryRes = searchTasks(result["search"])
+        queryRes = searchHistory(result["search"])
         if queryRes and result["search"] :
             return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes, tasks = getTasks())
         elif not result["search"]:
