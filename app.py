@@ -182,7 +182,8 @@ def updateTaskPage():
     if request.method == 'POST':
         result = request.form
         exists = tasksExists(result['taskname'])
-        if len(exists) > 0:
+        print(exists)
+        if exists:
             updatableStuff = getATask(result['taskname']) #assignedto, subtasks, materials, notes
             print(updatableStuff)
             subarr = getArrSubtask(result["taskname"])
@@ -195,8 +196,7 @@ def updateTaskPage():
                     matarr.remove(x)
             return render_template('updatetaskbody.html', tasks = getTasks(), currtask = result['taskname'], assignedto = updatableStuff[0][0], subtasks = updatableStuff[0][1], othersubtasks = subarr, othermats = matarr , materials = updatableStuff[0][2], notes = updatableStuff[0][3])
         else:
-            exists = 'false'
-            render_template('noupdatetask.html', tasks = getTasks(), exists = exists)
+            return render_template('noupdatetask.html', tasks = getTasks())
     return render_template('updatetask.html', tasks = getTasks())
 
 @app.route('/recieveupdatetask', methods = ['POST', 'GET'])
