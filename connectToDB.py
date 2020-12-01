@@ -756,7 +756,9 @@ def findSubtasks(word, mysub=mysub):
     return array
 
 def findMaterials(word, mysub=mysub):
-    word = ".*" + word + ".*"
+    if len(word) < 3:
+        return []
+    word = ".*^" + word + ".*"
     array = []
     materials = mysub.find({"keyword":  { "$regex": word, "$options" :'i' }}, {"_id": 0, "materials": 1})
     for i in materials:
