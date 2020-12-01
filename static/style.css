@@ -190,3 +190,12 @@ table.table tfoot .links a{
     margin-top: -6px;
 }
 
+.flip {
+  background-color: #E7F7F8;
+}
+.hidden {
+  display: none;
+}
+.showed {
+  display: block;
+}

@@ -39,7 +39,7 @@ def managelogin():
             userinfo = getUserInfo()
             groupid = userinfo[5]
             if queryRes and groupid is not None:
-                return render_template('home.html', tasks = getTasks())
+                return home()
             elif queryRes and groupid is None:
                 return render_template('createjoingroup.html')
             else:
@@ -107,8 +107,13 @@ def exitGroup():
 
 @app.route('/home')
 def home():
+    
     tasks = getTasks()
     userinfo = getUserInfo()
+    print(tasks)
+    for item in tasks:
+        # item[12] = str(item[12])
+        print (type(item[12]))
     return render_template('home.html', tasks = getTasks())
     # try:
     #     groupid = checkGroupID(user)

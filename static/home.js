@@ -5,7 +5,7 @@ jQuery.expr[":"].containsNoCase = function(el, i, m) {
     if (!search) return false;
     return eval("/" + search + "/i").test($(el).text());
   };
-  
+
   jQuery(document).ready(function() {
     // used for the first example in the blog post
     jQuery('li:contains(\'DotNetNuke\')').css('color', '#0000ff').css('font-weight', 'bold');

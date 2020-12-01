@@ -55,9 +55,9 @@
         </thead>
           {% for task in tasks %}
           {% if task[4] == 'incomplete' %}
-          <tr style="color: rgb(165, 40, 40)">
+          <tr class = "task" style="color: rgb(165, 40, 40)">
           {% else %}
-            <tr style="color: rgb(31, 110, 31)">
+            <tr class = "task" style="color: rgb(31, 110, 31)">
           {% endif %}
           <th scope="row">{{task[1]}}</th>
           <td>{{task[4]}}</td> 
@@ -68,8 +68,18 @@
           <td>{{task[7]}}</td>
           <td>{{task[8]}}</td>
           </tr>
-          {% endfor %}
+          <tr class="flip hidden">
+            <td colspan="4">Subtasks : {{task[10]}} <br> Materials : {{task[11]}} <br> Notes : {{task[12]}}</td>
+          </tr>
+            {% endfor %}
         </table>
       </div>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          $(".task").click(function (e) {
+           $(this).closest("tr").next(".flip").toggle();
+          });
+        });
+        </script>
     </body>
 </html>
