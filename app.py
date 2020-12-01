@@ -241,6 +241,8 @@ def addtask():
             print(result["taskname"])
             subarr = getArrSubtask(result["taskname"])
             matarr = getArrMaterials(result["taskname"])
+            if len(subarr) == 0 and len(matarr) == 0:
+                return render_template('nosubtaskcreated.html', taskname=result["taskname"], exists=exists, tasks = getTasks())
             global current_taskname 
             current_taskname = result["taskname"]
             return render_template('addsubmat.html', currtask = result["taskname"], tasks = getTasks(), subtasks = subarr, materials= matarr)
