@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -203,7 +203,19 @@ def updateTaskPage():
 def updateTask():
     if request.method == 'POST':
         result = request.form
-        print(result)
+        for list_type in request.form.keys():
+            if list_type == "taskname":
+                taskname = result["taskname"]
+            if list_type == "assignedto":
+                assignedto = result["assignedto"]
+            if list_type == "subtask":
+                subtask = request.form.getlist(list_type)
+            if list_type == "material":
+                material = request.form.getlist(list_type)
+            if list_type == "usernotes":
+                notes = result["usernotes"]
+        exists = changeStuff(taskname, assignedto, subtask, material, notes)
+        return render_template('successupdatetask.html', tasks = getTasks(), currtask = taskname, assignedto = assignedto, subtasks = subtask, materials = material, usernotes = notes)
 
 
 @app.route('/deletetask', methods = ['POST', 'GET'])

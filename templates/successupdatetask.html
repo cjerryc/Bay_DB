@@ -30,29 +30,25 @@
       </div>
       <div class = "content">
          <div class = "activities">
-          <h1>Update a Task</h1>
+          <h1>Change a Task</h1>
             <div class ="divform">
                <form action = "/recieveupdatetask" method = "POST">
                   <p>Task Name <input type = "text" name = "taskname" value = "{{ currtask }}"readonly/></p>
-                  <p>Assigned to <input type = "text" name = "assignedto" value = "{{ assignedto }}"/></p>
+                  <p>Assigned to <input type = "text" name = "assignedto" value = "{{ assignedto }}"readonly/></p>
                   <p>Subtasks </p>
                   {% for sub in subtasks %}     
-                  <input type="checkbox" name="subtask" value= "{{ sub }}" checked>{{ sub }}<br>
+                  <input type="checkbox" name="subtask" disabled="disabled" value= "{{ sub }}" checked>{{ sub }}<br>
                   {% endfor %}
-                  {% for sub in othersubtasks %}
-                  <input type="checkbox" name="subtask" value= "{{ sub }}">{{ sub }}<br>  
-                  {% endfor %}
+
 
                   <p>Materials </p>    
                   {% for mat in materials %}
-                  <input type="checkbox" name="material" value= "{{ mat }}" checked>{{ mat }}<br>   
-                  {% endfor %}
-                  {% for mat in othermats %}
-                  <input type="checkbox" name="material" value= "{{ mat }}">{{ mat }}<br>  
-                  {% endfor %}  
-                  <p>Notes </p><textarea name="usernotes" rows="10" cols="40" value = "{{ notes }}"> </textarea> 
-                  <p><input type = "submit" value = "submit" /></p>
+                  <input type="checkbox" name="material" disabled="disabled" value= "{{ mat }}" checked>{{ mat }}<br>   
+                  {% endfor %} 
+                  <p>Notes </p><textarea name="usernotes" rows="10" cols="40" value = "{{ notes }}" readonly> </textarea> 
+                  <p><input type = "submit" value = "submit" readonly/></p>
                </form>
+               <p> Change Successful! </p>
             </div>
          </div>
          <div class = "taskscontainer">

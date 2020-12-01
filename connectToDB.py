@@ -801,3 +801,18 @@ def getATask(taskname, cursor = cur):
     query = "SELECT assignedto, subtasks, materials, notes FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;" % (taskname, current_groupid)
     cur.execute(query)
     return cur.fetchall() 
+
+#this is dumb lol
+def changeStuff(taskname, assignedto, subtaskarr, materialarr, usernotes, cursor = cur):
+    global current_groupid
+    if len(subtaskarr) != 0 or len(materialarr) != 0:
+        subtasks = convertArray(subtaskarr)
+        materials = convertArray(materialarr)
+    taskname = "'" + taskname + "'"
+    assignedto = "'" + assignedto + "'"
+    notes = "'" + usernotes + "'"
+    
+    query = "UPDATE tasks_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, current_groupid)
+    cur.execute(query)
+    conn.commit()
+    return True
