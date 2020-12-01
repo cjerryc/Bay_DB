@@ -50,7 +50,7 @@
                   {% for mat in othermats %}
                   <input type="checkbox" name="material" value= "{{ mat }}">{{ mat }}<br>  
                   {% endfor %}  
-                  <p>Notes </p><textarea name="usernotes" rows="10" cols="40" value = "{{ notes }}"> </textarea> 
+                  <p>Notes </p><textarea name="usernotes" rows="10" cols="40"> {{ notes }}</textarea> 
                   <p><input type = "submit" value = "submit" /></p>
                </form>
             </div>

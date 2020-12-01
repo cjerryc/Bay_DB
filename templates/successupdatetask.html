@@ -36,17 +36,27 @@
                   <p>Task Name <input type = "text" name = "taskname" value = "{{ currtask }}"readonly/></p>
                   <p>Assigned to <input type = "text" name = "assignedto" value = "{{ assignedto }}"readonly/></p>
                   <p>Subtasks </p>
+                  
+                  {% if subtasks == 'false' %}
+                  <input type="checkbox" name="subtask" disabled="disabled" checked> No Subtasks<br>
+                  {% else %}
                   {% for sub in subtasks %}     
                   <input type="checkbox" name="subtask" disabled="disabled" value= "{{ sub }}" checked>{{ sub }}<br>
                   {% endfor %}
+                  {% endif %}
 
 
-                  <p>Materials </p>    
+                  <p>Materials </p>
+
+                  {% if materials == 'false' %}
+                  <input type="checkbox" name="subtask" disabled="disabled" checked> No Materials<br>
+                  {% else %}
                   {% for mat in materials %}
                   <input type="checkbox" name="material" disabled="disabled" value= "{{ mat }}" checked>{{ mat }}<br>   
                   {% endfor %} 
-                  <p>Notes </p><textarea name="usernotes" rows="10" cols="40" value = "{{ notes }}" readonly> </textarea> 
-                  <p><input type = "submit" value = "submit" readonly/></p>
+                  {% endif %}
+                  <p>Notes </p> <textarea name="usernotes" rows="10" cols="40" value = "{{ usernotes }}" readonly> {{ usernotes }}</textarea> 
+                  <!-- <p><input type = "submit" value = "submit" readonly/></p> -->
                </form>
                <p> Change Successful! </p>
             </div>

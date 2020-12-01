@@ -812,6 +812,8 @@ def getATask(taskname, cursor = cur):
 #this is dumb lol
 def changeStuff(taskname, assignedto, subtaskarr, materialarr, usernotes, cursor = cur):
     global current_groupid
+    subtasks = convertArray([])
+    materials = convertArray([])
     if len(subtaskarr) != 0 or len(materialarr) != 0:
         subtasks = convertArray(subtaskarr)
         materials = convertArray(materialarr)

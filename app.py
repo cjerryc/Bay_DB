@@ -191,12 +191,14 @@ def updateTaskPage():
             #    for x in updatableStuff[0][1]:
             #TypeError: 'NoneType' object is not iterable
             # [('vedanta2', None, None, ' ')]
-            for x in updatableStuff[0][1]:
-                if x in subarr:
-                    subarr.remove(x)
-            for x in updatableStuff[0][2]:
-                if x in subarr:
-                    matarr.remove(x)
+            if updatableStuff[0][1] != None:
+                for x in updatableStuff[0][1]:
+                    if x in subarr:
+                        subarr.remove(x)
+            if updatableStuff[0][2] != None:
+                for x in updatableStuff[0][2]:
+                    if x in subarr:
+                        matarr.remove(x)
             return render_template('updatetaskbody.html', tasks = getTasks(), currtask = result['taskname'], assignedto = updatableStuff[0][0], subtasks = updatableStuff[0][1], othersubtasks = subarr, othermats = matarr , materials = updatableStuff[0][2], notes = updatableStuff[0][3])
         else:
             return render_template('noupdatetask.html', tasks = getTasks())
@@ -204,6 +206,9 @@ def updateTaskPage():
 
 @app.route('/recieveupdatetask', methods = ['POST', 'GET'])
 def updateTask():
+    assignedto = ""
+    subtask = []
+    material = []
     if request.method == 'POST':
         result = request.form
         for list_type in request.form.keys():
@@ -218,6 +223,10 @@ def updateTask():
             if list_type == "usernotes":
                 notes = result["usernotes"]
         exists = changeStuff(taskname, assignedto, subtask, material, notes)
+        if len(subtask) == 0:
+            subtask = 'false'
+        if len(material) == 0:
+            material = 'false'
         return render_template('successupdatetask.html', tasks = getTasks(), currtask = taskname, assignedto = assignedto, subtasks = subtask, materials = material, usernotes = notes)
 
 
