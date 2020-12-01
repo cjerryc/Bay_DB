@@ -1,9 +1,10 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
+from connectToDB import getUser, checkGroupID, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, updateTask, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
+current_taskname = "''"
 
 
 @app.route('/')
@@ -229,14 +230,32 @@ def addtask():
         # print(result)
         exists = createTask(result["taskname"], result["assignedto"], result["repeat"], result["usernotes"])
         ##this is for cdc stuff:
-        if 'CDCoption' in result.keys():
-            ##do mongo stuff 
+        print(exists)
+        if 'CDCoption' in result.keys() and exists == 'false':
+            ##do mongo stuff
             print("insertmongostuff")
-        # print(exists)
+            print(result["taskname"])
+            subarr = getArrSubtask(result["taskname"])
+            matarr = getArrMaterials(result["taskname"])
+            global current_taskname 
+            current_taskname = result["taskname"]
+            return render_template('addsubmat.html', currtask = result["taskname"], tasks = getTasks(), subtasks = subarr, materials= matarr)
         return render_template('taskcreated.html', taskname=result["taskname"], exists=exists, tasks = getTasks())
-    return render_template('addtask.html', tasks = getTasks())     
-
-
+    return render_template('addtask.html', tasks = getTasks())    
+ 
+@app.route('/addsubtask', methods = ['POST', 'GET'])
+def addsubtask():
+    global current_taskname 
+    if request.method == 'POST':
+        result = request.form
+        for list_type in request.form.keys():
+            if list_type == "subtask":
+                subtask = request.form.getlist(list_type)
+            if list_type == "material":
+                material = request.form.getlist(list_type)
+        exists = updateSubMat(subtask, material)
+        return render_template('taskcreated.html', taskname= current_taskname, exists=exists, tasks = getTasks())
+        
 @app.route('/signinfo', methods = ['POST', 'GET'])
 def signinfo():
    if request.method == 'POST':

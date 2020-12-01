@@ -9,6 +9,7 @@ import redis
 import json
 current_username = "unknown"
 current_groupid = 0
+current_taskid = 0
 client = pymongo.MongoClient("mongodb+srv://ogencer2:iWMOdvjfmgaKTLmO@cluster0.iez4s.mongodb.net/BayDB?retryWrites=true&w=majority")
 mydb = client["BayDB"]
 mycol = mydb["BayDB"]
@@ -254,7 +255,8 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         exists = 'false'
         groupid = current_groupid ##need to chnage
         taskid = random.randrange(1,2147483647) #id range
-        keys = taskname.split()
+        global current_taskid
+        current_taskid = taskid
         taskname = "'" + taskname + "'"
         assignedto = "'" + assignedto + "'"
         username = "'" + current_username + "'"
@@ -274,24 +276,7 @@ def createTask(taskname, assignedto, repeat, usernotes, cursor=cur):
         cursor.execute(query)
         conn.commit()
         print(repeat)
-        subtasks = []
-        materials = []
-        for word in keys:
-            stask = findSubtasks(word)
-            mats = findMaterials(word)
-            subtasks = stask + subtasks
-            materials = mats + materials
-
-        ## need to insert users adding and subtracting their preferences.
-        if len(subtasks) != 0 or len(materials) != 0:
-            subtasks = convertArray(subtasks)
-            materials = convertArray(materials)
-            #need to reformat subtasks and materiasl from being [] to '{"209-240-9984", "209-256-6897"}' LOL kms
-            query = 'UPDATE tasks_table SET subtasks = %s, materials = %s WHERE taskid = %s;' % (subtasks, materials, taskid)
-            cursor.execute(query)
-            conn.commit()
-        print(subtasks)
-        print(materials)
+        
         if "No" not in repeat:
             query = 'INSERT INTO recurring_table(taskid,taskname,repeattime,assignedto,groupid,subtasks,materials,notes) VALUES ( %s, %s, %s, %s, %s,NULL, NULL, %s) ;'% (taskid, taskname, repeat, assignedto, groupid, usernotes)
             cursor.execute(query)
@@ -785,3 +770,33 @@ def convertArray(array):
     array = array.replace(']', '}')
     array = "'" + array + "'"
     return array
+
+def getArrSubtask(taskname):
+    keys = taskname.split()
+    subtasks = []
+    for word in keys:
+        stask = findSubtasks(word)
+        subtasks = stask + subtasks
+
+    return subtasks
+def getArrMaterials(taskname):
+    keys = taskname.split()
+    materials = []
+    for word in keys:
+        mats = findMaterials(word)
+        materials = mats + materials
+    return materials
+
+def updateSubMat(subtaskarr, materialarr, cursor = cur):
+        ## need to insert users adding and subtracting their preferences.
+    global current_taskid
+    if len(subtaskarr) != 0 or len(materialarr) != 0:
+        subtasks = convertArray(subtaskarr)
+        materials = convertArray(materialarr)
+        #need to reformat subtasks and materiasl from being [] to '{"209-240-9984", "209-256-6897"}' LOL kms
+        query = 'UPDATE tasks_table SET subtasks = %s, materials = %s WHERE taskid = %s;' % (subtasks, materials, current_taskid)
+        cursor.execute(query)
+        conn.commit()
+    print(subtasks)
+    print(materials)
+    return 'false'
