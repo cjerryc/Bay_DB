@@ -55,9 +55,9 @@
               </thead>
                 {% for task in tasks %}
                 {% if task[4] == 'incomplete' %}
-                <tr onclick="descriptionsView(this)" style="cursor:pointer" style="color: rgb(165, 40, 40)">
+                <tr style="color: rgb(165, 40, 40)">
                 {% else %}
-                  <tr onclick="descriptionsView(this)" style="cursor:pointer" style="color: rgb(31, 110, 31)">
+                  <tr style="color: rgb(31, 110, 31)">
                 {% endif %}
                 <!-- <th scope="row"></th>  onclick="descriptionsView(this)" -->
                   <th scope="row">{{task[1]}}</th>
