@@ -45,8 +45,7 @@ def managelogin():
             else:
                 return "<h1>Username or Password is wrong!!</h1> <p>try again!</p>"
         except Exception as e:
-            return e
-            #return render_template('login.html', wrongPass = True)
+            return render_template('login.html', wrongPass = True)
 '''
 @app.route('/group',  methods = ['POST', 'GET'])
 def groupinfo():
@@ -142,50 +141,47 @@ def dashboard():
     ret_c1 = countOverallTasks()
     ret_c2, tasks_c2 = countIndivTasks()
     userinfo = getUserInfo()
+    print(userinfo)
     exists = "true"
     try:
         groupid = userinfo[5]
-        #print(groupid)
+        print(groupid)
         groupname = getGroupName(groupid)
         #print(groupname[0][0])
         groupmembers = getGroupMembers(groupid)
 
-        try:
-            legend = " "
-            keys_c1, vals_c1 = zip(*ret_c1.items())
-            keys_c0, vals_c0 = zip(*ret_c0.items())
-            #print("keys_c1: \n")
-            print(vals_c1)
-            #print("vals_c1: \n")
-            #print(keys_c1)
-            names, nums = nameByTask()
-            #print("names: \n")
+        legend = " "
+        keys_c1, vals_c1 = zip(*ret_c1.items())
+        keys_c0, vals_c0 = zip(*ret_c0.items())
+        #print("keys_c1: \n")
+        #print(vals_c1)
+        #print("vals_c1: \n")
+        #print(keys_c1)
+        names, nums = nameByTask()
+        #print("names: \n")
             
             
 
-            #print("nums: \n")
-            #print(nums)
-            user_keys_c2, vals_c2 = zip(*ret_c2.items())
-            dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
-            for i in range(0, len(user_keys_c2)):
-                if i == 0:
-                     legend = legend + user_keys_c2[i] + ':' +' red'
-                elif i == 1:
-                     legend = legend + user_keys_c2[i] + ':' +' pink'
-                elif i == 2:
-                     legend = legend + user_keys_c2[i] + ':' +' yellow'
-                else:
-                     legend = legend + user_keys_c2[i] + ':' + ' orange'
-                if i != len(user_keys_c2)-1:
-                    legend = legend + ", "
-            print(legend)
-
-            return render_template('dashboard.html', legend = legend, exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c0 = keys_c0, val_c0 = vals_c0, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2, d_names = names, d_nums = nums )
+        #print("nums: \n")
+        #print(nums)
+        user_keys_c2, vals_c2 = zip(*ret_c2.items())
+        dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
+        for i in range(0, len(user_keys_c2)):
+            if i == 0:
+                legend = legend + user_keys_c2[i] + ':' +' red'
+            elif i == 1:
+                legend = legend + user_keys_c2[i] + ':' +' pink'
+            elif i == 2:
+                legend = legend + user_keys_c2[i] + ':' +' yellow'
+            else:
+                legend = legend + user_keys_c2[i] + ':' + ' orange'
+            if i != len(user_keys_c2)-1:
+                legend = legend + ", "
+            #print(legend)
+        return render_template('dashboard.html', legend = legend, exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c0 = keys_c0, val_c0 = vals_c0, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2, d_names = names, d_nums = nums )
           
-        except:
-            exists = "false"
-            return render_template('dashboard.html', legend = legend, exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
-    except:
+    except Exception as e:
+        print(e)
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
 
 @app.route('/progress')
@@ -375,12 +371,12 @@ def signinfo():
       #print(result)
 
       try:
-        createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
-        #print(result["username"])
-        render_template('login.html', wrongPass = False)
-        #return render_template("profile.html", result = result)
+          createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
+          #print(result["username"])
+          return render_template('login.html', wrongPass = False)
       except:
           return "<h1>Password doesn't match try again!</h1>"
+        
 
 @app.route('/profile')
 def profilepage():

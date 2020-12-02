@@ -49,7 +49,8 @@ def getUser(username, cursor=cur):
     return cur.fetchone()
     
 def getUsernames(groupid, cursor=cur):
-    query = "SELECT username FROM users WHERE groupid::int = %i;" %groupid
+    a = int(groupid)
+    query = "SELECT username FROM users WHERE groupid::int = %i;" %a
     cursor.execute(query)
     return cur.fetchall()
 
@@ -65,21 +66,23 @@ def getUserInfo(cursor = cur):
 
 def getTasks(cursor = cur):
     global current_groupid 
-    query = "SELECT * FROM tasks_table WHERE groupid::int = %i;" %current_groupid 
+    a = int(current_groupid)
+    query = "SELECT * FROM tasks_table WHERE groupid::int = %i;" %a 
     cur.execute(query)
     print(cur.statusmessage)
     return cur.fetchall()
 
 def getTaskNames(cursor = cur):
     global current_groupid
-    print(int(current_groupid))
-    query = "SELECT taskname FROM tasks_table WHERE groupid::int = %i;" %current_groupid 
+    a = int(current_groupid)
+    query = "SELECT taskname FROM tasks_table WHERE groupid::int = %i;" %a 
     cur.execute(query)
     return cur.fetchall()
 
 def getRecurringTaskNames(cursor = cur):
     global current_groupid
-    query = "SELECT taskname FROM recurring_table WHERE groupid::int = %i;" %current_groupid 
+    a = int(current_groupid)
+    query = "SELECT taskname FROM recurring_table WHERE groupid::int = %i;" %a 
     cur.execute(query)
     return cur.fetchall()
 
@@ -87,7 +90,8 @@ def tasksExists(taskname, cursor = cur):
     global current_groupid 
     print(current_groupid)
     taskname = "'" + taskname + "'"
-    query = 'SELECT taskid FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    a = int(current_groupid)
+    query = 'SELECT taskid FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;'% (taskname, a)
     cur.execute(query)
     return cur.fetchall()  
 
@@ -95,7 +99,8 @@ def tasksRecurring(taskname, cursor = cur):
     global current_groupid 
     print(current_groupid)
     taskname = "'" + taskname + "'"
-    query = 'SELECT taskname FROM recurring_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    a = int(current_groupid)
+    query = 'SELECT taskname FROM recurring_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, a)
     cur.execute(query)
     return cur.fetchall()  
 
@@ -103,14 +108,16 @@ def deleteRecurring(taskname, cursor = cur):
     global current_groupid
     print(current_groupid)
     taskname = "'" + taskname + "'"
-    query = 'DELETE FROM recurring_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    a = int(current_groupid)
+    query = 'DELETE FROM recurring_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, a)
     cur.execute(query)  
     conn.commit()
 
 def searchTasks(taskname, cursor = cur):
     global current_groupid
     taskname = "'%" + taskname + "%'"
-    query = 'SELECT * FROM tasks_table WHERE groupid::int = %i AND ((tasks_table.taskname LIKE %s) OR (tasks_table.doneby LIKE %s) OR (tasks_table.assignedto LIKE %s) OR (tasks_table.status LIKE %s) OR (tasks_table.date LIKE %s) OR (tasks_table.time LIKE %s));' % (current_groupid, taskname, taskname, taskname, taskname, taskname, taskname)
+    a = int(current_groupid)
+    query = 'SELECT * FROM tasks_table WHERE groupid::int = %i AND ((tasks_table.taskname LIKE %s) OR (tasks_table.doneby LIKE %s) OR (tasks_table.assignedto LIKE %s) OR (tasks_table.status LIKE %s) OR (tasks_table.date LIKE %s) OR (tasks_table.time LIKE %s));' % (a, taskname, taskname, taskname, taskname, taskname, taskname)
     cur.execute(query)
     return cur.fetchall()
 
@@ -160,18 +167,23 @@ def searchHistory(taskname, date_created, assignedto, date_completed, doneby, cu
 def getSubtasks(taskname, cursor = cur):
     global current_groupid 
     taskname = "'" + taskname + "'"
-    query = 'SELECT subtasks FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    a = int(current_groupid)
+    query = 'SELECT subtasks FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, a)
     cur.execute(query)
     return cur.fetchall()  
 
 
 def getGroupName(groupid, cursor = cur):
+    global current_groupid
+    current_groupid = groupid
     groupid = "'" + groupid + "'"
     query = 'SELECT groupname FROM groups_table WHERE groupid = %s;' % (groupid)
     cur.execute(query)
     return cur.fetchall()
 
 def getGroupMembers(groupid, cursor = cur):
+    global current_groupid
+    current_groupid = groupid
     groupid = "'" + groupid + "'"
     query = 'SELECT firstname, lastname FROM users WHERE groupid = %s;' % (groupid)
     cur.execute(query)
@@ -192,13 +204,13 @@ def getTaskIDs( cursor=cur):
 def joinGroup(groupid, cursor=cur, conn=conn):
     global current_username
     global current_groupid 
-    current_groupid = groupid
+    current_groupid = int(groupid)
     try:
         username = "'" + db.get('current_username') + "'"
     except:
         username = "'" + current_username + "'"
     groupid = str(groupid)
-    updateUser = 'UPDATE users SET Groupid = %s WHERE Username = %s;' %(groupid, username)
+    updateUser = 'UPDATE users SET groupid = %s WHERE username = %s;' %(groupid, username)
     cur.execute(updateUser)
     conn.commit()
 
@@ -236,7 +248,8 @@ def deleteTask(task, cursor = cur):
     #insrt = 'INSERT INTO tasks(taskname, username, status, date, time) VALUES (%s, %s, %s, %s, %s);' % (tskname, usrname, stts, dt, tm)
     #cursor.execute(insrt)
     #conn.commit()
-    query = 'DELETE FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taske, current_groupid)
+    a = int(current_groupid)
+    query = 'DELETE FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taske, a)
     cursor.execute(query)
 
     if cursor.statusmessage == "DELETE 0":
@@ -289,7 +302,8 @@ def findAssignment(taskname, cursor=cur):
     except:
         print("Local")
     taskname = "'" + taskname + "'"
-    query = 'SELECT assignedto FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    a = int(current_groupid)
+    query = 'SELECT assignedto FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, a)
     cursor.execute(query)
     return cur.fetchone()
 
@@ -300,7 +314,8 @@ def findTaskID(taskname, cursor=cur):
     except:
         print("Local")
     taskname = "'" + taskname + "'"
-    query = 'SELECT taskid FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    a = int(current_groupid)
+    query = 'SELECT taskid FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, a)
     cursor.execute(query)
     return cur.fetchone()
 
@@ -409,7 +424,8 @@ def completeTask(taskname, cursor=cur):
         status = "'complete'"
         date = "'" + date + "'"
         time = "'" + time + "'"
-        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s AND groupid::int = %i;' % (username, status, date, time, taskname, current_groupid)
+        a = int(current_groupid)
+        query = 'UPDATE tasks_table SET doneby = %s, status = %s, completeddate = %s, completedtime = %s WHERE taskname = %s AND groupid::int = %i;' % (username, status, date, time, taskname, a)
         cursor.execute(query)
         conn.commit()
         mycol.insert_one(mongo_template)
@@ -869,8 +885,8 @@ def updateTask(taskname, cursor=cur):
         taskname = "'" + taskname + "'"
         status = "'complete'"
         assignedto = "'" + assignedto + "'"
-
-        query = 'UPDATE tasks_table SET assignedto = %s WHERE taskname = %s AND groupid::int = %i;' % (assignedto, taskname, current_groupid)
+        a = int(current_groupid)
+        query = 'UPDATE tasks_table SET assignedto = %s WHERE taskname = %s AND groupid::int = %i;' % (assignedto, taskname, a)
         cursor.execute(query)
         conn.commit()
         
@@ -956,12 +972,12 @@ def changeStuff(taskname, assignedto, subtaskarr, materialarr, usernotes, cursor
     taskname = "'" + taskname + "'"
     assignedto = "'" + assignedto + "'"
     notes = "'" + usernotes + "'"
-    
-    query = "UPDATE tasks_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, current_groupid)
+    a = int(current_groupid)
+    query = "UPDATE tasks_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, a)
     cur.execute(query)
     conn.commit()
     try:
-        query = "UPDATE recurring_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, current_groupid)
+        query = "UPDATE recurring_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, a)
         cur.execute(query)
         conn.commit()
         return True
@@ -978,7 +994,8 @@ def getCompleted(cursor = cur):
 
 def getRecurrance(cursor = cur):
     global current_groupid
-    query = "SELECT E.taskname, D.repeattime FROM (SELECT taskid, taskname, groupid FROM tasks_table ) E LEFT JOIN (SELECT taskid, taskname, groupid ,repeattime FROM recurring_table) D ON E.taskid = D.taskid WHERE E.groupid::int = %i;" % current_groupid
+    a = int(current_groupid)
+    query = "SELECT E.taskname, D.repeattime FROM (SELECT taskid, taskname, groupid FROM tasks_table ) E LEFT JOIN (SELECT taskid, taskname, groupid ,repeattime FROM recurring_table) D ON E.taskid = D.taskid WHERE E.groupid::int = %i;" % a
     cur.execute(query)
     return cur.fetchall()
 
