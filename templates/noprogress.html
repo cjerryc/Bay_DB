@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="../static/signup.js"></script>
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+
+  </head>
+
+
+<body>
+  <div id="navbar">
+    <a> CS411 BayDB </a>
+    <a href="#home"></a>
+  </div>
+  <div class="sidebar">
+    <a href="home">Home</a>
+    <a href = "profile"> Profile</a>
+    <a href = "group"> My Group</a>
+    <a class= "active" href = "progress">My Progress</a>
+    <a href = "addtask">Add Task</a>
+    <a href = "search"> Search Tasks</a>
+    <a href = "updatetask"> Change a Task</a>
+    <a href = "completetask"> Complete Task</a>
+    <a href = "deletetask"> Delete Task</a>
+    <a href = "login"> Log Out</a>
+  </div>
+ 
+</div>
+<div class = "content">
+    <h1>My Progress</h1> 
+    <h3>My Most Completed Tasks:</h3> 
+    <i> Not enough Information! </i>
+    <h3>My Least Completed Tasks:</h3> 
+    <i>Not enough Information!<br><br></i>
+    <div class = "activities">
+    <h3>Number of Tasks I Completed Per Month</h3> 
+    <div id= "line_chart1" class="ct-chart ct-square" ></div>
+    <h3>Number of Tasks I Missed Per Month</h3> 
+    <div id= "line_chart2" class="ct-chart ct-square"></div>  
+    <!--<div id= "chart3" class="ct-chart ct-square"></div>  
+    <div id= "chart4" class="ct-chart ct-square" ></div>  -->
+  </div>
+</body>
+</html>
