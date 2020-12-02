@@ -293,16 +293,21 @@ def completetask():
 def search():
     if request.method == 'POST':
         result = request.form
-        queryRes = searchHistory(result["search"])
-        if queryRes and result["search"] :
-            return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes, tasks = getTasks())
-        elif not result["search"]:
-            return render_template('search.html', searchInput = "No results could be found!", searchedTasks= '', tasks = getTasks())
-        else:
-            return render_template('search.html', searchInput = "No results for '" + result["search"] + "' could be found!", searchedTasks= '', tasks = getTasks())
-    elif request.method == 'GET':
-        return render_template('search.html', tasks = getTasks())
-    return render_template('search.html', tasks = getTasks())
+        print(result)
+        return render_template('search.html')
+    return render_template('search.html')
+    # if request.method == 'POST':
+    #     result = request.form
+    #     queryRes = searchHistory(result["search"])
+    #     if queryRes and result["search"] :
+    #         return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes, tasks = getTasks())
+    #     elif not result["search"]:
+    #         return render_template('search.html', searchInput = "No results could be found!", searchedTasks= '', tasks = getTasks())
+    #     else:
+    #         return render_template('search.html', searchInput = "No results for '" + result["search"] + "' could be found!", searchedTasks= '', tasks = getTasks())
+    # elif request.method == 'GET':
+    #     return render_template('search.html', tasks = getTasks())
+    # return render_template('search.html', tasks = getTasks())
     
 @app.route('/addtask', methods = ['POST', 'GET'])
 def addtask():

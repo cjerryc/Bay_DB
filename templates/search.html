@@ -29,51 +29,21 @@
          <a href = "login"> Log Out</a>
       </div>
       <div class = "content">
-         <div class = "activities">
           <h1>Search your group's history!</h1>
           <div class ="divform">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-            <form class="search" action="/search">
-              <input type="text" placeholder="Search.." name="search">
-              <button type="submit" formmethod="post"><i class="fa fa-search"></i></button>
+            <form action = "/search" method = "POST">
+              <p>Taskname <input type="text" placeholder = "wash dishes" name="taskname"></p>
+              <p>Date Created <input type="text" name="date_created"></p>
+              <p>Assigned to <input type="text" placeholder = "netid" name="assignedto"></p>
+              <p>Date Completed <input type="text" name="date_completed"></p>
+              <p>Done By <input type="text" placeholder = "netid" name="doneby"></p>
+              <p> For dates, please follow the format of (Day/Month/Year) for example 12/01/2020.</p>
+              <p><input type = "submit" value = "submit"/></p>
             </form>
           </div>
-          <p1> {{searchInput}}</p1>
-          <p1> {{searchedTasks}} </p1>
-        </div>
-         <div class = "taskscontainer">
-            <h1> Tasks List </h1>
-            <table id="tblSearch" class="table" cellpadding="2" cellspacing="0">
-              <thead>
-                <tr>
-                  <th scope="col">Taskname</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Created Date</th>
-                  <th scope="col">Created Time</th>
-                  <th scope="col">Assigned to:</th>
-                  <th scope="col">Completed Date</th>
-                  <th scope="col">Completed Time</th>
-                  <th scope="col">Done by:</th>
-                </tr>
-              </thead>
-                {% for task in tasks %}
-                {% if task[4] == 'incomplete' %}
-                <tr onclick="descriptionsView(this)" style="color: rgb(165, 40, 40)">
-                {% else %}
-                  <tr onclick="descriptionsView(this)" style="color: rgb(31, 110, 31)">
-                {% endif %}
-                  <th scope="row">{{task[1]}}</th>
-                  <td>{{task[4]}}</td> 
-                  <td>{{task[3]}}</td>
-                  <td>{{task[2]}}</td>
-                  <td>{{task[5]}}</td>
-                  <td>{{task[6]}}</td>
-                  <td>{{task[7]}}</td>
-                  <td>{{task[8]}}</td>
-                </tr>
-                {% endfor %}
-              </table>
-         </div>
+          <!-- <p1> {{searchInput}}</p1>
+          <p1> {{searchedTasks}} </p1> -->
       </div>
    </body>
 </html>
