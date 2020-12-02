@@ -294,7 +294,9 @@ def search():
     if request.method == 'POST':
         result = request.form
         print(result)
-        return render_template('search.html')
+        # ([('taskname', 'hiss'), ('date_created', 'helo'), ('assignedto', 'wat'), ('date_completed', 'ee'), ('doneby', '')])
+        exists = searchHistory(result["taskname"], result["date_created"], result["assignedto"], result["date_completed"], result["doneby"])
+        return render_template('search.html', tasks = exists)
     return render_template('search.html')
     # if request.method == 'POST':
     #     result = request.form

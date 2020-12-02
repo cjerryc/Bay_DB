@@ -44,6 +44,41 @@
           </div>
           <!-- <p1> {{searchInput}}</p1>
           <p1> {{searchedTasks}} </p1> -->
+          <table id="tblSearch" class="table" cellpadding="2" cellspacing="0">
+            <thead>
+              <tr>
+                <th scope="col">Taskname</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Assigned to:</th>
+                <th scope="col">Completed Date</th>
+                <th scope="col">Done by:</th>
+              </tr>
+            </thead>
+              {% for task in tasks %}
+              {% if task[4] == 'incomplete' %}
+              <tr class = "task" style="color: rgb(165, 40, 40)">
+              {% else %}
+                <tr class = "task" style="color: rgb(31, 110, 31)">
+              {% endif %}
+              <th scope="row">{{task[1]}}</th>
+              <td>{{task[3]}}</td>
+              <td>{{task[5]}}</td>
+              <td>{{task[6]}}</td>
+              <td>{{task[8]}}</td>
+              </tr>
+              <tr class="flip hidden">
+                <td colspan="9">Subtasks : {% for item in task[10] %} <br> <li>{{ item }}</li> {% endfor %}<br> Materials : {% for item in task[11] %} <br> <li>{{ item }}</li> {% endfor %}<br> Notes : {{task[12]}}</td> 
+              </tr>
+                {% endfor %}
+            </table>
+          </div>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $(".task").click(function (e) {
+               $(this).closest("tr").next(".flip").toggle();
+              });
+            });
+            </script>
       </div>
    </body>
 </html>
