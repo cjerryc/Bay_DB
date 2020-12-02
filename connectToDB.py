@@ -179,7 +179,7 @@ def getSubtasks(taskname, cursor = cur):
 
 def getGroupName(groupid, cursor = cur):
     global current_groupid
-    current_groupid = groupid
+    current_groupid = int(groupid)
     groupid = "'" + groupid + "'"
     query = 'SELECT groupname FROM groups_table WHERE groupid = %s;' % (groupid)
     cur.execute(query)
@@ -187,7 +187,7 @@ def getGroupName(groupid, cursor = cur):
 
 def getGroupMembers(groupid, cursor = cur):
     global current_groupid
-    current_groupid = groupid
+    current_groupid = int(groupid)
     groupid = "'" + groupid + "'"
     query = 'SELECT firstname, lastname FROM users WHERE groupid = %s;' % (groupid)
     cur.execute(query)
