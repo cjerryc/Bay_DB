@@ -112,11 +112,16 @@ def searchHistory(taskname, date_created, assignedto, date_completed, doneby, cu
     global current_groupid
     if len(taskname) != 0 and len(date_created) == 0 and len(assignedto) == 0 and len(date_completed) == 0 and len(doneby) == 0:
         taskname = "'%" + taskname + "%'"
-        query = 'SELECT * FROM history_table WHERE groupid::int = %i AND taskname LIKE %s;' %(current_groupid, taskname)
+        try:
+            query = 'SELECT * FROM history_table WHERE groupid::int = %i AND taskname LIKE %s;' %(current_groupid, taskname)
+            cur.execute(query)
+            return cur.fetchall()
+        except:
+            return 'false'
+    return 'false'
     # if len(taskname) != 0:
     # query = 'SELECT * FROM history_table WHERE groupid::int = %i AND ((taskname LIKE %s) OR (doneby LIKE %s) OR (assignedto LIKE %s) OR (status LIKE %s) OR (date LIKE %s) OR (time LIKE %s) OR (%s  = ANY(subtasks)) OR (%s = ANY(materials) ) OR (notes LIKE %s));' % (current_groupid, taskname, taskname, taskname, taskname, taskname, taskname, taskname, taskname, taskname)
-    cur.execute(query)
-    return cur.fetchall()
+
 
 def getSubtasks(taskname, cursor = cur):
     global current_groupid 

@@ -296,8 +296,12 @@ def search():
         print(result)
         # ([('taskname', 'hiss'), ('date_created', 'helo'), ('assignedto', 'wat'), ('date_completed', 'ee'), ('doneby', '')])
         exists = searchHistory(result["taskname"], result["date_created"], result["assignedto"], result["date_completed"], result["doneby"])
-        return render_template('search.html', tasks = exists)
-    return render_template('search.html')
+        tasks = []
+        for item in exists:
+            new_item = tuple((i or '') for i in item)
+            tasks.append(new_item)
+        return render_template('search.html', tasks = tasks)
+    return render_template('nosearch.html')
     # if request.method == 'POST':
     #     result = request.form
     #     queryRes = searchHistory(result["search"])

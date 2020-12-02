@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="../static/style.css">
+      <link rel="stylesheet" href="../static/style.css">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Abel&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <script src="../static/signup.js"></script>
+      <script src="../static/home.js"></script>
+      <script src="../static/taskslist.js"></script>
+   </head>
+   <body>
+    <div id="navbar">
+      <a> CS411 BayDB </a>
+      <a href="#home"></a>
+    </div>
+      <div class="sidebar">
+         <a href="home">Home</a>
+         <a href = "profile"> Profile</a>
+         <a href = "group"> My Group</a>
+         <a href = "progress">My Progress</a>
+         <a href = "addtask">Add Task</a>
+         <a class= "active" href = "search"> Search Tasks</a>
+         <a href = "updatetask"> Change a Task</a>
+         <a href = "completetask"> Complete Task</a>
+         <a href = "deletetask"> Delete Task</a>
+         <a href = "login"> Log Out</a>
+      </div>
+      <div class = "content">
+          <h1>Search your group's history!</h1>
+          <div class ="divform">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <form action = "/search" method = "POST">
+              <p>Taskname <input type="text" placeholder = "wash dishes" name="taskname"></p>
+              <p>Date Created <input type="text" name="date_created"></p>
+              <p>Assigned to <input type="text" placeholder = "netid" name="assignedto"></p>
+              <p>Date Completed <input type="text" name="date_completed"></p>
+              <p>Done By <input type="text" placeholder = "netid" name="doneby"></p>
+              <p> For dates, please follow the format of (Day/Month/Year) for example 12/01/2020.</p>
+              <p><input type = "submit" value = "submit"/></p>
+            </form>
+          </div>
+      </div>
+   </body>
+</html>
