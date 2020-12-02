@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted, getUsernames
+from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted, getUsernames, countRecurringTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -138,37 +138,53 @@ def home():
 
 @app.route('/group')
 def dashboard():
+    ret_c0 = countRecurringTasks()
     ret_c1 = countOverallTasks()
     ret_c2, tasks_c2 = countIndivTasks()
     userinfo = getUserInfo()
     exists = "true"
     try:
         groupid = userinfo[5]
-        print(groupid)
+        #print(groupid)
         groupname = getGroupName(groupid)
-        print(groupname[0][0])
+        #print(groupname[0][0])
         groupmembers = getGroupMembers(groupid)
 
         try:
+            legend = " "
             keys_c1, vals_c1 = zip(*ret_c1.items())
-            print("keys_c1: \n")
+            keys_c0, vals_c0 = zip(*ret_c0.items())
+            #print("keys_c1: \n")
             print(vals_c1)
-            print("vals_c1: \n")
-            print(keys_c1)
+            #print("vals_c1: \n")
+            #print(keys_c1)
             names, nums = nameByTask()
-            print("names: \n")
-            print(names)
-            print("nums: \n")
-            print(nums)
+            #print("names: \n")
+            
+            
+
+            #print("nums: \n")
+            #print(nums)
             user_keys_c2, vals_c2 = zip(*ret_c2.items())
             dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
-            print(tasks_keys_c2)
-            return render_template('dashboard.html', exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2, d_names = names, d_nums = nums )
-            #k = jsonify({'key_list': keys_c1})
-            #v = jsonify({'val_list': vals_c1})
+            for i in range(0, len(user_keys_c2)):
+                if i == 0:
+                     legend = legend + user_keys_c2[i] + ':' +' red'
+                elif i == 1:
+                     legend = legend + user_keys_c2[i] + ':' +' pink'
+                elif i == 2:
+                     legend = legend + user_keys_c2[i] + ':' +' yellow'
+                else:
+                     legend = legend + user_keys_c2[i] + ':' + ' orange'
+                if i != len(user_keys_c2)-1:
+                    legend = legend + ", "
+            print(legend)
+
+            return render_template('dashboard.html', legend = legend, exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c0 = keys_c0, val_c0 = vals_c0, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2, d_names = names, d_nums = nums )
+          
         except:
             exists = "false"
-            return render_template('dashboard.html', exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
+            return render_template('dashboard.html', legend = legend, exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
     except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
 

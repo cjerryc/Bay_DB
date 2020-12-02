@@ -51,10 +51,13 @@
     <div id= "chart1" class="ct-chart ct-square" ></div>
     <h3>Percentage of Non-Recurring Tasks Completed per Person</h3>
     <div id= "chart01" class="ct-chart ct-square" ></div>
-    <h3>Number of Completed Tasks per Task Type and Person</h3>
+    <h3>Percentage of Recurring Tasks Completed per Person</h3>
+    <div id= "chart02" class="ct-chart ct-square" ></div>
+    <h3>Number of Completed Recurring Tasks per Task Type</h3>
     {% if exists == 'true' %}
+    <i>*Legend: {{legend}} <br><br></i>
     <div id= "chart2" class="ct-chart ct-square"></div>  
-    <div id= "chart3" class="ct-chart ct-square" ></div> 
+    <!--<div id= "chart3" class="ct-chart ct-square" ></div> -->
     <h1> LEAVE GROUP</h1>
     <form action="/exitGroup" method="get">
       <button type="submit">LEAVE!</button>
@@ -69,12 +72,7 @@
  
 
   <script>
-        //var getData = $.get('/data');
-        //getData.done(function(results){
-            /*import Chartist from "chartist";
-            window["Chartist"] = Chartist;
-            const axisLabels = require("chartists-plugin-axistitle");
-            axisLabels();*/
+       
 
             var keys_c1 = JSON.parse('{{key_c1 | tojson | safe}}');
             var vals_c1 = JSON.parse('{{val_c1 | tojson | safe}}');
@@ -153,55 +151,43 @@
                 ];
                 var MyChart01 = new Chartist.Pie('#chart01', data01, options);
 
+            /*New graph 2*/
+            var keys_c02 = JSON.parse('{{key_c0 | tojson | safe}}');
+            var vals_c02 = JSON.parse('{{val_c0 | tojson | safe}}');
+
+            var data02 = {
+
+                series: vals_c02
+                };
+
+            var sum = function(a, b) { return a + b };
+
+                var options = {
 
 
+                labelInterpolationFnc: function(value, idx) {
+                    var percentage = Math.round(value/data02.series.reduce(sum) * 100) + '%';
+                    return  keys_c02[idx] + '  (' + percentage + ')';
+                }
 
-            /*
-            var data1 = {
-                labels: keys, 
-                series: [vals]
-            };
-            
-        
-            var options1 = {
-                width: 500,
-                height: 200,
-                chartPadding: {
-                    top: 20,
-                    right: 0,
-                    bottom: 20,
-                    left: 0
-                    },
-                axisY: {
-                    onlyInteger: true
-                },
-            
-                plugins: [
-                    Chartist.plugins.ctAxisTitle({
-                    axisX: {
-                    axisTitle: "Time (mins)",
-                    axisClass: "ct-axis-title",
-                    offset: {
-                    x: 0,
-                    y: 50
-                    },
-                    textAnchor: "middle"
-                    },
-                    axisY: {
-                    axisTitle: "Goals",
-                    axisClass: "ct-axis-title",
-                    offset: {
-                    x: 0,
-                    y: 0
-                    },
-                    textAnchor: "middle",
-                    flipTitle: false
+                };
+
+                var responsiveOptions = [
+                ['screen and (min-width: 640px)', {
+                    chartPadding: 10,
+                    labelOffset: 50,
+                    labelDirection: 'explode',
+                    labelInterpolationFnc: function(value) {
+                    return value;
                     }
-                    })
-                ] 
+                }],
+                ['screen and (min-width: 1024px)', {
+                    labelOffset: 0,
+                    chartPadding: 10
+                }]
+                ];
+                var MyChart02 = new Chartist.Pie('#chart02', data02, options);
 
-                
-            };*/
 
 
             
@@ -230,7 +216,7 @@
 
             //var myChart1 = new Chartist.Line('#chart2', data1, options1);
 
-            var myChart3 = new Chartist.Bar('#chart3', {
+            /*var myChart3 = new Chartist.Bar('#chart3', {
                 labels: ['TestVal1', 'TestVal2', 'TestVal3'],
                 series: [
                     [127, 211, 146],
@@ -254,7 +240,7 @@
                     offset: 135,
                 },
                
-                });
+                });*/
 
                 
 

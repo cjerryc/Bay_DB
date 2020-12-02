@@ -77,6 +77,12 @@ def getTaskNames(cursor = cur):
     cur.execute(query)
     return cur.fetchall()
 
+def getRecurringTaskNames(cursor = cur):
+    global current_groupid
+    query = "SELECT taskname FROM recurring_table WHERE groupid::int = %i;" %current_groupid 
+    cur.execute(query)
+    return cur.fetchall()
+
 def tasksExists(taskname, cursor = cur):
     global current_groupid 
     print(current_groupid)
@@ -147,6 +153,11 @@ def checkGroupID(usrnm, cursor=cur):
     usrnm = "'" + usrnm + "'"
     #query = 'SELECT groupid FROM groups_table WHERE %s = ANY (username);' %usrnm
     query = 'SELECT groupid FROM users WHERE username = %s ;' %usrnm
+    cur.execute(query)
+    return cur.fetchall()
+
+def getTaskIDs( cursor=cur):
+    query = 'SELECT taskid FROM task_table;' 
     cur.execute(query)
     return cur.fetchall()
 
@@ -416,12 +427,67 @@ def countOverallTasks():
     
     return final_dict
 
+def countRecurringTasks():
+    global current_groupid
+    final_dict = {}
+    users = []
+    vals = []
+    vals0 = []
+    all_rec_tasks = getRecurringTaskNames()
+    tasks_arr = []
+    
+    for e2 in all_rec_tasks:
+        tasks_arr.append(" ".join(list(e2)))
+
+    agg_result= mycol.aggregate( 
+    [{ 
+    "$match":
+    {"group_id":current_groupid}},
+
+    {"$group" :  
+        {"_id" : "$username",  
+         "num" : {"$sum" : 1},
+         "taskname": { "$push": "$taskname" } 
+         }},
+    {"$project" : 
+        { "_id": 0, "username": "$_id", "num": 1, "taskname": 1 } },
+    { "$sort" : 
+        SON([("num", -1)]) } 
+    ]) 
+
+    result = list(agg_result)
+    all_users = getUsernames(current_groupid)
+
+    users_arr = []
+    for e1 in all_users:
+        users_arr.append(" ".join(list(e1)))
+
+
+    for u in users_arr:
+        for d in result:
+            if d['username'] == u:
+                vals0.append(d['num'])
+                for t in d['taskname']:
+                    if t not in tasks_arr:
+                        d['num'] = d['num'] - 1
+
+                name = getUser(d['username'])
+                user = " ".join(list(name)).title()
+                val = d['num']
+                final_dict[user] = val
+            
+                users.append(user)
+                vals.append(val)
+    
+    print(final_dict)
+    return final_dict
+
 
 def countIndivTasks():
     global current_groupid
     complete_list = {}
     only_vals = {}
-    all_tasks = getTaskNames()
+    all_tasks = getRecurringTaskNames()
 
     agg_result= mycol.aggregate( 
     [{ 
@@ -466,7 +532,11 @@ def countIndivTasks():
             if not found:
                 complete_list[u + '-' + t] = 0
                 temp_arr.append(0)
-        only_vals[u] = temp_arr
+
+        name = getUser(u)
+        user = " ".join(list(name)).title()
+
+        only_vals[user] = temp_arr
 
     dummy_tasks_dict = {}
     for i in range(0, len(tasks_arr)):
@@ -685,7 +755,7 @@ def myBottomTasks():
         print("Local")
     final_dict = {}
     bottom_tasks = []
-    all_tasks = getTaskNames()
+    all_tasks = getRecurringTaskNames()
     tasks_arr = []
 
     for e2 in all_tasks:
@@ -736,7 +806,7 @@ def myBottomTasks():
     
     
     if len(bottom_tasks) == 0:
-        top_tasks = 'No Tasks Completed'
+        bottom_tasks = 'No Tasks Completed'
     elif len(bottom_tasks) == 1:
         bottom_tasks = " ".join(bottom_tasks)
     else:
