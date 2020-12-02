@@ -142,9 +142,6 @@ def dashboard():
         ret_c1 = countOverallTasks()
         ret_c2, tasks_c2 = countIndivTasks()
         userinfo = getUserInfo()
-        print("HIIIIIIIIIIIII")
-        print(ret_c0, ret_c1, ret_c2, tasks_c2)
-        print("BYEEEEEEEEEEEE")
         exists = "true"
     except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group

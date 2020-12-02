@@ -2,6 +2,7 @@ import os
 import sys
 import psycopg2
 from datetime import datetime
+import re
 import pymongo 
 import random
 from bson.son import SON
@@ -699,11 +700,15 @@ def myTaskMisses():
         print("Local")
     final_dict = {}
     username = str(current_username)
+    first = getUser(username)
+    first_full = (list(first)[0]).lower()
+    search_expr = re.compile(f".*{first_full}.*", re.I)
+    
 
     agg_result= mycol.aggregate( 
     [{ 
     "$match":
-    {"group_id":current_groupid, "assignedto":username, "username": { "$ne": username }}},
+    {"group_id":current_groupid, "username": {"$ne": username }, "$or": [ {"assignedto": {"$eq": username }}, {"assignedto": {"$regex": search_expr}} ]}},
 
     {"$group" :  
         {"_id": { "$substr": ["$date", 0, 2 ] },
