@@ -296,6 +296,8 @@ def search():
         print(result)
         # ([('taskname', 'hiss'), ('date_created', 'helo'), ('assignedto', 'wat'), ('date_completed', 'ee'), ('doneby', '')])
         exists = searchHistory(result["taskname"], result["date_created"], result["assignedto"], result["date_completed"], result["doneby"])
+        if exists == 'false':
+            return render_template('nosuchsearch.html', exists = exists)
         tasks = []
         for item in exists:
             new_item = tuple((i or '') for i in item)

@@ -110,18 +110,46 @@ def searchTasks(taskname, cursor = cur):
 
 def searchHistory(taskname, date_created, assignedto, date_completed, doneby, cursor = cur):
     global current_groupid
-    if len(taskname) != 0 and len(date_created) == 0 and len(assignedto) == 0 and len(date_completed) == 0 and len(doneby) == 0:
-        taskname = "'%" + taskname + "%'"
-        try:
-            query = 'SELECT * FROM history_table WHERE groupid::int = %i AND taskname LIKE %s;' %(current_groupid, taskname)
-            cur.execute(query)
-            return cur.fetchall()
-        except:
-            return 'false'
-    return 'false'
-    # if len(taskname) != 0:
-    # query = 'SELECT * FROM history_table WHERE groupid::int = %i AND ((taskname LIKE %s) OR (doneby LIKE %s) OR (assignedto LIKE %s) OR (status LIKE %s) OR (date LIKE %s) OR (time LIKE %s) OR (%s  = ANY(subtasks)) OR (%s = ANY(materials) ) OR (notes LIKE %s));' % (current_groupid, taskname, taskname, taskname, taskname, taskname, taskname, taskname, taskname, taskname)
+    thisdict =	{
+        "taskname": taskname,
+        "date_created": date_created,
+        "assignedto": assignedto,
+        "date_completed": date_completed,
+        "doneby": doneby
+    }
+    boop = {}
+    for item in thisdict.keys():
+        if len(thisdict[item]) != 0:
+            boop[item] = "'%" + thisdict[item] + "%'"
+    querydict = {
+        "taskname": 'SELECT * FROM history_table WHERE groupid::int = %i AND taskname LIKE %s',
+        "date_created": 'SELECT * FROM history_table WHERE groupid::int = %i AND date LIKE %s',
+        "assignedto": 'SELECT * FROM history_table WHERE groupid::int = %i AND assignedto LIKE %s',
+        "date_completed": 'SELECT * FROM history_table WHERE groupid::int = %i AND completeddate LIKE %s',
+        "doneby": 'SELECT * FROM history_table WHERE groupid::int = %i AND doneby LIKE %s'
+    }
+    query = []
+    items  = []
+    intersect = ' INTERSECT '
 
+    for item in boop.keys():
+        query.append(querydict[item])
+        items.append(current_groupid)
+        items.append(boop[item])
+    items = tuple(items)
+
+    stringquery = ''
+    for index in range(len(query) - 1):
+        stringquery = stringquery + query[index] + intersect
+    stringquery = stringquery + query[len(query) - 1]
+    
+    finalquery = (stringquery % items)
+    print(stringquery)
+    print(items)
+    print(finalquery)
+    cur.execute(finalquery)
+    return cur.fetchall() 
+    
 
 def getSubtasks(taskname, cursor = cur):
     global current_groupid 
