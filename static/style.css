@@ -74,7 +74,6 @@ body {
   }
   .taskscontainer {
     float: right;
-    background-color: coral;
     width: 63%;
     margin: 0 1.5%;
     color: black;
@@ -198,4 +197,13 @@ table.table tfoot .links a{
 }
 .showed {
   display: block;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }

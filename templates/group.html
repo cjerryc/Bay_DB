@@ -29,20 +29,23 @@
       <a href = "login"> Log Out</a>
     </div>
  <div class = "content">
-    <div class = "activities">
-      <h1> My Group Information</h1>
-   <table class = "table" border = 1 cellpadding="2" cellspacing="0">
-      <thead>
-        <tr><th>GroupId</th><td>{{groupid}}</td></tr>
-        <tr><th>Group Name</th><td>{{groupname}}</td></tr>
-         <tr><th>Group Members</th> <td>  {% for member in groupmembers %} {{member[0]}} {{member[1]}} {% endfor %}</td></tr>
-      </thead>
- </table>
- <h1> LEAVE GROUP</h1>
- <form action="/exitGroup" method="get">
-   <button type="submit">LEAVE!</button>
- </form>
+  <div class="row">
+    <div class="column"><h1> My Group Information</h1>
+      <table class = "table" border = 1 cellpadding="2" cellspacing="0">
+         <thead>
+           <tr><th>GroupId</th><td>{{groupid}}</td></tr>
+           <tr><th>Group Name</th><td>{{groupname}}</td></tr>
+            <tr><th>Group Members</th> <td>  {% for member in groupmembers %} {{member[0]}} {{member[1]}} {% endfor %}</td></tr>
+         </thead>
+    </table>
+  </div>
+    <div class="column"> <h1> LEAVE GROUP</h1>
+      <form action="/exitGroup" method="get">
+        <button type="submit">LEAVE!</button>
+      </form>
+    </div>
+  </div>
+    
  </div>
-</div>
 </body>
 </html>

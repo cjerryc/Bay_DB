@@ -116,7 +116,6 @@ def home():
     for item in temp:
         new_item = tuple((i or '') for i in item)
         tasks.append(new_item)
-    print(tasks)
     # print(tasks)
     # for item in tasks:
     #     for i in item:

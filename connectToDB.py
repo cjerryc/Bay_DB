@@ -845,7 +845,13 @@ def changeStuff(taskname, assignedto, subtaskarr, materialarr, usernotes, cursor
     query = "UPDATE tasks_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, current_groupid)
     cur.execute(query)
     conn.commit()
-    return True
+    try:
+        query = "UPDATE recurring_table SET assignedto = %s, subtasks = %s, materials = %s, notes = %s WHERE taskname = %s AND groupid::int = %i;" % (assignedto, subtasks, materials, notes, taskname, current_groupid)
+        cur.execute(query)
+        conn.commit()
+        return True
+    except:
+        return True
 
 def getCompleted(cursor = cur):
     global current_groupid

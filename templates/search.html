@@ -22,7 +22,7 @@
          <a href = "group"> My Group</a>
          <a href = "progress">My Progress</a>
          <a href = "addtask">Add Task</a>
-         <a class= "active" href = "search"> Search Past Tasks</a>
+         <a class= "active" href = "search"> Search Tasks</a>
          <a href = "updatetask"> Change a Task</a>
          <a href = "completetask"> Complete Task</a>
          <a href = "deletetask"> Delete Task</a>
@@ -30,7 +30,7 @@
       </div>
       <div class = "content">
          <div class = "activities">
-          <h1>Search the System !!! NEED CHANGE !!!!</h1>
+          <h1>Search your group's history!</h1>
           <div class ="divform">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
             <form class="search" action="/search">
@@ -58,9 +58,9 @@
               </thead>
                 {% for task in tasks %}
                 {% if task[4] == 'incomplete' %}
-                <tr onclick="descriptionsView(this)" style="cursor:pointer" style="color: rgb(165, 40, 40)">
+                <tr onclick="descriptionsView(this)" style="color: rgb(165, 40, 40)">
                 {% else %}
-                  <tr onclick="descriptionsView(this)" style="cursor:pointer" style="color: rgb(31, 110, 31)">
+                  <tr onclick="descriptionsView(this)" style="color: rgb(31, 110, 31)">
                 {% endif %}
                   <th scope="row">{{task[1]}}</th>
                   <td>{{task[4]}}</td> 
