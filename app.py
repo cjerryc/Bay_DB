@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted, getUsernames, countRecurringTasks
+from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, checkRecurr, updateSubMatRecurr, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted, getUsernames, countRecurringTasks
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -382,6 +382,10 @@ def addsubtask():
                 material = request.form.getlist(list_type)
 
         exists = updateSubMat(subtask, material)
+        check = checkRecurr()
+        if len(check) != 0:
+            yay = updateSubMatRecurr(subtask, material)
+            print("it got into here")
         return render_template('taskcreated.html', taskname= current_taskname, exists=exists, tasks = getTasks())
         
 @app.route('/signinfo', methods = ['POST', 'GET'])

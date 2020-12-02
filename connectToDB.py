@@ -954,11 +954,29 @@ def updateSubMat(subtaskarr, materialarr, cursor = cur):
     if len(subtaskarr) != 0 or len(materialarr) != 0:
         subtasks = convertArray(subtaskarr)
         materials = convertArray(materialarr)
-        #need to reformat subtasks and materiasl from being [] to '{"209-240-9984", "209-256-6897"}' LOL kms
         query = 'UPDATE tasks_table SET subtasks = %s, materials = %s WHERE taskid = %s;' % (subtasks, materials, current_taskid)
         cursor.execute(query)
         conn.commit()
     return 'false'
+
+def updateSubMatRecurr(subtaskarr, materialarr, cursor = cur):
+        ## need to insert users adding and subtracting their preferences.
+    global current_taskid
+    if len(subtaskarr) != 0 or len(materialarr) != 0:
+        subtasks = convertArray(subtaskarr)
+        materials = convertArray(materialarr)
+        query = 'UPDATE recurring_table SET subtasks = %s, materials = %s WHERE taskid = %s;' % (subtasks, materials, current_taskid)
+        cursor.execute(query)
+        conn.commit()
+    return 'false'
+
+def checkRecurr(cursor = cur):
+    global current_groupid 
+    global current_taskid 
+    query = 'SELECT * FROM recurring_table WHERE taskid = %s AND groupid::int = %i' % (current_taskid, current_groupid)
+    cur.execute(query)
+    return cur.fetchall() 
+
 
 def getATask(taskname, cursor = cur):
     global current_groupid 
