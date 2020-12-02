@@ -71,13 +71,15 @@ def getTasks(cursor = cur):
     return cur.fetchall()
 
 def getTaskNames(cursor = cur):
-    global current_groupid 
+    global current_groupid
+    print(int(current_groupid))
     query = "SELECT taskname FROM tasks_table WHERE groupid::int = %i;" %current_groupid 
     cur.execute(query)
     return cur.fetchall()
 
 def tasksExists(taskname, cursor = cur):
     global current_groupid 
+    print(current_groupid)
     taskname = "'" + taskname + "'"
     query = 'SELECT taskid FROM tasks_table WHERE tasks_table.taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
     cur.execute(query)
@@ -85,6 +87,7 @@ def tasksExists(taskname, cursor = cur):
 
 def tasksRecurring(taskname, cursor = cur):
     global current_groupid 
+    print(current_groupid)
     taskname = "'" + taskname + "'"
     query = 'SELECT taskname FROM recurring_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
     cur.execute(query)
@@ -92,6 +95,7 @@ def tasksRecurring(taskname, cursor = cur):
 
 def deleteRecurring(taskname, cursor = cur):
     global current_groupid
+    print(current_groupid)
     taskname = "'" + taskname + "'"
     query = 'DELETE FROM recurring_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
     cur.execute(query)  
@@ -855,9 +859,9 @@ def changeStuff(taskname, assignedto, subtaskarr, materialarr, usernotes, cursor
 
 def getCompleted(cursor = cur):
     global current_groupid
-    current_groupid = "'" + str(current_groupid) + "'"
+    curr_gid = "'" + str(current_groupid) + "'"
     # query = 'SELECT DISTINCT firstname, lastname, users.groupid, cnt FROM((SELECT doneby, count(DISTINCT taskid) as cnt FROM history_table WHERE history_table.groupid = %s AND doneby IS NOT NULL GROUP BY doneby) r JOIN history_table t on r.doneby = t.doneby) NATURAL JOIN users WHERE users.username = t.doneby ORDER BY  firstname;' % current_groupid
-    query = 'SELECT DISTINCT firstname, lastname, users.groupid, cnt FROM((SELECT assignedto, count(DISTINCT taskid) as cnt FROM history_table WHERE history_table.groupid = %s AND assignedto IS NOT NULL GROUP BY assignedto) r JOIN history_table t on r.assignedto = t.assignedto) NATURAL JOIN users WHERE users.username = t.assignedto ORDER BY  firstname;' % current_groupid
+    query = 'SELECT DISTINCT firstname, lastname, users.groupid, cnt FROM((SELECT assignedto, count(DISTINCT taskid) as cnt FROM history_table WHERE history_table.groupid = %s AND assignedto IS NOT NULL GROUP BY assignedto) r JOIN history_table t on r.assignedto = t.assignedto) NATURAL JOIN users WHERE users.username = t.assignedto ORDER BY  firstname;' % curr_gid
     cur.execute(query)
     return cur.fetchall()
 
