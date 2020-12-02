@@ -861,3 +861,9 @@ def getCompleted(cursor = cur):
     cur.execute(query)
     return cur.fetchall()
 
+def getRecurrance(cursor = cur):
+    global current_groupid
+    query = "SELECT E.taskname, D.repeattime FROM (SELECT taskid, taskname, groupid FROM tasks_table ) E LEFT JOIN (SELECT taskid, taskname, groupid ,repeattime FROM recurring_table) D ON E.taskid = D.taskid WHERE E.groupid::int = %i;" % current_groupid
+    cur.execute(query)
+    return cur.fetchall()
+

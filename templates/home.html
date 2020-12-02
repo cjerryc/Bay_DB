@@ -45,6 +45,7 @@
           <tr>
             <th scope="col">Taskname</th>
             <th scope="col">Status</th>
+            <th scope="col">Recurrance</th>
             <th scope="col">Created Date</th>
             <th scope="col">Created Time</th>
             <th scope="col">Assigned to:</th>
@@ -61,6 +62,11 @@
           {% endif %}
           <th scope="row">{{task[1]}}</th>
           <td>{{task[4]}}</td> 
+          {% for recur in recurring %}
+          {% if recur[0] == task[1] %}
+          <td>{{recur[1]}}</td>
+          {% endif %}
+          {% endfor %}
           <td>{{task[3]}}</td>
           <td>{{task[2]}}</td>
           <td>{{task[5]}}</td>
@@ -69,7 +75,7 @@
           <td>{{task[8]}}</td>
           </tr>
           <tr class="flip hidden">
-            <td colspan="8">Subtasks : {% for item in task[10] %} <br> <li>{{ item }}</li> {% endfor %}<br> Materials : {% for item in task[11] %} <br> <li>{{ item }}</li> {% endfor %}<br> Notes : {{task[12]}}</td> 
+            <td colspan="9">Subtasks : {% for item in task[10] %} <br> <li>{{ item }}</li> {% endfor %}<br> Materials : {% for item in task[11] %} <br> <li>{{ item }}</li> {% endfor %}<br> Notes : {{task[12]}}</td> 
           </tr>
             {% endfor %}
         </table>

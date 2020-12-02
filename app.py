@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted
+from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -111,17 +111,24 @@ def exitGroup():
 def home():
     
     temp = getTasks()
-    userinfo = getUserInfo()
+    temp_recurr = getRecurrance()
+
     tasks = []
     for item in temp:
         new_item = tuple((i or '') for i in item)
         tasks.append(new_item)
+
+    recurr = []
+    for item in temp_recurr:
+        new_item = tuple((i or '') for i in item)
+        recurr.append(new_item)
+    # print(recurr[0][1])
     # print(tasks)
     # for item in tasks:
     #     for i in item:
     #         print(i, type(i))
 
-    return render_template('home.html', tasks = tasks)
+    return render_template('home.html', tasks = tasks, recurring = recurr)
     # try:
     #     groupid = checkGroupID(user)
     #     print(groupid)
