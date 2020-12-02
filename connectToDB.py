@@ -904,7 +904,7 @@ def findSubtasks(word, mysub=mysub):
     global stop_words
     if word in stop_words:
         return []
-    word = ".*" + word + ".*"
+    word = ".*^" + word + ".*"
     #{ "$regex": /^word/}
     # query = {"keyword": word }, {"_id": 0, "subtask": 1}
     array = []

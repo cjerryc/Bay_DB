@@ -71,7 +71,7 @@ def groupjoined():
         groupname = getGroupName(groupid)
         print(groupname[0][0])
         groupmembers = getGroupMembers(groupid)
-        return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
+        return dashboard() #render_template('dashboard.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
     except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
 
@@ -215,8 +215,8 @@ def progress():
         return render_template('progress.html', top_tasks = top_tasks, bottom_tasks = bottom_tasks, key_c1 = keys_c1, val_c1 = vals_c1, key_c2 = keys_c2, val_c2 = vals_c2, task_keys_c3 = tasks_keys_c3, val_c3 = vals_c3 )
 
     except:
-         return "<h1>No Data Available</h1>"
-    return "<h1>No Data Available</h1>"
+         return render_template('noprogress.html')
+    return render_template('noprogress.html')
 
 @app.route('/data')
 def data():
