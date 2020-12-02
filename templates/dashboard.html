@@ -117,12 +117,12 @@
                 var MyChart0 = new Chartist.Pie('#chart1', data, options);
 
             /*JERRY ADDED GRAPH*/
-            var keys_c1 = JSON.parse('{{d_names | tojson | safe}}');
-            var vals_c1 = JSON.parse('{{d_nums | tojson | safe}}');
+            var keys_c01 = JSON.parse('{{d_names | tojson | safe}}');
+            var vals_c01 = JSON.parse('{{d_nums | tojson | safe}}');
 
-            var data = {
+            var data01 = {
 
-                series: vals_c1
+                series: vals_c01
                 };
 
             var sum = function(a, b) { return a + b };
@@ -131,8 +131,8 @@
 
 
                 labelInterpolationFnc: function(value, idx) {
-                    var percentage = Math.round(value/data.series.reduce(sum) * 100) + '%';
-                    return  keys_c1[idx] + '  (' + percentage + ')';
+                    var percentage = Math.round(value/data01.series.reduce(sum) * 100) + '%';
+                    return  keys_c01[idx] + '  (' + percentage + ')';
                 }
 
                 };
@@ -151,7 +151,7 @@
                     chartPadding: 10
                 }]
                 ];
-                var MyChart01 = new Chartist.Pie('#chart01', data, options);
+                var MyChart01 = new Chartist.Pie('#chart01', data01, options);
 
 
 
