@@ -145,10 +145,19 @@ def dashboard():
 
         try:
             keys_c1, vals_c1 = zip(*ret_c1.items())
+            print("keys_c1: \n")
+            print(vals_c1)
+            print("vals_c1: \n")
+            print(keys_c1)
+            names, nums = nameByTask()
+            print("names: \n")
+            print(names)
+            print("nums: \n")
+            print(nums)
             user_keys_c2, vals_c2 = zip(*ret_c2.items())
             dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
             print(tasks_keys_c2)
-            return render_template('dashboard.html', exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2 )
+            return render_template('dashboard.html', exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2, d_names = names, d_nums = nums )
             #k = jsonify({'key_list': keys_c1})
             #v = jsonify({'val_list': vals_c1})
         except:
@@ -354,15 +363,14 @@ if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
     app.run(threaded=True, port=5000)
 
-@app.route('/nameByTask', methods = ['POST', 'GET'])
 def nameByTask():
-    if request.method == 'POST':
-        queryRes = getCompleted()
-        for i in range(0, len(queryRes)):
-            print(queryRes[i])
-            print("\n")
-    #     if queryRes:
-    #         return render_template('search.html', searchInput = "Search results for '" + result["search"] + "'", searchedTasks=queryRes, tasks = getTasks())
-    #  elif request.method == 'GET':
-    #     return render_template('search.html', tasks = getTasks())
-    # return render_template('search.html', tasks = getTasks())
+    queryRes = getCompleted()
+    nameTuple = ()
+    numTuple = ()
+    for i in range(0, len(queryRes)):
+        name = queryRes[i][0] + ' ' + queryRes[i][1]
+        nameTuple = nameTuple + (name,)
+        numComplete = queryRes[i][3]
+        numTuple = numTuple + (numComplete,)
+    return nameTuple, numTuple
+

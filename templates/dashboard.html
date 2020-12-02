@@ -49,7 +49,9 @@
  </table>
     <h3>Overall Tasks Contribution per Person</h3> 
     <div id= "chart1" class="ct-chart ct-square" ></div>
-    <h3>Number of Completed Tasks per Task Type and Person</h3> 
+    <h3>Percentage of Tasks Completed per Person</h3>
+    <div id= "chart01" class="ct-chart ct-square" ></div>
+    <h3>Number of Completed Tasks per Task Type and Person</h3>
     {% if exists == 'true' %}
     <div id= "chart2" class="ct-chart ct-square"></div>  
     <div id= "chart3" class="ct-chart ct-square" ></div> 
@@ -113,6 +115,46 @@
                 ];
 
                 var MyChart0 = new Chartist.Pie('#chart1', data, options);
+
+            /*JERRY ADDED GRAPH*/
+            var keys_c1 = JSON.parse('{{d_names | tojson | safe}}');
+            var vals_c1 = JSON.parse('{{d_nums | tojson | safe}}');
+
+            var data = {
+
+                series: vals_c1
+                };
+
+            var sum = function(a, b) { return a + b };
+
+                var options = {
+
+
+                labelInterpolationFnc: function(value, idx) {
+                    var percentage = Math.round(value/data.series.reduce(sum) * 100) + '%';
+                    return  keys_c1[idx] + '  (' + percentage + ')';
+                }
+
+                };
+
+                var responsiveOptions = [
+                ['screen and (min-width: 640px)', {
+                    chartPadding: 10,
+                    labelOffset: 50,
+                    labelDirection: 'explode',
+                    labelInterpolationFnc: function(value) {
+                    return value;
+                    }
+                }],
+                ['screen and (min-width: 1024px)', {
+                    labelOffset: 0,
+                    chartPadding: 10
+                }]
+                ];
+                var MyChart01 = new Chartist.Pie('#chart01', data, options);
+
+
+
 
             /*
             var data1 = {
