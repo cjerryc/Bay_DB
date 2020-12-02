@@ -441,6 +441,7 @@ def completeTask(taskname, cursor=cur):
 
 def countOverallTasks():
     global current_groupid
+    current_groupid = int(current_groupid)
     final_dict = {}
     users = []
     vals = []
@@ -482,6 +483,8 @@ def countOverallTasks():
 
 def countRecurringTasks():
     global current_groupid
+    current_groupid = int(current_groupid)
+
     final_dict = {}
     users = []
     vals = []
@@ -538,6 +541,7 @@ def countRecurringTasks():
 
 def countIndivTasks():
     global current_groupid
+    current_groupid = int(current_groupid)
     complete_list = {}
     only_vals = {}
     all_tasks = getRecurringTaskNames()
@@ -602,6 +606,7 @@ def countIndivTasks():
 
 def earliestActive():
     global current_groupid
+    current_groupid = int(current_groupid)
    
 
     agg_result= mycol.aggregate( 
@@ -632,6 +637,7 @@ def earliestActive():
 def myTaskCompletions():
     global current_username
     global current_groupid
+    current_groupid = int(current_groupid)
     try:
         current_username = db.get('current_username')
         current_groupid = db.get('current_groupid')
@@ -685,6 +691,7 @@ def myTaskCompletions():
 def myTaskMisses():
     global current_username
     global current_groupid
+    current_groupid = int(current_groupid)
     try:
         current_username = db.get('current_username')
         current_groupid = db.get('current_groupid')
@@ -754,6 +761,7 @@ def mapMonthNums(month):
 
 def myTopTasks():
     global current_groupid
+    current_groupid = int(current_groupid)
     global current_username
     try:
         current_username = db.get('current_username')
@@ -800,6 +808,7 @@ def myTopTasks():
 
 def myBottomTasks():
     global current_groupid
+    current_groupid = int(current_groupid)
     global current_username
     try:
         current_username = db.get('current_username')
