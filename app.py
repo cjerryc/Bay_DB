@@ -137,12 +137,15 @@ def home():
 
 @app.route('/group')
 def dashboard():
-    ret_c0 = countRecurringTasks()
-    ret_c1 = countOverallTasks()
-    ret_c2, tasks_c2 = countIndivTasks()
-    userinfo = getUserInfo()
-    print(userinfo)
-    exists = "true"
+    try:
+        ret_c0 = countRecurringTasks()
+        ret_c1 = countOverallTasks()
+        ret_c2, tasks_c2 = countIndivTasks()
+        userinfo = getUserInfo()
+        print(userinfo)
+        exists = "true"
+    except:
+        return render_template('createjoingroup.html') ##this mean the person doesn have a group
     try:
         groupid = userinfo[5]
         print(groupid)
@@ -165,7 +168,12 @@ def dashboard():
         #print("nums: \n")
         #print(nums)
         user_keys_c2, vals_c2 = zip(*ret_c2.items())
-        dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
+        dummy_vals = 0
+        tasks_keys_c2 = 0
+        try:
+            dummy_vals, tasks_keys_c2 = zip(*tasks_c2.items())
+        except:
+            return render_template('group.html', groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers)
         for i in range(0, len(user_keys_c2)):
             if i == 0:
                 legend = legend + user_keys_c2[i] + ':' +' red'
@@ -177,11 +185,9 @@ def dashboard():
                 legend = legend + user_keys_c2[i] + ':' + ' orange'
             if i != len(user_keys_c2)-1:
                 legend = legend + ", "
-            #print(legend)
+            
         return render_template('dashboard.html', legend = legend, exists = exists, groupid = groupid, groupname = groupname[0][0], groupmembers = groupmembers, key_c0 = keys_c0, val_c0 = vals_c0, key_c1 = keys_c1, val_c1 = vals_c1, task_keys_c2 = tasks_keys_c2, val_c2 = vals_c2, d_names = names, d_nums = nums )
-          
-    except Exception as e:
-        print(e)
+    except:
         return render_template('createjoingroup.html') ##this mean the person doesn have a group
 
 @app.route('/progress')
