@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted
+from connectToDB import getUser, checkGroupID, getATask, getRecurrance, changeStuff, tasksExists, updateSubMat, getArrSubtask, getArrMaterials, logUserIn, logUserOut, createUser, getUserInfo, createTask, getTasks, getGroupMembers, searchTasks, searchHistory, deleteTask, completeTask, getGroupName, countOverallTasks, countIndivTasks, myTaskCompletions, myTaskMisses, myTopTasks, myBottomTasks, joinGroup, leaveGroup, createGroup, getCompleted, getUsernames
 app = Flask(__name__)
 current_firstname = "''"
 current_lastname = "''"
@@ -381,13 +381,47 @@ if __name__ == '__main__':
     app.run(threaded=True, port=5000)
 
 def nameByTask():
+
     queryRes = getCompleted()
     nameTuple = ()
     numTuple = ()
+
+    print(queryRes)
+
+    try:
+        groupid  = int(queryRes[0][2])
+    except:
+        groupid = 0
+
+    print(groupid)
+    all_users = getUsernames(groupid)
+    print(all_users)
+    
+    
+    users_arr = []
+    for e1 in all_users:
+        full_name = getUser(" ".join(list(e1)))
+        users_arr.append(" ".join(list(full_name)))
+
+    
+    for u in users_arr:
+        for d in queryRes:
+            name = d[0] + ' ' + d[1]
+            #print(name1)
+            #print(u)
+            if name == u:
+                
+                nameTuple = nameTuple + ((name.title()),)
+                numComp = d[3]
+                numTuple = numTuple + (numComp,)
+               
+
+    '''
     for i in range(0, len(queryRes)):
         name = queryRes[i][0] + ' ' + queryRes[i][1]
         nameTuple = nameTuple + (name,)
         numComplete = queryRes[i][3]
         numTuple = numTuple + (numComplete,)
+    '''
     return nameTuple, numTuple
 
