@@ -156,9 +156,9 @@ def searchHistory(taskname, date_created, assignedto, date_completed, doneby, cu
         stringquery = stringquery + query[index] + intersect
     stringquery = stringquery + query[len(query) - 1]
     
+    print(items)
     finalquery = (stringquery % items)
     print(stringquery)
-    print(items)
     print(finalquery)
     cur.execute(finalquery)
     return cur.fetchall() 
