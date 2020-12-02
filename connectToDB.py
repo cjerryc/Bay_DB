@@ -148,10 +148,11 @@ def searchHistory(taskname, date_created, assignedto, date_completed, doneby, cu
 
     for item in boop.keys():
         query.append(querydict[item])
-        items.append(current_groupid)
+        items.append(int(current_groupid))
         items.append(boop[item])
     items = tuple(items)
-
+    if len(query) == 0:
+        return 'false'
     stringquery = ''
     for index in range(len(query) - 1):
         stringquery = stringquery + query[index] + intersect
@@ -955,8 +956,6 @@ def updateSubMat(subtaskarr, materialarr, cursor = cur):
         query = 'UPDATE tasks_table SET subtasks = %s, materials = %s WHERE taskid = %s;' % (subtasks, materials, current_taskid)
         cursor.execute(query)
         conn.commit()
-    print(subtasks)
-    print(materials)
     return 'false'
 
 def getATask(taskname, cursor = cur):

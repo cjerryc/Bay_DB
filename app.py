@@ -312,19 +312,20 @@ def completetask():
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
+    exists = 'hi'
     if request.method == 'POST':
         result = request.form
         print(result)
         # ([('taskname', 'hiss'), ('date_created', 'helo'), ('assignedto', 'wat'), ('date_completed', 'ee'), ('doneby', '')])
         exists = searchHistory(result["taskname"], result["date_created"], result["assignedto"], result["date_completed"], result["doneby"])
         if exists == 'false':
-            return render_template('nosuchsearch.html', exists = exists)
+            return render_template('nosearch.html', exists = exists)
         tasks = []
         for item in exists:
             new_item = tuple((i or '') for i in item)
             tasks.append(new_item)
         return render_template('search.html', tasks = tasks)
-    return render_template('nosearch.html')
+    return render_template('nosearch.html', exists = exists)
     # if request.method == 'POST':
     #     result = request.form
     #     queryRes = searchHistory(result["search"])
@@ -365,13 +366,15 @@ def addsubtask():
     global current_taskname 
     if request.method == 'POST':
         result = request.form
+        subtask = []
+        material = []
         for list_type in request.form.keys():
             if list_type == "subtask":
                 subtask = request.form.getlist(list_type)
             if list_type == "material":
                 material = request.form.getlist(list_type)
-        if subtask is not None:
-            exists = updateSubMat(subtask, material)
+
+        exists = updateSubMat(subtask, material)
         return render_template('taskcreated.html', taskname= current_taskname, exists=exists, tasks = getTasks())
         
 @app.route('/signinfo', methods = ['POST', 'GET'])

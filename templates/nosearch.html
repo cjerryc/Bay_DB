@@ -41,6 +41,9 @@
               <p> For dates, please follow the format of (Day/Month/Year) for example 12/01/2020.</p>
               <p><input type = "submit" value = "submit"/></p>
             </form>
+            {% if exists == 'false' %}
+            <p> Please enter a valid search.</p>
+            {% endif %}
           </div>
       </div>
    </body>
