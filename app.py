@@ -361,7 +361,8 @@ def signinfo():
       try:
         createUser(result["username"], result["firstname"], result["lastname"], result["email"], result["passcode"])
         #print(result["username"])
-        return render_template("profile.html", result = result)
+        render_template('login.html', wrongPass = False)
+        #return render_template("profile.html", result = result)
       except:
           return "<h1>Password doesn't match try again!</h1>"
 

@@ -180,6 +180,8 @@ def checkGroupID(usrnm, cursor=cur):
 
 def joinGroup(groupid, cursor=cur, conn=conn):
     global current_username
+    global current_groupid 
+    current_groupid = groupid
     try:
         username = "'" + db.get('current_username') + "'"
     except:
@@ -191,6 +193,8 @@ def joinGroup(groupid, cursor=cur, conn=conn):
 
 def leaveGroup(cursor=cur, conn=conn):
     global current_username
+    global current_groupid
+    current_groupid = 0
     try:
         username = "'" + db.get('current_username') + "'"
     except:
@@ -247,6 +251,7 @@ def logUserIn(username, passcode, cursor=cur):
         current_username = username
 
     group_id = checkGroupID(current_username)
+    current_groupid = group_id
 
     try:
         group_id = " ".join(list(group_id[0]))
