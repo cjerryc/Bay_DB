@@ -111,6 +111,14 @@ def searchHistory(taskname, cursor = cur):
     cur.execute(query)
     return cur.fetchall()
 
+def getSubtasks(taskname, cursor = cur):
+    global current_groupid 
+    taskname = "'" + taskname + "'"
+    query = 'SELECT subtasks FROM tasks_table WHERE taskname = %s AND groupid::int = %i;'% (taskname, current_groupid)
+    cur.execute(query)
+    return cur.fetchall()  
+
+
 def getGroupName(groupid, cursor = cur):
     groupid = "'" + groupid + "'"
     query = 'SELECT groupname FROM groups_table WHERE groupid = %s;' % (groupid)
@@ -313,17 +321,30 @@ def completeTask(taskname, cursor=cur):
 
     taskid_arr = findTaskID(taskname)
     taskid = ','.join(str(v) for v in taskid_arr)
-  
 
-    mongo_template = { "history_id": int(datetime.now().timestamp()),
-           "task_id": int(taskid),
-           "group_id": current_groupid,
-           "taskname": taskname,
-           "username": current_username,
-           "date": date,
-           "time": time,
-           "assignedto": assigned,
-           "subtasks": ["hi", "lol", "love"]}
+    subtasks_res = getSubtasks(taskname)
+    try:
+        subtasks_arr = list(subtasks_res[0])[0]
+
+        mongo_template = { "history_id": int(datetime.now().timestamp()),
+        "task_id": int(taskid),
+        "group_id": current_groupid,
+        "taskname": taskname,
+        "username": current_username,
+        "date": date,
+        "time": time,
+        "assignedto": assigned,
+        "subtasks": subtasks_arr}
+    except:
+        mongo_template = { "history_id": int(datetime.now().timestamp()),
+        "task_id": int(taskid),
+        "group_id": current_groupid,
+        "taskname": taskname,
+        "username": current_username,
+        "date": date,
+        "time": time,
+        "assignedto": assigned}
+  
 
     if exists:
         exists = 'true' 
