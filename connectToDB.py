@@ -152,7 +152,9 @@ def searchHistory(taskname, date_created, assignedto, date_completed, doneby, cu
         items.append(boop[item])
     items = tuple(items)
     if len(query) == 0:
-        return 'false'
+        allquery = 'SELECT * FROM history_table WHERE groupid::int = %i;' % current_groupid
+        cur.execute(allquery)
+        return cur.fetchall()
     stringquery = ''
     for index in range(len(query) - 1):
         stringquery = stringquery + query[index] + intersect

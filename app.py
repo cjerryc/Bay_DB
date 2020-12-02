@@ -248,11 +248,17 @@ def updateTaskPage():
                 for x in updatableStuff[0][1]:
                     if x in subarr:
                         subarr.remove(x)
+                subtasks = updatableStuff[0][1]
+            else:
+                subtasks = []
             if updatableStuff[0][2] != None:
                 for x in updatableStuff[0][2]:
                     if x in subarr:
                         matarr.remove(x)
-            return render_template('updatetaskbody.html', tasks = getTasks(), currtask = result['taskname'], assignedto = updatableStuff[0][0], subtasks = updatableStuff[0][1], othersubtasks = subarr, othermats = matarr , materials = updatableStuff[0][2], notes = updatableStuff[0][3])
+                materials = updatableStuff[0][2]
+            else:
+                materials = []
+            return render_template('updatetaskbody.html', tasks = getTasks(), currtask = result['taskname'], assignedto = updatableStuff[0][0], subtasks = subtasks, othersubtasks = subarr, othermats = matarr , materials = materials, notes = updatableStuff[0][3])
         else:
             return render_template('noupdatetask.html', tasks = getTasks())
     return render_template('updatetask.html', tasks = getTasks())
@@ -307,7 +313,8 @@ def completetask():
             return render_template("taskcompleted.html", taskname=result["taskname"], exists=exists, tasks = getTasks())
         except Exception as inst:
             print(inst)
-            return "<h1>Error try again!</h1>"
+            exists = 'false'
+            return render_template("taskcompleted.html", taskname=result["taskname"], exists=exists, tasks = getTasks())
     return render_template('completetask.html', tasks = getTasks())
 
 @app.route('/search', methods = ['POST', 'GET'])
