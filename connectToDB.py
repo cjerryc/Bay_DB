@@ -2,6 +2,7 @@ import os
 import sys
 import psycopg2
 from datetime import datetime
+from datetime import timedelta
 import re
 import pymongo 
 import random
@@ -635,7 +636,7 @@ def earliestActive():
     return earliest
 
 
-def myTaskCompletions():
+def myTaskCompletions(selected):
     global current_username
     global current_groupid
     current_groupid = int(current_groupid)
@@ -646,50 +647,96 @@ def myTaskCompletions():
         print("Local")
     final_dict = {}
     username = str(current_username)
+    days = []
 
-    agg_result= mycol.aggregate( 
-    [{ 
-    "$match":
-    {"group_id":current_groupid, "username":username}},
+    if selected == 'Last 7 Days':
 
-    {"$group" :  
-        {"_id": { "$substr": ["$date", 0, 2 ] },
-         "num" : {"$sum" : 1} 
-         }},
-    {"$project" : 
-        { "_id": 0, "month": "$_id", "num": 1 } },
-    { "$sort" : 
-        SON([("month", 1)]) } 
-    ]) 
+        for i in range(0,8):
+            if i == 0:
+                date = datetime.now()
+                days.append(date.strftime("%m/%d/%Y"))
+            else:
+                date = datetime.now() - timedelta(days=i)
+                days.append(date.strftime("%m/%d/%Y"))
 
-    result = list(agg_result)
+        days.reverse()
 
-    start = earliestActive()
-    now = datetime.now()
-    end = now.strftime("%m")
-    start = mapMonthNums(start)
-    end = mapMonthNums(end)
+        agg_result= mycol.aggregate( 
+        [{ 
+        "$match":
+        {"group_id":current_groupid, "date": {"$in": days }, "username":username}},
+
+        {"$group" :  
+            {"_id": "$date",
+            "num" : {"$sum" : 1} 
+            }},
+        {"$project" : 
+            { "_id": 0, "date": "$_id", "num": 1 } },
+        { "$sort" : 
+            SON([("month", 1)]) } 
+        ]) 
+
+        result = list(agg_result)
+
+        for i in days:
+            monthExists = False
+            for d in result:
+                if d['date'] == i:
+                    month = i
+                    val = d['num']
+                    final_dict[month] = val
+                    monthExists = True
+            if not monthExists:
+                monthName = i
+                month = i
+                val = 0
+                final_dict[month] = val
+            
+
+    else:
+        agg_result= mycol.aggregate( 
+        [{ 
+        "$match":
+        {"group_id":current_groupid, "username":username}},
+
+        {"$group" :  
+            {"_id": { "$substr": ["$date", 0, 2 ] },
+            "num" : {"$sum" : 1} 
+            }},
+        {"$project" : 
+            { "_id": 0, "month": "$_id", "num": 1 } },
+        { "$sort" : 
+            SON([("month", 1)]) } 
+        ]) 
+
+        result = list(agg_result)
+
+        start = earliestActive()
+        now = datetime.now()
+        end = now.strftime("%m")
+        start = mapMonthNums(start)
+        end = mapMonthNums(end)
 
 
-    for i in range(start, end + 1):
-        monthExists = False
-        for d in result:
-            num = mapMonthNums(d['month'])
-            if num == i:
+        for i in range(start, end + 1):
+            monthExists = False
+            for d in result:
+                num = mapMonthNums(d['month'])
+                if num == i:
+                    monthName = mapMonthNames(i)
+                    month = monthName
+                    val = d['num']
+                    final_dict[month] = val
+                    monthExists = True
+            if not monthExists:
                 monthName = mapMonthNames(i)
                 month = monthName
-                val = d['num']
+                val = 0
                 final_dict[month] = val
-                monthExists = True
-        if not monthExists:
-            monthName = mapMonthNames(i)
-            month = monthName
-            val = 0
-            final_dict[month] = val
     
     return final_dict
 
-def myTaskMisses():
+def myTaskMisses(selected):
     global current_username
     global current_groupid
     current_groupid = int(current_groupid)
@@ -703,48 +750,94 @@ def myTaskMisses():
     first = getUser(username)
     first_full = (list(first)[0]).lower()
     search_expr = re.compile(f".*{first_full}.*", re.I)
+    days = []
+
+    if selected == 'Last 7 Days':
+
+        for i in range(0,8):
+            if i == 0:
+                date = datetime.now()
+                days.append(date.strftime("%m/%d/%Y"))
+            else:
+                date = datetime.now() - timedelta(days=i)
+                days.append(date.strftime("%m/%d/%Y"))
+
+        days.reverse()
+
+        agg_result= mycol.aggregate( 
+        [{ 
+        "$match":
+        {"group_id":current_groupid, "username": {"$ne": username }, "date": {"$in": days }, "$or": [ {"assignedto": {"$eq": username }}, {"assignedto": {"$regex": search_expr}} ]}},
+
+        {"$group" :  
+            {"_id": "$date",
+            "num" : {"$sum" : 1} 
+            }},
+        {"$project" : 
+            { "_id": 0, "date": "$_id", "num": 1 } },
+        { "$sort" : 
+            SON([("date", 1)]) } 
+        ]) 
+
+        result = list(agg_result)
+        #print(result)
+
+        
+        for i in days:
+            monthExists = False
+            for d in result:
+                if d['date'] == i:
+                    month = i
+                    val = d['num']
+                    final_dict[month] = val
+                    monthExists = True
+            if not monthExists:
+                monthName = i
+                month = i
+                val = 0
+                final_dict[month] = val
     
+    else:
+        agg_result= mycol.aggregate( 
+        [{ 
+        "$match":
+        {"group_id":current_groupid, "username": {"$ne": username }, "$or": [ {"assignedto": {"$eq": username }}, {"assignedto": {"$regex": search_expr}} ]}},
 
-    agg_result= mycol.aggregate( 
-    [{ 
-    "$match":
-    {"group_id":current_groupid, "username": {"$ne": username }, "$or": [ {"assignedto": {"$eq": username }}, {"assignedto": {"$regex": search_expr}} ]}},
+        {"$group" :  
+            {"_id": { "$substr": ["$date", 0, 2 ] },
+            "num" : {"$sum" : 1} 
+            }},
+        {"$project" : 
+            { "_id": 0, "month": "$_id", "num": 1 } },
+        { "$sort" : 
+            SON([("month", 1)]) } 
+        ]) 
 
-    {"$group" :  
-        {"_id": { "$substr": ["$date", 0, 2 ] },
-         "num" : {"$sum" : 1} 
-         }},
-    {"$project" : 
-        { "_id": 0, "month": "$_id", "num": 1 } },
-    { "$sort" : 
-        SON([("month", 1)]) } 
-    ]) 
+        result = list(agg_result)
+        #print(result)
 
-    result = list(agg_result)
-    #print(result)
+        start = earliestActive()
+        now = datetime.now()
+        end = now.strftime("%m")
+        start = mapMonthNums(start)
+        end = mapMonthNums(end)
 
-    start = earliestActive()
-    now = datetime.now()
-    end = now.strftime("%m")
-    start = mapMonthNums(start)
-    end = mapMonthNums(end)
-
-    
-    for i in range(start, end + 1):
-        monthExists = False
-        for d in result:
-            num = mapMonthNums(d['month'])
-            if num == i:
+        
+        for i in range(start, end + 1):
+            monthExists = False
+            for d in result:
+                num = mapMonthNums(d['month'])
+                if num == i:
+                    monthName = mapMonthNames(i)
+                    month = monthName
+                    val = d['num']
+                    final_dict[month] = val
+                    monthExists = True
+            if not monthExists:
                 monthName = mapMonthNames(i)
                 month = monthName
-                val = d['num']
+                val = 0
                 final_dict[month] = val
-                monthExists = True
-        if not monthExists:
-            monthName = mapMonthNames(i)
-            month = monthName
-            val = 0
-            final_dict[month] = val
     
     return final_dict
 

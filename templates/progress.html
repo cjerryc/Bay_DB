@@ -44,9 +44,30 @@
     <h3>My Least Completed Tasks:</h3> 
     <i>'{{bottom_tasks}}' <br><br></i>
     <div class = "activities">
+        <form action= "/progress" method="post">
+
+            <select name= 'filter'>
+             {% if selected %}
+             <option value="{{selected}}" selected>{{selected}}</option>
+             {% for t in test %}
+             {% if t != selected %}
+               <option value="{{t}}">{{t}}</option>
+             {% endif %}
+             {% endfor %}
+             {%else%}
+             <option value="{{test[0]}}" selected>{{test[0]}}</option>
+             {% for t in test[1:] %}
+               <option value="{{t}}">{{t}}</option>
+             {% endfor %}
+             {% endif %}
+       
+             </select>
+       
+            <input type="submit" value="Filter" />
+       </form>
     <h3>Number of Tasks I Completed Per Month</h3> 
     <div id= "line_chart1" class="ct-chart ct-square" ></div>
-    <h3>Number of Tasks I Missed Per Month</h3> 
+    <h3><br>Number of Tasks I Missed Per Month</h3> 
     <div id= "line_chart2" class="ct-chart ct-square"></div>  
     <!--<div id= "chart3" class="ct-chart ct-square"></div>  
     <div id= "chart4" class="ct-chart ct-square" ></div>  -->

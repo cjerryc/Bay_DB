@@ -54,20 +54,9 @@
     <h3>Percentage of Recurring Tasks Completed per Person</h3>
     <div id= "chart02" class="ct-chart ct-square" ></div>
     <h3>Number of Completed Recurring Tasks per Task Type</h3>
-    {% if exists == 'true' %}
     <i>*Legend: {{legend}} <br><br></i>
     <div id= "chart2" class="ct-chart ct-square"></div>  
     <!--<div id= "chart3" class="ct-chart ct-square" ></div> -->
-    <h1> LEAVE GROUP</h1>
-    <form action="/exitGroup" method="get">
-      <button type="submit">LEAVE!</button>
-    </form> 
-    {% else %}
-    <h1> LEAVE GROUP</h1>
-    <form action="/exitGroup" method="get">
-      <button type="submit">LEAVE!</button>
-    </form>
-    {% endif %}
   </div>
  
 
